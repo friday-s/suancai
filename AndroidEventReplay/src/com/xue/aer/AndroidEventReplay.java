@@ -62,7 +62,6 @@ public class AndroidEventReplay {
 		frame.setTitle(AER.APP_NAME);
 		frame.setIconImage(Util.getImageIcon("android.png").getImage());
 		frame.setBounds(AER.LOCATION_X, AER.LOCATION_Y,AER.WIDTH, AER.HEIGHT);
-
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }
