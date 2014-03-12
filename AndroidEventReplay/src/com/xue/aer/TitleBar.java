@@ -24,7 +24,8 @@ public class TitleBar extends JPanel {
 
     private static final int TITLE_BAR_WIDTH = AER.WIDTH;
     private static final int TITLE_BAR_HEIGHT = 25;
-
+    private static final int TITLE_BAR_PAD_HEIGHT=(TITLE_BAR_HEIGHT-TITLE_BAR_ICON_HEIGHT)/2;
+    
     private JFrame mContext;
     // private Image mTitleIcon;
     private JLabel mTitleIcon;
@@ -34,6 +35,7 @@ public class TitleBar extends JPanel {
     private boolean isDragged = false;
     private Point loc = null;
     private Point tmp = null;
+    
 
     public TitleBar(JFrame context) {
         this.mContext = context;
@@ -63,20 +65,28 @@ public class TitleBar extends JPanel {
         SpringLayout springLayout = new SpringLayout();
         setLayout(springLayout);
         setVisible(true);
-        System.out.println(TITLE_BAR_WIDTH);
         setBounds(0, 0, TITLE_BAR_WIDTH, TITLE_BAR_HEIGHT);
-        this.setBackground(Color.GRAY);
+        this.setBackground(Color.CYAN);
 
         add(mTitleIcon);
         add(mTitleName);
         add(mCloseIcon);
 
-        springLayout.putConstraint(SpringLayout.WEST, mTitleIcon, 5,
+        
+        springLayout.putConstraint(SpringLayout.WEST, mTitleIcon, 1,
                 SpringLayout.WEST, this);
-        springLayout.putConstraint(SpringLayout.WEST, mTitleName, 5,
+        springLayout.putConstraint(SpringLayout.WEST, mTitleName, 1,
                 SpringLayout.EAST, mTitleIcon);
-        springLayout.putConstraint(SpringLayout.EAST, mCloseIcon, 5,
+        springLayout.putConstraint(SpringLayout.EAST, mCloseIcon,-2,
                 SpringLayout.EAST, this);
+        
+        springLayout.putConstraint(SpringLayout.NORTH, mTitleIcon,TITLE_BAR_PAD_HEIGHT,
+                SpringLayout.NORTH, this);
+        springLayout.putConstraint(SpringLayout.NORTH, mTitleName,TITLE_BAR_PAD_HEIGHT,
+                SpringLayout.NORTH, this);
+        springLayout.putConstraint(SpringLayout.NORTH, mCloseIcon,TITLE_BAR_PAD_HEIGHT,
+                SpringLayout.NORTH, this);
+        
 
         this.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(MouseEvent e) {

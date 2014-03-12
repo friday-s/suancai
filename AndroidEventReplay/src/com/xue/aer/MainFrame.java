@@ -34,8 +34,11 @@ public class MainFrame extends JFrame {
 		contentPane.setLayout(null);
 		// contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		TitleBar bar  = new TitleBar(this,Util.getImageIcon("android.png"),AER.APP_NAME,Util.getImageIcon("close.png"));
-		contentPane.add(bar);
+		TitleBar titleBar  = new TitleBar(this,Util.getImageIcon("android.png"),AER.APP_NAME,Util.getImageIcon("close.png"));
+		contentPane.add(titleBar);
+		
+		ToolBar toolBar = new ToolBar(0,titleBar.getHeight());
+		contentPane.add(toolBar);
 		//contentPane.add(initMenuBar(AER.MENU_BAR));
 		//
 		// JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.LEFT);
