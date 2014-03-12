@@ -31,7 +31,6 @@ public class TitleBar extends JPanel {
 		setBounds(0, 0, 200, 80);
 		add(mTitleIcon, BorderLayout.WEST);
 		add(mTitleName,BorderLayout.EAST);
-		
 	}
 
 	public void setTitleName(String name) {
