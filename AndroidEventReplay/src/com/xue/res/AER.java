@@ -11,7 +11,7 @@ public class AER {
     public static final int HEIGHT = 500;
 
     public static final int LOCATION_X = (SCREEN_WIDTH -WIDTH)/2;
-    public static final int LOCATION_Y = (int) (SCREEN_HEIGHT*0.2);
+    public static final int LOCATION_Y = (int) (SCREEN_HEIGHT*0.15);
 
     public static final int TAB_ICON_WIDTH = 50;
     public static final int TAB_ICON_HEIGHT = 50;
@@ -22,5 +22,7 @@ public class AER {
     public static final String[] MENU_BAR = { "File","Settings", "Help" };
 
     public static final String[] TABBED_PANE = { "record", "replay" };
+    
+    public static final String EXIT_CONTENT="Do you want to quit?";
     
 }
