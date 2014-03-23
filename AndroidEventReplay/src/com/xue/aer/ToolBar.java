@@ -20,8 +20,7 @@ import com.xue.util.Util;
 
 public class ToolBar extends JPanel implements MouseListener {
 
-	private static final int TOOL_BAR_WIDTH = AER.WIDTH;
-	private static final int TOOL_BAR_HEIGHT = 26;
+
 
 	private static final int TOOL_BAR_OPTION_WIDTH = 26;
 	private static final int TOOL_BAR_OPTION_HEIGHT = 26;
@@ -30,7 +29,7 @@ public class ToolBar extends JPanel implements MouseListener {
 	private JLabel mSettingsLabel;
 
 	public ToolBar(int x, int y) {
-		setSize(TOOL_BAR_WIDTH, TOOL_BAR_HEIGHT);
+		setSize(AER.TOOL_BAR_WIDTH, AER.TOOL_BAR_HEIGHT);
 		setLocation(x, y);
 		// setLayout(new FlowLayout(FlowLayout.RIGHT, 0, 0));
 		setLayout(null);

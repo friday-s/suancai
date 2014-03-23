@@ -1,23 +1,16 @@
 package com.xue.aer;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Image;
 import java.awt.Point;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
-
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
-
 import com.xue.res.AER;
 import com.xue.util.Util;
 
@@ -26,9 +19,8 @@ public class TitleBar extends JPanel {
 	private static final int TITLE_BAR_ICON_WIDTH = 20;
 	private static final int TITLE_BAR_ICON_HEIGHT = 20;
 
-	private static final int TITLE_BAR_WIDTH = AER.WIDTH;
-	private static final int TITLE_BAR_HEIGHT = 25;
-	private static final int TITLE_BAR_PAD_HEIGHT = (TITLE_BAR_HEIGHT - TITLE_BAR_ICON_HEIGHT) / 2;
+
+	private static final int TITLE_BAR_PAD_HEIGHT = (AER.TITLE_BAR_HEIGHT - TITLE_BAR_ICON_HEIGHT) / 2;
 
 	private JFrame mContext;
 	// private Image mTitleLabel;
@@ -108,7 +100,7 @@ public class TitleBar extends JPanel {
 		SpringLayout springLayout = new SpringLayout();
 		setLayout(springLayout);
 		setVisible(true);
-		setBounds(0, 0, TITLE_BAR_WIDTH, TITLE_BAR_HEIGHT);
+		setBounds(0, 0, AER.TITLE_BAR_WIDTH, AER.TITLE_BAR_HEIGHT);
 		this.setBackground(Color.WHITE);
 
 		add(mTitleLabel);

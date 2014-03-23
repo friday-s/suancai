@@ -13,8 +13,20 @@ public class AER {
     public static final int LOCATION_X = (SCREEN_WIDTH -WIDTH)/2;
     public static final int LOCATION_Y = (int) (SCREEN_HEIGHT*0.15);
 
-    public static final int TAB_ICON_WIDTH = 50;
-    public static final int TAB_ICON_HEIGHT = 50;
+    public static final int TITLE_BAR_WIDTH = WIDTH;
+    public static final int TITLE_BAR_HEIGHT = 25;
+    
+    public static final int TOOL_BAR_WIDTH = WIDTH;
+    public static final int TOOL_BAR_HEIGHT = 26;
+    
+    public static final int TAB_HOST_WIDTH = WIDTH;
+    public static final int TAB_HOST_HEIGHT = HEIGHT-TITLE_BAR_HEIGHT-TOOL_BAR_HEIGHT;
+    public static final int TAB_HOST_LOCATION_X = 0;
+    public static final int TAB_HOST_LOCATION_Y = TITLE_BAR_HEIGHT+TOOL_BAR_HEIGHT;
+    
+    public static final int TAB_BAR_WIDTH = WIDTH;
+    public static final int TAB_BAR_HEIGHT = 50;
+    
 
     public static final String APP_NAME = "Android Event Replay";
     public static final String APP_NAME_SHORT = "AER";

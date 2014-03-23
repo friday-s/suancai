@@ -37,17 +37,27 @@ public class MainFrame extends JFrame {
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
-		
+
 		setContentPane(contentPane);
-	
-		
+
 		TitleBar titleBar = new TitleBar(this);
 		contentPane.add(titleBar);
-		
-		
-		ToolBar toolBar = new ToolBar(0, titleBar.getHeight());
+
+		ToolBar toolBar = new ToolBar(0, AER.TITLE_BAR_HEIGHT);
 		contentPane.add(toolBar);
+
+		TabHost tabHost = new TabHost();
+		tabHost.setBounds(AER.TAB_HOST_LOCATION_X, AER.TAB_HOST_LOCATION_Y, AER.TAB_HOST_WIDTH,
+				AER.TAB_HOST_HEIGHT);
+		contentPane.add(tabHost);
 		
+		
+		
+		 RecordView recordView = new RecordView("record");
+		 ReplayView replayView = new ReplayView("replay");
+		 tabHost.addTabView(recordView);
+		 tabHost.addTabView(replayView);
+
 	}
 
 }
