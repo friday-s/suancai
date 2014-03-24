@@ -55,8 +55,10 @@ public class MainFrame extends JFrame {
 		
 		 RecordView recordView = new RecordView("record");
 		 ReplayView replayView = new ReplayView("replay");
+	     ReplayView replayView2 = new ReplayView("replay2");
 		 tabHost.addTabView(recordView);
 		 tabHost.addTabView(replayView);
+		 tabHost.addTabView(replayView2);
 
 	}
 
