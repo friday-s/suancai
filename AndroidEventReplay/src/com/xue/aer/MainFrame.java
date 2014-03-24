@@ -50,15 +50,16 @@ public class MainFrame extends JFrame {
 		tabHost.setBounds(AER.TAB_HOST_LOCATION_X, AER.TAB_HOST_LOCATION_Y, AER.TAB_HOST_WIDTH,
 				AER.TAB_HOST_HEIGHT);
 		contentPane.add(tabHost);
-		
-		
-		
-		 RecordView recordView = new RecordView("record");
-		 ReplayView replayView = new ReplayView("replay");
-	     ReplayView replayView2 = new ReplayView("replay2");
-		 tabHost.addTabView(recordView);
-		 tabHost.addTabView(replayView);
-		 tabHost.addTabView(replayView2);
+
+		RecordView recordView = new RecordView("record");
+		recordView.setBackground(Color.YELLOW);
+		ReplayView replayView = new ReplayView("replay");
+		replayView.setBackground(Color.RED);
+		ReplayView replayView2 = new ReplayView("replay2");
+		replayView2.setBackground(Color.BLUE);
+		tabHost.addTab(recordView);
+		tabHost.addTab(replayView);
+		tabHost.addTab(replayView2);
 
 	}
 
