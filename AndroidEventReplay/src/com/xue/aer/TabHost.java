@@ -71,7 +71,7 @@ public class TabHost extends JPanel {
 		components[0].setFont(new Font(mTabStrings.get(0), 1, 20));
 		components[0].setForeground(Color.BLUE);
 		TabView defaultView = mTabViews.get(0);
-		defaultView.setBounds(0, 0, AER.TAB_VIEW_WIDTH, 300);
+		defaultView.setBounds(0, 0, AER.TAB_VIEW_WIDTH, AER.TAB_VIEW_HEIGHT);
 		mTabView.add(defaultView);
 
 	}
@@ -135,6 +135,11 @@ public class TabHost extends JPanel {
 			int beginX = mTabSelect.getX();
 			int endX = 0;
 			int step = part * DURATION;
+			
+			mTabViews.get(mSelectIndex).setBounds(AER.TAB_VIEW_WIDTH, 0, AER.TAB_VIEW_WIDTH, AER.TAB_VIEW_HEIGHT);
+			
+			mTabView.add(mTabViews.get(mSelectIndex));
+			
 			// int step = 10;
 			switch (direction) {
 			case MOVE_RIGHT:
@@ -142,6 +147,7 @@ public class TabHost extends JPanel {
 				while (beginX < endX) {
 					mTabSelect.setLocation(beginX += step, 0);
 					System.out.println("beginX:" + beginX);
+					
 					try {
 						Thread.sleep(3);
 					} catch (InterruptedException e) {
