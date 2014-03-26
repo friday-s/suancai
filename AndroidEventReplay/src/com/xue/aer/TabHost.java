@@ -20,237 +20,298 @@ import com.xue.util.Util;
 
 public class TabHost extends JPanel {
 
-	private static final int SELECT_INDEX_HEIGHT = 10;
+    private static final int SELECT_INDEX_HEIGHT = 10;
 
-	private final int MOVE_RIGHT = 1;
-	private final int MOVE_LEFT = 0;
+    private final int MOVE_RIGHT = 1;
+    private final int MOVE_LEFT = 0;
 
-	private JPanel mTabBar;
-	private JPanel mTabView;
+    private JPanel mTabBar;
+    private JPanel mTabView;
 
-	private JPanel mNamePanel;
-	private JPanel mScrollPanel;
-	private JLabel mTabSelect;
-	private ArrayList<String> mTabStrings;
+    private JPanel mNamePanel;
+    private JPanel mScrollPanel;
+    private JLabel mTabSelect;
+    private ArrayList<String> mTabStrings;
 
-	private ArrayList<TabView> mTabViews;
+    private ArrayList<TabView> mTabViews;
 
-	private int mSelectIndex;
-	private int mCurrentIndex = 0;
-	private int mLastIndex = 0;
+    private int mSelectIndex;
+    private int mCurrentIndex = 0;
+    private int mLastIndex = 0;
 
-	private int mIndexBarWidth;
+    private int mIndexBarWidth;
 
-	private ScrollThread mScrollThread;
+    private ScrollThread mScrollThread;
 
-	public TabHost() {
-		initTabHost();
-	}
+    public TabHost() {
+        initTabHost();
+    }
 
-	public void addTab(TabView tabView) {
-		
-		JLabel label = new JLabel(tabView.getTabName());
-		label.setHorizontalAlignment(JLabel.CENTER);
-		label.addMouseListener(mMouseListener);
-		mNamePanel.add(label);
+    public void addTab(TabView tabView) {
 
-		mTabStrings.add(tabView.getTabName());
+        JLabel label = new JLabel(tabView.getTabName());
+        label.setHorizontalAlignment(JLabel.CENTER);
+        label.addMouseListener(mMouseListener);
+        mNamePanel.add(label);
 
-		mIndexBarWidth = AER.TAB_BAR_WIDTH / mTabStrings.size();
-		ImageIcon image = Util.getImageIcon("tabbar_select.png");
-		image.setImage(image.getImage().getScaledInstance(mIndexBarWidth, SELECT_INDEX_HEIGHT,
-				Image.SCALE_SMOOTH));
-		mTabSelect.setSize(mIndexBarWidth, SELECT_INDEX_HEIGHT);
-		mTabSelect.setIcon(image);
-		mTabSelect.setLocation(0, 0);
+        mTabStrings.add(tabView.getTabName());
 
-		mTabViews.add(tabView);
-	
-		/* default view */
-		Component[] components = mNamePanel.getComponents();
-		components[0].setFont(new Font(mTabStrings.get(0), 1, 20));
-		components[0].setForeground(Color.BLUE);
-		TabView defaultView = mTabViews.get(0);
-		defaultView.setBounds(0, 0, AER.TAB_VIEW_WIDTH, AER.TAB_VIEW_HEIGHT);
-		mTabView.add(defaultView);
+        mIndexBarWidth = AER.TAB_BAR_WIDTH / mTabStrings.size();
+        ImageIcon image = Util.getImageIcon("tabbar_select.png");
+        image.setImage(image.getImage().getScaledInstance(mIndexBarWidth, SELECT_INDEX_HEIGHT,
+                Image.SCALE_SMOOTH));
+        mTabSelect.setSize(mIndexBarWidth, SELECT_INDEX_HEIGHT);
+        mTabSelect.setIcon(image);
+        mTabSelect.setLocation(0, 0);
 
-	}
+        mTabViews.add(tabView);
 
-	private void initTabHost() {
-		mTabStrings = new ArrayList<String>();
-		mTabViews = new ArrayList<TabView>();
-		
-		mTabBar = new JPanel();
-		mTabBar.setLayout(new BorderLayout());
-		mTabBar.setMaximumSize(new Dimension(AER.TAB_BAR_WIDTH, AER.TAB_BAR_HEIGHT));
-		mTabBar.setPreferredSize(new Dimension(AER.TAB_BAR_WIDTH, AER.TAB_BAR_HEIGHT));
-		this.add(mTabBar);
-		
-		mTabView = new JPanel();
-		mTabView.setLayout(null);
-		mTabView.setMaximumSize(new Dimension(AER.TAB_VIEW_WIDTH, AER.TAB_VIEW_HEIGHT));
-		mTabView.setPreferredSize(new Dimension(AER.TAB_VIEW_WIDTH, AER.TAB_VIEW_HEIGHT));
-		this.add(mTabView);
+        /* default view */
+        Component[] components = mNamePanel.getComponents();
+        components[0].setFont(new Font(mTabStrings.get(0), 1, 20));
+        components[0].setForeground(Color.BLUE);
+        TabView defaultView = mTabViews.get(0);
+        defaultView.setBounds(0, 0, AER.TAB_VIEW_WIDTH, AER.TAB_VIEW_HEIGHT);
+        mTabView.add(defaultView);
 
-		mNamePanel = new JPanel();
-		mNamePanel.setLayout(new GridLayout());
-		mNamePanel.setPreferredSize(new Dimension(AER.TAB_BAR_WIDTH,
-				(int) (AER.TAB_BAR_HEIGHT * 0.6)));
+    }
 
-		mScrollPanel = new JPanel();
-		mScrollPanel.setPreferredSize(new Dimension(AER.TAB_BAR_WIDTH,
-				(int) (AER.TAB_BAR_HEIGHT * 0.3)));
-		mScrollPanel.setLayout(null);
-		mTabSelect = new JLabel();
+    private void initTabHost() {
+        this.setLayout(null);
+        
+        mTabStrings = new ArrayList<String>();
+        mTabViews = new ArrayList<TabView>();
 
-		mScrollPanel.add(mTabSelect);
+        mTabBar = new JPanel();
+        BorderLayout broderlayout = new BorderLayout();
+       
+        mTabBar.setLayout(new BorderLayout());
+        mTabBar.setMaximumSize(new Dimension(AER.TAB_BAR_WIDTH, AER.TAB_BAR_HEIGHT));
+        mTabBar.setPreferredSize(new Dimension(AER.TAB_BAR_WIDTH, AER.TAB_BAR_HEIGHT));
+        mTabBar.setBackground(Color.WHITE);
+        mTabBar.setBounds(0, 0, AER.TAB_BAR_WIDTH, AER.TAB_BAR_HEIGHT);
+        this.add(mTabBar);
 
-		mTabBar.add(mNamePanel, BorderLayout.NORTH);
-		mTabBar.add(mScrollPanel, BorderLayout.SOUTH);
-		
-	
+        mTabView = new JPanel();
+        mTabView.setLayout(null);
+        mTabView.setMaximumSize(new Dimension(AER.TAB_VIEW_WIDTH, AER.TAB_VIEW_HEIGHT));
+        mTabView.setPreferredSize(new Dimension(AER.TAB_VIEW_WIDTH, AER.TAB_VIEW_HEIGHT));
+        mTabView.setBounds(AER.TAB_VIEW_X, AER.TAB_VIEW_Y, AER.TAB_VIEW_WIDTH, AER.TAB_VIEW_HEIGHT);
 
-		
-	}
+        this.add(mTabView);
 
-	class ScrollThread extends Thread {
+        mNamePanel = new JPanel();
+        mNamePanel.setLayout(new GridLayout());
+        mNamePanel.setPreferredSize(new Dimension(AER.TAB_BAR_WIDTH,
+                (int) (AER.TAB_BAR_HEIGHT * 0.8)));
+        mNamePanel.setBackground(Color.WHITE);
 
-		private final int DURATION = 10;
-		private int direction;
-		private int part;
+        mScrollPanel = new JPanel();
+        mScrollPanel.setPreferredSize(new Dimension(AER.TAB_BAR_WIDTH,
+                (int) (AER.TAB_BAR_HEIGHT * 0.1)));
+        mScrollPanel.setLayout(null);
+        mScrollPanel.setBackground(Color.WHITE);
+        
+        mTabSelect = new JLabel();
 
-		// private int step;
+        mScrollPanel.add(mTabSelect);
 
-		public void setAction(int direction) {
-			this.direction = direction;
-		}
+        mTabBar.add(mNamePanel, BorderLayout.NORTH);
+        mTabBar.add(mScrollPanel, BorderLayout.SOUTH);
 
-		public void setPart(int part) {
-			this.part = part;
-		}
+    }
 
-		@Override
-		public void run() {
-			// TODO Auto-generated method stub
-			int beginX = mTabSelect.getX();
-			int endX = 0;
-			int step = part * DURATION;
-			
-			mTabViews.get(mSelectIndex).setBounds(AER.TAB_VIEW_WIDTH, 0, AER.TAB_VIEW_WIDTH, AER.TAB_VIEW_HEIGHT);
-			
-			mTabView.add(mTabViews.get(mSelectIndex));
-			
-			// int step = 10;
-			switch (direction) {
-			case MOVE_RIGHT:
-				endX = beginX + part * mIndexBarWidth;
-				while (beginX < endX) {
-					mTabSelect.setLocation(beginX += step, 0);
-					System.out.println("beginX:" + beginX);
-					
-					try {
-						Thread.sleep(3);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				break;
-			case MOVE_LEFT:
-				endX = mCurrentIndex * mIndexBarWidth - part * mIndexBarWidth;
-				while (beginX > endX) {
-					mTabSelect.setLocation(beginX -= step, 0);
-					System.out.println("beginX:" + beginX);
-					try {
-						Thread.sleep(3);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
+    class ScrollThread extends Thread {
 
-				break;
-			default:
-				break;
-			}
-			mCurrentIndex = mSelectIndex;
+        private final int DURATION = 50;
+        private int direction;
+        private int part;
 
-			Component[] components = mNamePanel.getComponents();
+        // private int step;
 
-			components[mCurrentIndex].setFont(new Font(mTabStrings.get(mCurrentIndex), 1, 20));
-			components[mCurrentIndex].setForeground(Color.BLUE);
+        public void setAction(int direction) {
+            this.direction = direction;
+        }
 
-			components[mLastIndex].setFont(new Font(mTabStrings.get(mLastIndex), 1, 12));
-			components[mLastIndex].setForeground(Color.BLACK);
+        public void setPart(int part) {
+            this.part = part;
+        }
 
-			mLastIndex = mCurrentIndex;
-		}
-	}
+        @Override
+        public void run() {
+            // TODO Auto-generated method stub
+            int barBeginX = mTabSelect.getX();
+            int barEndX = 0;
+            int barStep = part * mIndexBarWidth / DURATION;
 
-	private void onTabLayout() {
-		if (mScrollThread != null && mScrollThread.isAlive()) {
-			try {
-				mScrollThread.join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+            int currentViewBeginX = 0;
+            int currentViewEndX = 0;
+            int lastViewBeginX = 0;
+            int lastViewEndX = 0;
+            int viewStep = AER.TAB_VIEW_WIDTH / DURATION;
 
-		mScrollThread = new ScrollThread();
+            TabView currentTabView = mTabViews.get(mSelectIndex);
+            currentTabView.setBounds(direction == 0 ? -AER.TAB_VIEW_WIDTH : AER.TAB_VIEW_WIDTH, 0,
+                    AER.TAB_VIEW_WIDTH, AER.TAB_VIEW_HEIGHT);
+            mTabView.add(currentTabView);
 
-		if (mSelectIndex > mCurrentIndex) {
+            TabView lastTabView = mTabViews.get(mLastIndex);
 
-			mScrollThread.setAction(MOVE_RIGHT);
-			mScrollThread.setPart(mSelectIndex - mCurrentIndex);
+            // int step = 10;
+            switch (direction) {
+            case MOVE_RIGHT:
+                barEndX = barBeginX + part * mIndexBarWidth;
+                currentViewBeginX = AER.TAB_VIEW_WIDTH;
+                lastViewBeginX = 0;
+                currentViewEndX = 0;
+                lastViewEndX = -currentViewBeginX;
+                while (barBeginX < barEndX) {
+                    barBeginX += barStep;
+                    if (barBeginX > barEndX) {
+                        barBeginX = barEndX;
+                    }
+                 
+                    lastViewBeginX -= viewStep;
+                    if (lastViewBeginX < lastViewEndX) {
+                        lastViewBeginX = lastViewEndX;
+                    }
+                    
+                    currentViewBeginX -= viewStep;
+                    if (currentViewBeginX < currentViewEndX) {
+                        currentViewBeginX = currentViewEndX;
+                    }
 
-			mScrollThread.start();
+                    mTabSelect.setLocation(barBeginX, 0);
+                    lastTabView.setLocation(lastViewBeginX, 0);
+                    currentTabView.setLocation(currentViewBeginX, 0);
 
-		} else if (mSelectIndex < mCurrentIndex) {
-			mScrollThread.setAction(MOVE_LEFT);
-			mScrollThread.setPart(mCurrentIndex - mSelectIndex);
-			mScrollThread.start();
+                    try {
+                        Thread.sleep(3);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case MOVE_LEFT:
+                barEndX = mCurrentIndex * mIndexBarWidth - part * mIndexBarWidth;
+                currentViewBeginX = -AER.TAB_VIEW_WIDTH;
+                lastViewBeginX = 0;
+                currentViewEndX = 0;
+                lastViewEndX = -currentViewBeginX;
+                while (barBeginX > barEndX) {
+                    barBeginX -= barStep;
+                    if (barBeginX < barEndX){
+                        barBeginX = barEndX;
+                    }
+                    
+                    lastViewBeginX += viewStep;
+                    if (lastViewBeginX > lastViewEndX) {
+                        lastViewBeginX = lastViewEndX;
+                    }
+                    
+                    currentViewBeginX += viewStep;
+                    if (currentViewBeginX > currentViewEndX) {
+                        currentViewBeginX = currentViewEndX;
+                    }
+                    
+                    mTabSelect.setLocation(barBeginX, 0);
+                    lastTabView.setLocation(lastViewBeginX, 0);
+                    currentTabView.setLocation(currentViewBeginX, 0);
+                    
+                    try {
+                        Thread.sleep(3);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
 
-		} else {
+                break;
+            default:
+                break;
+            }
+            mCurrentIndex = mSelectIndex;
 
-		}
+            Component[] components = mNamePanel.getComponents();
 
-	}
+            components[mCurrentIndex].setFont(new Font(mTabStrings.get(mCurrentIndex), 1, 20));
+            components[mCurrentIndex].setForeground(Color.BLUE);
 
-	private MouseListener mMouseListener = new MouseListener() {
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-			for (int i = 0; i < mTabStrings.size(); i++) {
-				if (mTabStrings.get(i).equals(((JLabel) e.getComponent()).getText())) {
-					mSelectIndex = i;
-					onTabLayout();
-				}
-			}
-		}
+            components[mLastIndex].setFont(new Font(mTabStrings.get(mLastIndex), 1, 12));
+            components[mLastIndex].setForeground(Color.BLACK);
 
-		@Override
-		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
+            mTabView.remove(lastTabView);//remove the last one
+            //mTabView.remove(0);
 
-		}
+            mLastIndex = mCurrentIndex;
+        }
+    }
 
-		@Override
-		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
+    private void onTabLayout() {
+        if (mScrollThread != null && mScrollThread.isAlive()) {
+            try {
+                mScrollThread.join();
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
 
-		}
+        mScrollThread = new ScrollThread();
 
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
+        if (mSelectIndex > mCurrentIndex) {
 
-		}
+            mScrollThread.setAction(MOVE_RIGHT);
+            mScrollThread.setPart(mSelectIndex - mCurrentIndex);
 
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
+            mScrollThread.start();
 
-		}
-	};
+        } else if (mSelectIndex < mCurrentIndex) {
+            mScrollThread.setAction(MOVE_LEFT);
+            mScrollThread.setPart(mCurrentIndex - mSelectIndex);
+            mScrollThread.start();
+
+        } else {
+
+        }
+
+    }
+
+    private MouseListener mMouseListener = new MouseListener() {
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            // TODO Auto-generated method stub
+            for (int i = 0; i < mTabStrings.size(); i++) {
+                if (mTabStrings.get(i).equals(((JLabel) e.getComponent()).getText())) {
+                    mSelectIndex = i;
+                    onTabLayout();
+                }
+            }
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            // TODO Auto-generated method stub
+
+        }
+    };
 }

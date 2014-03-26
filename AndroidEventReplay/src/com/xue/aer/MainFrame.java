@@ -52,7 +52,7 @@ public class MainFrame extends JFrame {
 		contentPane.add(tabHost);
 
 		RecordView recordView = new RecordView("record");
-		recordView.setBackground(Color.YELLOW);
+		recordView.setBackground(Color.GRAY);
 		ReplayView replayView = new ReplayView("replay");
 		replayView.setBackground(Color.RED);
 		ReplayView replayView2 = new ReplayView("replay2");
