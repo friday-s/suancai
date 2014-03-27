@@ -83,19 +83,18 @@ public class TabHost extends JPanel {
         mTabViews = new ArrayList<TabView>();
 
         mTabBar = new JPanel();
-        BorderLayout broderlayout = new BorderLayout();
        
         mTabBar.setLayout(new BorderLayout());
-        mTabBar.setMaximumSize(new Dimension(AER.TAB_BAR_WIDTH, AER.TAB_BAR_HEIGHT));
-        mTabBar.setPreferredSize(new Dimension(AER.TAB_BAR_WIDTH, AER.TAB_BAR_HEIGHT));
+        //mTabBar.setMaximumSize(new Dimension(AER.TAB_BAR_WIDTH, AER.TAB_BAR_HEIGHT));
+        //mTabBar.setPreferredSize(new Dimension(AER.TAB_BAR_WIDTH, AER.TAB_BAR_HEIGHT));
         mTabBar.setBackground(Color.WHITE);
         mTabBar.setBounds(0, 0, AER.TAB_BAR_WIDTH, AER.TAB_BAR_HEIGHT);
         this.add(mTabBar);
 
         mTabView = new JPanel();
         mTabView.setLayout(null);
-        mTabView.setMaximumSize(new Dimension(AER.TAB_VIEW_WIDTH, AER.TAB_VIEW_HEIGHT));
-        mTabView.setPreferredSize(new Dimension(AER.TAB_VIEW_WIDTH, AER.TAB_VIEW_HEIGHT));
+        //mTabView.setMaximumSize(new Dimension(AER.TAB_VIEW_WIDTH, AER.TAB_VIEW_HEIGHT));
+        //mTabView.setPreferredSize(new Dimension(AER.TAB_VIEW_WIDTH, AER.TAB_VIEW_HEIGHT));
         mTabView.setBounds(AER.TAB_VIEW_X, AER.TAB_VIEW_Y, AER.TAB_VIEW_WIDTH, AER.TAB_VIEW_HEIGHT);
 
         this.add(mTabView);
@@ -157,6 +156,8 @@ public class TabHost extends JPanel {
 
             TabView lastTabView = mTabViews.get(mLastIndex);
 
+            boolean isReached =false;
+            
             // int step = 10;
             switch (direction) {
             case MOVE_RIGHT:
@@ -165,7 +166,7 @@ public class TabHost extends JPanel {
                 lastViewBeginX = 0;
                 currentViewEndX = 0;
                 lastViewEndX = -currentViewBeginX;
-                while (barBeginX < barEndX) {
+                while (!isReached) {
                     barBeginX += barStep;
                     if (barBeginX > barEndX) {
                         barBeginX = barEndX;
@@ -180,10 +181,16 @@ public class TabHost extends JPanel {
                     if (currentViewBeginX < currentViewEndX) {
                         currentViewBeginX = currentViewEndX;
                     }
+                    
+                    if (barBeginX == barEndX && lastViewBeginX == lastViewEndX
+                            && currentViewBeginX == currentViewEndX) {
+                        isReached = true;
+                    }
 
                     mTabSelect.setLocation(barBeginX, 0);
                     lastTabView.setLocation(lastViewBeginX, 0);
                     currentTabView.setLocation(currentViewBeginX, 0);
+                    
 
                     try {
                         Thread.sleep(3);
@@ -199,7 +206,7 @@ public class TabHost extends JPanel {
                 lastViewBeginX = 0;
                 currentViewEndX = 0;
                 lastViewEndX = -currentViewBeginX;
-                while (barBeginX > barEndX) {
+                while (!isReached) {
                     barBeginX -= barStep;
                     if (barBeginX < barEndX){
                         barBeginX = barEndX;
@@ -213,6 +220,11 @@ public class TabHost extends JPanel {
                     currentViewBeginX += viewStep;
                     if (currentViewBeginX > currentViewEndX) {
                         currentViewBeginX = currentViewEndX;
+                    }
+                    
+                    if (barBeginX == barEndX && lastViewBeginX == lastViewEndX
+                            && currentViewBeginX == currentViewEndX) {
+                        isReached = true;
                     }
                     
                     mTabSelect.setLocation(barBeginX, 0);

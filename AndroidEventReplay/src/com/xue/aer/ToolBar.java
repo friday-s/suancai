@@ -28,12 +28,9 @@ public class ToolBar extends JPanel implements MouseListener {
 	private JLabel mAboutLabel;
 	private JLabel mSettingsLabel;
 
-	public ToolBar(int x, int y) {
-		setSize(AER.TOOL_BAR_WIDTH, AER.TOOL_BAR_HEIGHT);
-		setLocation(x, y);
+	public ToolBar() {
 		// setLayout(new FlowLayout(FlowLayout.RIGHT, 0, 0));
 		setLayout(null);
-		setBackground(Color.WHITE);
 		initOptions();
 	}
 
@@ -65,7 +62,7 @@ public class ToolBar extends JPanel implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println("mouseClicked");
+		//System.out.println("mouseClicked");
 
 	}
 

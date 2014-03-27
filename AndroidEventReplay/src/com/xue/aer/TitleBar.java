@@ -100,8 +100,6 @@ public class TitleBar extends JPanel {
 		SpringLayout springLayout = new SpringLayout();
 		setLayout(springLayout);
 		setVisible(true);
-		setBounds(0, 0, AER.TITLE_BAR_WIDTH, AER.TITLE_BAR_HEIGHT);
-		this.setBackground(Color.WHITE);
 
 		add(mTitleLabel);
 		add(mTitleName);

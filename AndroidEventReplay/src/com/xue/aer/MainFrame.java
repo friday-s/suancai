@@ -41,9 +41,13 @@ public class MainFrame extends JFrame {
 		setContentPane(contentPane);
 
 		TitleBar titleBar = new TitleBar(this);
+		titleBar.setBounds(0, 0, AER.TITLE_BAR_WIDTH, AER.TITLE_BAR_HEIGHT);
+		titleBar.setBackground(Color.WHITE);
 		contentPane.add(titleBar);
 
-		ToolBar toolBar = new ToolBar(0, AER.TITLE_BAR_HEIGHT);
+		ToolBar toolBar = new ToolBar();
+		toolBar.setBounds(0, AER.TITLE_BAR_HEIGHT, AER.TOOL_BAR_WIDTH, AER.TOOL_BAR_HEIGHT);
+		toolBar.setBackground(Color.WHITE);
 		contentPane.add(toolBar);
 
 		TabHost tabHost = new TabHost();
@@ -60,6 +64,11 @@ public class MainFrame extends JFrame {
 		tabHost.addTab(recordView);
 		tabHost.addTab(replayView);
 		tabHost.addTab(replayView2);
+		
+		BottomBar bottomBar = new BottomBar();
+		bottomBar.setBounds(AER.BOTTOM_BAR_X, AER.BOTTOM_BAR_Y, AER.BOTTOM_BAR_WIDTH, AER.BOTTOM_BAR_HEIGHT);
+		bottomBar.setBackground(Color.WHITE);
+		contentPane.add(bottomBar);
 
 	}
 
