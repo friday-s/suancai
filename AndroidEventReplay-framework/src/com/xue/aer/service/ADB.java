@@ -19,6 +19,7 @@ import java.io.File;
 
 import com.android.ddmlib.AndroidDebugBridge;
 import com.android.ddmlib.IDevice;
+import com.android.ddmlib.Log;
 
 public class ADB {
     private AndroidDebugBridge mAndroidDebugBridge;
@@ -26,7 +27,8 @@ public class ADB {
     public boolean initialize() {
         boolean success = true;
 
-        String adbLocation = System.getProperty("com.android.screenshot.bindir");
+        //String adbLocation = System.getProperty("com.android.screenshot.bindir");
+        String adbLocation = null;
 
         if (success) {
             if ((adbLocation != null) && (adbLocation.length() != 0)) {
