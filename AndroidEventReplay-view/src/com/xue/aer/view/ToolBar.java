@@ -9,6 +9,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
@@ -27,9 +28,12 @@ public class ToolBar extends JPanel implements MouseListener {
 
 	private JLabel mAboutLabel;
 	private JLabel mSettingsLabel;
+	
+	private JFrame mContext;
 
-	public ToolBar() {
+	public ToolBar(JFrame jframe) {
 		// setLayout(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+	    mContext = jframe;
 		setLayout(null);
 		initOptions();
 	}
@@ -72,6 +76,9 @@ public class ToolBar extends JPanel implements MouseListener {
 		System.out.println("mousePressed");
 		if (e.getSource() == mAboutLabel) {
 			mAboutLabel.setIcon(Util.getImageIcon("about_down_24.png"));
+			SoftwareInfoView view = new SoftwareInfoView(mContext);
+			view.setVisible(true);
+			
 		}
 		if (e.getSource() == mSettingsLabel) {
 			mSettingsLabel.setIcon(Util.getImageIcon("settings_down_25.png"));

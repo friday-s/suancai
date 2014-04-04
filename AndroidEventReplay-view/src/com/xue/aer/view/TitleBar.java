@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
 import com.xue.aer.res.AER;
+import com.xue.aer.util.AWTUtilitiesWrapper;
 import com.xue.aer.util.Util;
 
 public class TitleBar extends JPanel {

@@ -39,6 +39,7 @@ public class AER {
     public static final int TAB_VIEW_HEIGHT = TAB_HOST_HEIGHT - TAB_BAR_HEIGHT;
     public static final int TAB_VIEW_X = 0;
     public static final int TAB_VIEW_Y = TAB_BAR_HEIGHT + 1;
+    
 
     public static final String APP_NAME = "Android Event Replay";
     public static final String APP_NAME_SHORT = "AER";

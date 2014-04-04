@@ -7,6 +7,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import com.xue.aer.util.AWTUtilitiesWrapper;
 import com.xue.aer.util.Util;
 
 public class AlertDialog extends Dialog implements MouseListener {
@@ -24,7 +25,7 @@ public class AlertDialog extends Dialog implements MouseListener {
 	public static final int MSG_DIALOG = 2;
 
 	private int mFlag;
-	private String message = "xxxxxxxxxxxxxxx";
+	private String message;
 
 	private JLabel mIconLable;
 	private JLabel mPositiveBtn;
@@ -83,6 +84,8 @@ public class AlertDialog extends Dialog implements MouseListener {
 
 			getLayeredPane().add(mPositiveBtn, new Integer(300));
 			getLayeredPane().add(mNegativeBtn, new Integer(300));
+			this.setAlwaysOnTop(true);
+			mContext.setEnabled(false);
 
 			break;
 		}
@@ -106,6 +109,7 @@ public class AlertDialog extends Dialog implements MouseListener {
 		if (e.getSource() == mNegativeBtn) {
 			mNegativeBtn.setIcon(Util.getImageIcon("cancel_up.png"));
 			this.dispose();
+			mContext.setEnabled(true);
 			return;
 		}
 	}

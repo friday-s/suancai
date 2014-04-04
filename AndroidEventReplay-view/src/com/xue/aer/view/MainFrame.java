@@ -45,7 +45,7 @@ public class MainFrame extends JFrame {
 		titleBar.setBackground(Color.WHITE);
 		contentPane.add(titleBar);
 
-		ToolBar toolBar = new ToolBar();
+		ToolBar toolBar = new ToolBar(this);
 		toolBar.setBounds(0, AER.TITLE_BAR_HEIGHT, AER.TOOL_BAR_WIDTH, AER.TOOL_BAR_HEIGHT);
 		toolBar.setBackground(Color.WHITE);
 		contentPane.add(toolBar);
@@ -59,7 +59,7 @@ public class MainFrame extends JFrame {
 		recordView.setBackground(Color.GRAY);
 		ReplayView replayView = new ReplayView("replay");
 		replayView.setBackground(Color.RED);
-		ReplayView replayView2 = new ReplayView("replay2");
+		ReplayView replayView2 = new ReplayView("More");
 		replayView2.setBackground(Color.BLUE);
 		tabHost.addTab(recordView);
 		tabHost.addTab(replayView);
