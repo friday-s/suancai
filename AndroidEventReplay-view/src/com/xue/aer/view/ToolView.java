@@ -45,6 +45,7 @@ public class ToolView extends Dialog implements MouseListener {
 
         getLayeredPane().add(actionBar, new Integer(300));
         actionBar.setBounds(0, 0, AER.TOOL_VIEW_WIDTH, 50);
+        
     }
     
     public void setLocation(int x,int y){
