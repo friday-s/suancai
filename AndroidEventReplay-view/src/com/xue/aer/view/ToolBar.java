@@ -21,92 +21,95 @@ import com.xue.aer.util.Util;
 
 public class ToolBar extends JPanel implements MouseListener {
 
+    private static final int TOOL_BAR_OPTION_WIDTH = 26;
+    private static final int TOOL_BAR_OPTION_HEIGHT = 26;
 
+    private JLabel mAboutLabel;
+    private JLabel mSettingsLabel;
 
-	private static final int TOOL_BAR_OPTION_WIDTH = 26;
-	private static final int TOOL_BAR_OPTION_HEIGHT = 26;
+    private JFrame mContext;
 
-	private JLabel mAboutLabel;
-	private JLabel mSettingsLabel;
-	
-	private JFrame mContext;
+    private ToolView softwareInfoView;
 
-	public ToolBar(JFrame jframe) {
-		// setLayout(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-	    mContext = jframe;
-		setLayout(null);
-		initOptions();
-	}
+    public ToolBar(JFrame jframe) {
+        // setLayout(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+        mContext = jframe;
+        setLayout(null);
+        initOptions();
+    }
 
-	private void initOptions() {
-		SpringLayout springLayout = new SpringLayout();
-		setLayout(springLayout);
-		
-		mAboutLabel = new JLabel();
-		//mAboutLabel.setBounds(0, 0, TOOL_BAR_OPTION_HEIGHT, TOOL_BAR_OPTION_HEIGHT);
-		mAboutLabel.setIcon(Util.getImageIcon("about_up_24.png"));
-		mAboutLabel.setBackground(Color.WHITE);
-		mAboutLabel.addMouseListener(this);
-		this.add(mAboutLabel);
-		
-		mSettingsLabel = new JLabel();
-		//mSettingsLabel.setBounds(0, 0, TOOL_BAR_OPTION_HEIGHT, TOOL_BAR_OPTION_HEIGHT);
-		mSettingsLabel.setIcon(Util.getImageIcon("settings_up_25.png"));
-		mSettingsLabel.setBackground(Color.WHITE);
-		mSettingsLabel.addMouseListener(this);
-		this.add(mSettingsLabel);
-		
-		
-		springLayout.putConstraint(SpringLayout.EAST, mAboutLabel,-3,
-                SpringLayout.EAST, this);
-		springLayout.putConstraint(SpringLayout.EAST, mSettingsLabel,-5,
-                SpringLayout.WEST, mAboutLabel);
-	}
+    private void initOptions() {
+        SpringLayout springLayout = new SpringLayout();
+        setLayout(springLayout);
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		//System.out.println("mouseClicked");
+        mAboutLabel = new JLabel();
+        // mAboutLabel.setBounds(0, 0, TOOL_BAR_OPTION_HEIGHT,
+        // TOOL_BAR_OPTION_HEIGHT);
+        mAboutLabel.setIcon(Util.getImageIcon("about_up_24.png"));
+        mAboutLabel.setBackground(Color.WHITE);
+        mAboutLabel.addMouseListener(this);
+        this.add(mAboutLabel);
 
-	}
+        mSettingsLabel = new JLabel();
+        // mSettingsLabel.setBounds(0, 0, TOOL_BAR_OPTION_HEIGHT,
+        // TOOL_BAR_OPTION_HEIGHT);
+        mSettingsLabel.setIcon(Util.getImageIcon("settings_up_25.png"));
+        mSettingsLabel.setBackground(Color.WHITE);
+        mSettingsLabel.addMouseListener(this);
+        this.add(mSettingsLabel);
 
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println("mousePressed");
-		if (e.getSource() == mAboutLabel) {
-			mAboutLabel.setIcon(Util.getImageIcon("about_down_24.png"));
-			SoftwareInfoView view = new SoftwareInfoView(mContext);
-			view.setVisible(true);
-			
-		}
-		if (e.getSource() == mSettingsLabel) {
-			mSettingsLabel.setIcon(Util.getImageIcon("settings_down_25.png"));
-		}
-	}
+        springLayout.putConstraint(SpringLayout.EAST, mAboutLabel, -3, SpringLayout.EAST, this);
+        springLayout.putConstraint(SpringLayout.EAST, mSettingsLabel, -5, SpringLayout.WEST,
+                mAboutLabel);
+    }
 
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println("mouseReleased");
-		if (e.getSource() == mAboutLabel) {
-			mAboutLabel.setIcon(Util.getImageIcon("about_up_24.png"));
-		}
-		if (e.getSource() == mSettingsLabel) {
-			mSettingsLabel.setIcon(Util.getImageIcon("settings_up_25.png"));
-		}
-	}
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        // TODO Auto-generated method stub
+        // System.out.println("mouseClicked");
 
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println("mouseEntered");
-	}
+    }
 
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println("mouseExited");
-	}
+    @Override
+    public void mousePressed(MouseEvent e) {
+        // TODO Auto-generated method stub
+        System.out.println("mousePressed");
+        if (e.getSource() == mAboutLabel) {
+            mAboutLabel.setIcon(Util.getImageIcon("about_down_24.png"));
+            if (softwareInfoView == null) {
+                softwareInfoView = new ToolView(mContext);
+            }
+            if (!softwareInfoView.isShow()) {
+                softwareInfoView.showView();
+            }
+        }
+        if (e.getSource() == mSettingsLabel) {
+            mSettingsLabel.setIcon(Util.getImageIcon("settings_down_25.png"));
+        }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        // TODO Auto-generated method stub
+        System.out.println("mouseReleased");
+        if (e.getSource() == mAboutLabel) {
+            mAboutLabel.setIcon(Util.getImageIcon("about_up_24.png"));
+        }
+        if (e.getSource() == mSettingsLabel) {
+            mSettingsLabel.setIcon(Util.getImageIcon("settings_up_25.png"));
+        }
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        // TODO Auto-generated method stub
+        System.out.println("mouseEntered");
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        // TODO Auto-generated method stub
+        System.out.println("mouseExited");
+    }
 
 }

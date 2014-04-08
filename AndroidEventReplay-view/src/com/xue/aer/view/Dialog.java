@@ -19,11 +19,15 @@ public class Dialog extends JFrame {
     private int mDialogWidth = DEFAULT_WIDTH;
     private int mDialogHeight = DEFAULT_HEIGHT;
 
-    private JFrame mContext;
+    protected JFrame mContext;
     private JLayeredPane layeredPane;
+
+    private JLabel background;
+    private ImageIcon backgroundIcon;
 
     public Dialog(JFrame owner) {
         this.mContext = owner;
+        initPanel();
 
     }
 
@@ -31,16 +35,16 @@ public class Dialog extends JFrame {
         this.mContext = owner;
         this.mDialogWidth = width;
         this.mDialogHeight = height;
-
+        initPanel();
     }
 
-    public void initPanel() {
+    private void initPanel() {
         this.setUndecorated(true);
 
         this.setBackground(new Color(0, 0, 0, 0));
-        this.setLocationRelativeTo(mContext);
+        // this.setLocationRelativeTo(mContext);
         this.setSize(mDialogWidth, mDialogHeight);
-        this.setLocation(AER.LOCATION_X + (AER.WIDTH - mDialogWidth) / 2, AER.LOCATION_Y
+        this.setLocation(mContext.getX() + (AER.WIDTH - mDialogWidth) / 2, mContext.getY()
                 + (AER.HEIGHT - mDialogHeight) / 2);
 
         layeredPane = new JLayeredPane();
@@ -50,18 +54,35 @@ public class Dialog extends JFrame {
 
         this.add(layeredPane);
 
-        JLabel label = new JLabel();
-        ImageIcon icon = Util.getImageIcon("dlg_bg.png");
+        background = new JLabel();
+        backgroundIcon = Util.getImageIcon("dlg_bg.png");
 
-        if (mDialogWidth != DEFAULT_WIDTH && mDialogHeight != DEFAULT_HEIGHT) {
-            icon.setImage(icon.getImage().getScaledInstance(mDialogWidth, mDialogHeight,
-                    Image.SCALE_SMOOTH));
+        background.setIcon(scaleImage(backgroundIcon,mDialogWidth,mDialogHeight));
+        background.setBounds(0, 0, mDialogWidth, mDialogHeight);
+
+        layeredPane.add(background, new Integer(200));
+
+    }
+
+    private ImageIcon scaleImage(ImageIcon icon, int width, int height) {
+        if (width != DEFAULT_WIDTH || height != DEFAULT_HEIGHT) {
+            icon.setImage(icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
+            System.out.println("mDialogWidth:" + width);
+            System.out.println("mDialogHeight:" + height);
         }
-        label.setIcon(icon);
-        label.setBounds(0, 0, mDialogWidth, mDialogHeight);
+        return icon;
+    }
 
-        layeredPane.add(label, new Integer(200));
+    public void setViewBounds(int x, int y, int width, int height) {
+        setBounds(x, y, width, height);
+       // background.setBounds(0, 0, width, height);
 
+    }
+
+    public void packBackground() {
+        backgroundIcon = Util.getImageIcon("dlg_bg.png");
+        background.setIcon(scaleImage(backgroundIcon,mDialogWidth+5,mDialogHeight));
+        background.setBounds(0, 0, mDialogWidth, mDialogHeight);
     }
 
     public int getDialogWidth() {
