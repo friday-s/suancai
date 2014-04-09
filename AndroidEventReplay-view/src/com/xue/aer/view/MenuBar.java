@@ -76,12 +76,7 @@ public class MenuBar extends JPanel implements MouseListener {
         System.out.println("mousePressed");
         if (e.getSource() == mAboutLabel) {
             mAboutLabel.setIcon(Util.getImageIcon("about_down_24.png"));
-            if (softwareInfoView == null) {
-                softwareInfoView = new MenuView(mContext);
-            }
-            if (!softwareInfoView.isShow()) {
-                softwareInfoView.showView();
-            }
+            
         }
         if (e.getSource() == mSettingsLabel) {
             mSettingsLabel.setIcon(Util.getImageIcon("settings_down_25.png"));

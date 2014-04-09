@@ -25,79 +25,65 @@ import com.xue.aer.event.ViewLocationChangeListener;
 import com.xue.aer.res.AER;
 import com.xue.aer.util.Util;
 
-public class MainFrame extends JFrame implements ViewLocationChangeListener{
+public class MainFrame extends JFrame {
 
-    public JPanel contentPane;
+	private static final Integer LAYER_ONE = new Integer(200);
 
-    private ViewLocationChangeListener listener;
-    
-    /**
-     * Create the frame.
-     */
-    public MainFrame() {
-        setUndecorated(true);
+	// public JPanel contentPane;
 
-        contentPane = new JPanel();
-        contentPane.setBackground(Color.WHITE);
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        contentPane.setLayout(null);
+	public JLayeredPane layeredPane;
 
-        setContentPane(contentPane);
+	/**
+	 * Create the frame.
+	 */
+	public MainFrame() {
+		layeredPane = new JLayeredPane();
 
-        TitleBar titleBar = new TitleBar(this);
-        titleBar.setBounds(0, 0, AER.TITLE_BAR_WIDTH, AER.TITLE_BAR_HEIGHT);
-        titleBar.setBackground(Color.WHITE);
-        contentPane.add(titleBar);
+		setUndecorated(true);
 
-        MenuBar toolBar = new MenuBar(this);
-        toolBar.setBounds(0, AER.TITLE_BAR_HEIGHT, AER.TOOL_BAR_WIDTH, AER.TOOL_BAR_HEIGHT);
-        toolBar.setBackground(Color.WHITE);
-        contentPane.add(toolBar);
-        
-        MenuItem menuItem = new MenuItem(new JLabel(),new MenuView(this));
-        menuItem.addViewLocationChangeListener(this);
+		// contentPane = new JPanel();
+		layeredPane.setBackground(Color.WHITE);
+		layeredPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		layeredPane.setLayout(null);
 
-        TabHost tabHost = new TabHost();
-        tabHost.setBounds(AER.TAB_HOST_LOCATION_X, AER.TAB_HOST_LOCATION_Y, AER.TAB_HOST_WIDTH,
-                AER.TAB_HOST_HEIGHT);
-        contentPane.add(tabHost);
+		setContentPane(layeredPane);
 
-        RecordView recordView = new RecordView("record");
-        recordView.setBackground(Color.GRAY);
-        ReplayView replayView = new ReplayView("replay");
-        replayView.setBackground(Color.RED);
-        ReplayView replayView2 = new ReplayView("More");
-        replayView2.setBackground(Color.BLUE);
-        tabHost.addTab(recordView);
-        tabHost.addTab(replayView);
-        tabHost.addTab(replayView2);
+		TitleBar titleBar = new TitleBar(this);
+		titleBar.setBounds(0, 0, AER.TITLE_BAR_WIDTH, AER.TITLE_BAR_HEIGHT);
+		titleBar.setBackground(Color.WHITE);
+		layeredPane.add(titleBar, LAYER_ONE);
 
-        BottomBar bottomBar = new BottomBar();
-        bottomBar.setBounds(AER.BOTTOM_BAR_X, AER.BOTTOM_BAR_Y, AER.BOTTOM_BAR_WIDTH,
-                AER.BOTTOM_BAR_HEIGHT);
-        bottomBar.setBackground(Color.WHITE);
-        contentPane.add(bottomBar);
+		MenuBar toolBar = new MenuBar(this);
+		toolBar.setBounds(0, AER.TITLE_BAR_HEIGHT, AER.TOOL_BAR_WIDTH, AER.TOOL_BAR_HEIGHT);
+		toolBar.setBackground(Color.WHITE);
+		layeredPane.add(toolBar, LAYER_ONE);
 
-    }
+		TabHost tabHost = new TabHost();
+		tabHost.setBounds(AER.TAB_HOST_LOCATION_X, AER.TAB_HOST_LOCATION_Y, AER.TAB_HOST_WIDTH,
+				AER.TAB_HOST_HEIGHT);
+		layeredPane.add(tabHost, LAYER_ONE);
 
-    public void setLocation(Point p) {
-        super.setLocation(p);
-     
-    }
-    
-    public void addViewLocationChangeListener(ViewLocationChangeListener l) {
-        this.listener = l;
-    }
-    
-    public void locationChanged(Point p){
-        listener.locationChaged(p);
-    }
+		RecordView recordView = new RecordView("record");
+		recordView.setBackground(Color.GRAY);
+		ReplayView replayView = new ReplayView("replay");
+		replayView.setBackground(Color.RED);
+		ReplayView replayView2 = new ReplayView("More");
+		replayView2.setBackground(Color.BLUE);
+		tabHost.addTab(recordView);
+		tabHost.addTab(replayView);
+		tabHost.addTab(replayView2);
 
-    @Override
-    public void locationChaged(Point p) {
-        // TODO Auto-generated method stub
-        super.setLocation(p);
-    }
+		BottomBar bottomBar = new BottomBar();
+		bottomBar.setBounds(AER.BOTTOM_BAR_X, AER.BOTTOM_BAR_Y, AER.BOTTOM_BAR_WIDTH,
+				AER.BOTTOM_BAR_HEIGHT);
+		bottomBar.setBackground(Color.WHITE);
+		layeredPane.add(bottomBar, LAYER_ONE);
 
+	}
+
+	public void setLocation(Point p) {
+		super.setLocation(p);
+
+	}
 
 }
