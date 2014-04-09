@@ -32,21 +32,16 @@ public class AlertDialog extends Dialog implements MouseListener {
 	private JLabel mNegativeBtn;
 	private JLabel mMsgLabel;
 	
-	private JFrame mContext;
 
 	public AlertDialog(JFrame owner) {
 		super(owner);
-		mContext = owner;
+	
 	}
 
 	public AlertDialog(JFrame owner, int width, int height, int flag) {
-		this(owner);
+		super(owner,width,height);
 		// TODO Auto-generated constructor stub
 		setFlag(flag);
-		setDialogWidth(width);
-		setDialogHeight(height);
-		initPanel();
-		
 	}
 
 	public void setFlag(int flag) {
