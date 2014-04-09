@@ -2,6 +2,7 @@ package com.xue.aer.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -9,9 +10,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.xue.aer.event.ViewLocationChangeListener;
 import com.xue.aer.res.AER;
 
-public class MenuView extends Dialog implements MouseListener {
+public class MenuView extends Dialog implements MouseListener, ViewLocationChangeListener{
 
     private static final int SHOW_FLAG = 0;
     private static final int HIDE_FLAG = 1;
@@ -22,6 +24,8 @@ public class MenuView extends Dialog implements MouseListener {
 
     private JPanel actionBar;
     private JLabel back;
+    
+
 
     public MenuView(JFrame owner) {
         super(owner, 1, AER.TOOL_VIEW_HEIGHT);
@@ -153,6 +157,7 @@ public class MenuView extends Dialog implements MouseListener {
         }
 
     }
+    
 
     public boolean isShow() {
         return isShow;
@@ -192,6 +197,12 @@ public class MenuView extends Dialog implements MouseListener {
     public void mouseExited(MouseEvent e) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public void locationChaged(Point p) {
+        // TODO Auto-generated method stub
+        
     }
 
 }
