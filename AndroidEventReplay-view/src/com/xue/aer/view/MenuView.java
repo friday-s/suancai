@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 
 import com.xue.aer.res.AER;
 
-public class ToolView extends Dialog implements MouseListener {
+public class MenuView extends Dialog implements MouseListener {
 
     private static final int SHOW_FLAG = 0;
     private static final int HIDE_FLAG = 1;
@@ -23,7 +23,7 @@ public class ToolView extends Dialog implements MouseListener {
     private JPanel actionBar;
     private JLabel back;
 
-    public ToolView(JFrame owner) {
+    public MenuView(JFrame owner) {
         super(owner, 1, AER.TOOL_VIEW_HEIGHT);
         // TODO Auto-generated constructor stub
         initView();

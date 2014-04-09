@@ -19,7 +19,7 @@ import javax.swing.event.AncestorListener;
 import com.xue.aer.res.AER;
 import com.xue.aer.util.Util;
 
-public class ToolBar extends JPanel implements MouseListener {
+public class MenuBar extends JPanel implements MouseListener {
 
     private static final int TOOL_BAR_OPTION_WIDTH = 26;
     private static final int TOOL_BAR_OPTION_HEIGHT = 26;
@@ -29,9 +29,9 @@ public class ToolBar extends JPanel implements MouseListener {
 
     private JFrame mContext;
 
-    private ToolView softwareInfoView;
+    private MenuView softwareInfoView;
 
-    public ToolBar(JFrame jframe) {
+    public MenuBar(JFrame jframe) {
         // setLayout(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         mContext = jframe;
         setLayout(null);
@@ -77,7 +77,7 @@ public class ToolBar extends JPanel implements MouseListener {
         if (e.getSource() == mAboutLabel) {
             mAboutLabel.setIcon(Util.getImageIcon("about_down_24.png"));
             if (softwareInfoView == null) {
-                softwareInfoView = new ToolView(mContext);
+                softwareInfoView = new MenuView(mContext);
             }
             if (!softwareInfoView.isShow()) {
                 softwareInfoView.showView();

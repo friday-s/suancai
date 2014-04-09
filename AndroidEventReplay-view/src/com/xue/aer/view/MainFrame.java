@@ -45,7 +45,7 @@ public class MainFrame extends JFrame {
 		titleBar.setBackground(Color.WHITE);
 		contentPane.add(titleBar);
 
-		ToolBar toolBar = new ToolBar(this);
+		MenuBar toolBar = new MenuBar(this);
 		toolBar.setBounds(0, AER.TITLE_BAR_HEIGHT, AER.TOOL_BAR_WIDTH, AER.TOOL_BAR_HEIGHT);
 		toolBar.setBackground(Color.WHITE);
 		contentPane.add(toolBar);
