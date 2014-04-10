@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import com.xue.aer.event.ViewLocationChangeListener;
 import com.xue.aer.res.AER;
 
-public class MenuView extends Dialog implements MouseListener, ViewLocationChangeListener{
+public class MenuView2 extends Dialog implements MouseListener, ViewLocationChangeListener{
 
     private static final int SHOW_FLAG = 0;
     private static final int HIDE_FLAG = 1;
@@ -27,7 +27,7 @@ public class MenuView extends Dialog implements MouseListener, ViewLocationChang
     
 
 
-    public MenuView(JFrame owner) {
+    public MenuView2(JFrame owner) {
         super(owner, 1, AER.TOOL_VIEW_HEIGHT);
         // TODO Auto-generated constructor stub
         initView();

@@ -29,7 +29,7 @@ public class MenuBar extends JPanel implements MouseListener {
 
     private JFrame mContext;
 
-    private MenuView softwareInfoView;
+    private MenuView2 softwareInfoView;
 
     public MenuBar(JFrame jframe) {
         // setLayout(new FlowLayout(FlowLayout.RIGHT, 0, 0));

@@ -10,11 +10,11 @@ public class MenuItem {
 
     private JLabel mIconLabel;
 
-    private MenuView mMenuView;
+    private MenuView2 mMenuView;
 
     private ViewLocationChangeListener listener;
 
-    public MenuItem(JLabel iconLabel, MenuView menuView) {
+    public MenuItem(JLabel iconLabel, MenuView2 menuView) {
         this.mIconLabel = iconLabel;
         this.mMenuView = menuView;
     }
@@ -27,11 +27,11 @@ public class MenuItem {
         this.mIconLabel = mIconLabel;
     }
 
-    public MenuView getmenuView() {
+    public MenuView2 getmenuView() {
         return mMenuView;
     }
 
-    public void setmenuView(MenuView mMenuView) {
+    public void setmenuView(MenuView2 mMenuView) {
         this.mMenuView = mMenuView;
     }
 
