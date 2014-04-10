@@ -60,7 +60,7 @@ public class Dialog extends JFrame {
         background.setIcon(scaleImage(backgroundIcon,mDialogWidth,mDialogHeight));
         background.setBounds(0, 0, mDialogWidth, mDialogHeight);
 
-        layeredPane.add(background, new Integer(200));
+        layeredPane.add(background,JLayeredPane.DEFAULT_LAYER);
 
     }
 

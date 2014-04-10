@@ -1,33 +1,58 @@
 package com.xue.aer.view;
 
-import java.awt.Image;
-
-import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
+
+import com.xue.aer.util.Util;
 
 public class MenuItemView extends JLayeredPane {
 
-    private JPanel bgPanel;
+    private static final int BACK_BTN_WIDTH = 50;
+    private static final int BACK_BTN_HEIGHT = 50;
 
-    private int mMenuItemViewWidth = 450;
-    private int mMenuItemViewHeight = 300;
+    private JLabel bgLabel;
+
+    private JLabel back;
+
+    /* default size */
+    private int mWidth = 400;
+    private int mHeight = 300;
 
     public MenuItemView() {
         initView();
     }
 
+    public MenuItemView(int width, int height) {
+        this.mWidth = width;
+        this.mHeight = height;
+        initView();
+    }
+
     private void initView() {
         this.setLayout(null);
-        bgPanel = new JPanel();
+        this.setBounds(0, 0, mWidth, mHeight);
+        this.setVisible(false);
+
+        bgLabel = new JLabel();
+        bgLabel.setBounds(0, 0, mWidth, mHeight);
+        bgLabel.setIcon(Util.scaleImage(Util.getImageIcon("dlg_bg.png"), mWidth, mHeight));
+        this.add(bgLabel, JLayeredPane.DEFAULT_LAYER);
+
+        back = new JLabel();
+        back.setBounds(0, 0, BACK_BTN_WIDTH, BACK_BTN_HEIGHT);
+        back.setIcon(Util.scaleImage(Util.getImageIcon("right_normal.png"), BACK_BTN_WIDTH,
+                BACK_BTN_HEIGHT));
+        this.add(back, JLayeredPane.PALETTE_LAYER);
 
     }
 
-    private ImageIcon scaleImage(ImageIcon icon, int width, int height) {
-        if (width != mMenuItemViewWidth || height != mMenuItemViewHeight) {
-            icon.setImage(icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
-        }
-        return icon;
+    public void showView() {
+        this.setVisible(true);
+
+    }
+
+    public void hideView() {
+        this.setVisible(false);
     }
 
 }

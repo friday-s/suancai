@@ -1,110 +1,231 @@
 package com.xue.aer.view;
 
-import java.awt.Color;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
 
 import com.xue.aer.res.AER;
 import com.xue.aer.util.Util;
+
 
 public class MenuBar extends JPanel implements MouseListener {
 
     private static final int TOOL_BAR_OPTION_WIDTH = 26;
     private static final int TOOL_BAR_OPTION_HEIGHT = 26;
 
-    private JLabel mAboutLabel;
-    private JLabel mSettingsLabel;
-
     private JFrame mContext;
 
-    private MenuView2 softwareInfoView;
+    private ArrayList<MenuItem> mMenuItems;
+
+    private SpringLayout springLayout;
+
+    private AnimationThread animationThread;
 
     public MenuBar(JFrame jframe) {
         // setLayout(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         mContext = jframe;
         setLayout(null);
-        initOptions();
+        init();
     }
 
-    private void initOptions() {
-        SpringLayout springLayout = new SpringLayout();
+    private void init() {
+
+        mMenuItems = new ArrayList<MenuItem>();
+
+        springLayout = new SpringLayout();
         setLayout(springLayout);
+    }
 
-        mAboutLabel = new JLabel();
-        // mAboutLabel.setBounds(0, 0, TOOL_BAR_OPTION_HEIGHT,
-        // TOOL_BAR_OPTION_HEIGHT);
-        mAboutLabel.setIcon(Util.getImageIcon("about_up_24.png"));
-        mAboutLabel.setBackground(Color.WHITE);
-        mAboutLabel.addMouseListener(this);
-        this.add(mAboutLabel);
+    public void addMenuItem(MenuItem item) {
 
-        mSettingsLabel = new JLabel();
-        // mSettingsLabel.setBounds(0, 0, TOOL_BAR_OPTION_HEIGHT,
-        // TOOL_BAR_OPTION_HEIGHT);
-        mSettingsLabel.setIcon(Util.getImageIcon("settings_up_25.png"));
-        mSettingsLabel.setBackground(Color.WHITE);
-        mSettingsLabel.addMouseListener(this);
-        this.add(mSettingsLabel);
+        mMenuItems.add(item);
+        this.add(item.getWidget());
+        item.addMouseListener(this);
 
-        springLayout.putConstraint(SpringLayout.EAST, mAboutLabel, -3, SpringLayout.EAST, this);
-        springLayout.putConstraint(SpringLayout.EAST, mSettingsLabel, -5, SpringLayout.WEST,
-                mAboutLabel);
+        if (mMenuItems.size() == 1) {
+            springLayout.putConstraint(SpringLayout.EAST, mMenuItems.get(0).getWidget(), -3,
+                    SpringLayout.EAST, this);
+        } else {
+            springLayout.putConstraint(SpringLayout.EAST, mMenuItems.get(mMenuItems.size() - 1)
+                    .getWidget(), -5, SpringLayout.WEST, mMenuItems.get(mMenuItems.size() - 2)
+                    .getWidget());
+        }
+
+    }
+
+    private void attachBarForm(MenuItem item) {
+        MenuBarForm form = new MenuBarForm(this);
+        mContext.getLayeredPane().add(form, new Integer(200));
+        form.attachItemView(item.getMenuItemView());
+        form.showItemView();
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         // TODO Auto-generated method stub
-        // System.out.println("mouseClicked");
 
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
         // TODO Auto-generated method stub
-        System.out.println("mousePressed");
-        if (e.getSource() == mAboutLabel) {
-            mAboutLabel.setIcon(Util.getImageIcon("about_down_24.png"));
-            
-        }
-        if (e.getSource() == mSettingsLabel) {
-            mSettingsLabel.setIcon(Util.getImageIcon("settings_down_25.png"));
-        }
+
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         // TODO Auto-generated method stub
-        System.out.println("mouseReleased");
-        if (e.getSource() == mAboutLabel) {
-            mAboutLabel.setIcon(Util.getImageIcon("about_up_24.png"));
-        }
-        if (e.getSource() == mSettingsLabel) {
-            mSettingsLabel.setIcon(Util.getImageIcon("settings_up_25.png"));
+        for (MenuItem item : mMenuItems) {
+            if (item.getWidget() == e.getSource()) {
+                System.out.println("disply form");
+                attachBarForm(item);
+            }
         }
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
         // TODO Auto-generated method stub
-        System.out.println("mouseEntered");
+
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
         // TODO Auto-generated method stub
-        System.out.println("mouseExited");
+    }
+
+    class MenuBarForm extends JLayeredPane {
+
+        private MenuBar bar;
+        private int mFormWidth;
+        private int mFormHeight;
+
+        private MenuItemView mView;
+
+        public MenuBarForm(MenuBar bar) {
+
+            this.bar = bar;
+            mFormWidth = bar.mContext.getWidth();
+            mFormHeight = bar.mContext.getHeight();
+
+            this.setLayout(null);
+            this.setBounds(0, 0, mFormWidth, mFormHeight);
+            this.setVisible(true);
+            JLabel bg = new JLabel();
+            bg.setIcon(Util.scaleImage(Util.getImageIcon("shadow.png"), mFormWidth, mFormHeight));
+            bg.setBounds(0, 0, mFormWidth, mFormHeight);
+            this.add(bg, JLayeredPane.DEFAULT_LAYER);
+
+        }
+
+        public void showItemView() {
+            animationThread = new AnimationThread();
+            animationThread.setFlag(SHOW_FLAG);
+            animationThread.setItemView(mView);
+            animationThread.start();
+        }
+
+        public void hideItemView() {
+
+        }
+
+        public void attachItemView(MenuItemView view) {
+            this.mView = view;
+            this.add(mView, JLayeredPane.PALETTE_LAYER);
+        }
+    }
+
+    private static final int SHOW_FLAG = 0;
+    private static final int HIDE_FLAG = 1;
+
+    private class AnimationThread extends Thread {
+
+        private static final int STEP = 20;
+
+        private int flag;
+        private MenuItemView view;
+
+        public void setFlag(int flag) {
+            this.flag = flag;
+        }
+
+        public void setItemView(MenuItemView view) {
+            this.view = view;
+        }
+
+        public void run() {
+
+            int width = getWidth();
+            int height = getHeight();
+            int x = getX();
+            int tempX = x;
+            int y = getY();
+
+            switch (flag) {
+            case SHOW_FLAG:
+
+                while (width < AER.TOOL_VIEW_WIDTH) {
+
+                    tempX -= STEP;
+                    if (tempX < x - AER.TOOL_VIEW_WIDTH) {
+                        tempX = x - AER.TOOL_VIEW_WIDTH;
+                    }
+
+                    width += STEP;
+                    if (width > AER.TOOL_VIEW_WIDTH) {
+                        width = AER.TOOL_VIEW_WIDTH;
+                    }
+
+                    view.setBounds(tempX, y, width, height);
+                    // view.setDialogWidth(width);
+
+                    try {
+                        Thread.sleep(5);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+
+                break;
+            case HIDE_FLAG:
+
+                while (width > 1) {
+
+                    tempX += STEP;
+                    if (tempX > x + AER.TOOL_VIEW_WIDTH) {
+                        tempX = x + AER.TOOL_VIEW_WIDTH;
+                    }
+
+                    width -= STEP;
+                    if (width < 1) {
+                        width = 1;
+                    }
+
+                    view.setBounds(tempX, y, width, height);
+                    // view.setDialogWidth(width);
+
+                    try {
+                        Thread.sleep(5);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+
+                break;
+            default:
+                break;
+            }
+
+        }
+
     }
 
 }

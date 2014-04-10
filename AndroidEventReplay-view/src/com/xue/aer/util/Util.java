@@ -23,7 +23,7 @@ public class Util {
         return new ImageIcon(url);
     }
 
-    public ImageIcon scaleImage(ImageIcon icon, int width, int height) {
+    public static ImageIcon scaleImage(ImageIcon icon, int width, int height) {
         icon.setImage(icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
         return icon;
     }

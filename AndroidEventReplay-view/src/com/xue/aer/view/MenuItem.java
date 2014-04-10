@@ -1,54 +1,52 @@
 package com.xue.aer.view;
 
-import java.awt.Point;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
-import javax.swing.JLabel;
-
-import com.xue.aer.event.ViewLocationChangeListener;
+import javax.swing.JFrame;
 
 public class MenuItem {
 
-    private JLabel mIconLabel;
+    private static final int WIDGET_WIDTH = 26;
+    private static final int WIDGET_HEIGHT = 26;
 
-    private MenuView2 mMenuView;
+    private JFrame mContext;
+    private CButton mWidget;
 
-    private ViewLocationChangeListener listener;
+    private MenuItemView mMenuItemView;
 
-    public MenuItem(JLabel iconLabel, MenuView2 menuView) {
-        this.mIconLabel = iconLabel;
-        this.mMenuView = menuView;
+    public MenuItem(JFrame context, CButton widget, MenuItemView menuItemView) {
+        this.mContext = context;
+        this.mMenuItemView = menuItemView;
+        this.mWidget = widget;
     }
 
-    public JLabel getIconLabel() {
-        return mIconLabel;
+    public void showItemView() {
+        mMenuItemView.showView();
     }
 
-    public void setIconLabel(JLabel mIconLabel) {
-        this.mIconLabel = mIconLabel;
+    public void hideItemView() {
+        mMenuItemView.hideView();
     }
 
-    public MenuView2 getmenuView() {
-        return mMenuView;
+    public CButton getWidget() {
+        return mWidget;
     }
 
-    public void setmenuView(MenuView2 mMenuView) {
-        this.mMenuView = mMenuView;
+    public void setWidget(CButton mWidget) {
+        this.mWidget = mWidget;
     }
 
-    public void showMenuView() {
-        mMenuView.showView();
+    public MenuItemView getMenuItemView() {
+        return mMenuItemView;
     }
 
-    public void hideMenuView() {
-        mMenuView.hideView();
+    public void setMenuItemView(MenuItemView mMenuItemView) {
+        this.mMenuItemView = mMenuItemView;
     }
 
-    public void addViewLocationChangeListener(ViewLocationChangeListener l) {
-        this.listener = l;
-    }
-    
-    public void locationChanged(Point p){
-        listener.locationChaged(p);
+    public void addMouseListener(MouseListener l) {
+        this.mWidget.addMouseListener(l);
     }
 
 }
