@@ -41,6 +41,10 @@ public class AER {
     public static final int TAB_VIEW_HEIGHT = TAB_HOST_HEIGHT - TAB_BAR_HEIGHT;
     public static final int TAB_VIEW_X = 0;
     public static final int TAB_VIEW_Y = TAB_BAR_HEIGHT + 1;
+    
+    public static final int SOFTWARE_INFO_VIEW_WIDTH = 300;
+    public static final int SOFTWARE_INFO_VIEW_HEIGHT = 200;
+    
 
     public static final String APP_NAME = "Android Event Replay";
     public static final String APP_NAME_SHORT = "AER";
@@ -53,5 +57,12 @@ public class AER {
 
     public static final String USB_STATE = "USB:";
     public static final String DEVICE_SN = "Device:";
+    
+    public static final String SOFTWARE_INFORMATION = 
+                                                        "<html>"
+                                                        +APP_NAME + " v2.0"+"<br>"
+                                                        +"Build:XXXXX" + "<br>"
+                                                        +"Email:175427603@qq.com" + "<br>"
+                                                        +"</html>";
 
 }

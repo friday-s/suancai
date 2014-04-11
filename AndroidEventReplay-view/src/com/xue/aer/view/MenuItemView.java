@@ -2,6 +2,7 @@ package com.xue.aer.view;
 
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
 
 import com.xue.aer.util.Util;
 
@@ -15,8 +16,8 @@ public class MenuItemView extends JLayeredPane {
     private CButton back;
 
     /* default size */
-    private int mWidth = 400;
-    private int mHeight = 300;
+    protected int mWidth = 400;
+    protected int mHeight = 300;
 
     public MenuItemView() {
         initView();
@@ -37,13 +38,6 @@ public class MenuItemView extends JLayeredPane {
         bgLabel.setIcon(Util.scaleImage(Util.getImageIcon("dlg_bg.png"), mWidth, mHeight));
         this.add(bgLabel, JLayeredPane.DEFAULT_LAYER);
 
-        // back = new JLabel();
-        // back.setBounds(0, 0, BACK_BTN_WIDTH, BACK_BTN_HEIGHT);
-        // back.setIcon(Util.scaleImage(Util.getImageIcon("right_normal.png"),
-        // BACK_BTN_WIDTH,
-        // BACK_BTN_HEIGHT));
-        // this.add(back, JLayeredPane.PALETTE_LAYER);
-
         back = new CButton(Util.getImageIcon("right_normal.png"),
                 Util.getImageIcon("right_click.png"));
         back.setBounds(0, 0, BACK_BTN_WIDTH, BACK_BTN_HEIGHT);
@@ -51,6 +45,14 @@ public class MenuItemView extends JLayeredPane {
         this.add(back, JLayeredPane.PALETTE_LAYER);
 
     }
+
+    public void addContent(JPanel panel) {
+        panel.setSize(mWidth, mHeight-BACK_BTN_HEIGHT-3);
+        panel.setLocation(3, BACK_BTN_HEIGHT);
+        this.add(panel, JLayeredPane.PALETTE_LAYER);
+       
+    }
+    
 
     public void pressBack() {
         back.pressDown();

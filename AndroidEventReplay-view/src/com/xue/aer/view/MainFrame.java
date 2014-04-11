@@ -43,11 +43,11 @@ public class MainFrame extends JFrame {
         menuBar.setBackground(Color.WHITE);
         layeredPane.add(menuBar, JLayeredPane.DEFAULT_LAYER);
 
-        CButton about = new CButton(Util.getImageIcon("about_up_24.png"),
+        CButton info = new CButton(Util.getImageIcon("about_up_24.png"),
                 Util.getImageIcon("about_down_24.png"));
-        MenuItemView aboutView = new MenuItemView();
-        MenuItem adoutItem = new MenuItem(this, about, aboutView);
-        menuBar.addMenuItem(adoutItem);
+        SoftwareInfoView infoView = new SoftwareInfoView();
+        MenuItem infoItem = new MenuItem(this, info, infoView);
+        menuBar.addMenuItem(infoItem);
 
         CButton settings = new CButton(Util.getImageIcon("settings_up_25.png"),
                 Util.getImageIcon("settings_down_25.png"));
