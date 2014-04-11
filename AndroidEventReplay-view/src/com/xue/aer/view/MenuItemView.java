@@ -1,5 +1,7 @@
 package com.xue.aer.view;
 
+import java.awt.event.MouseListener;
+
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
@@ -51,6 +53,10 @@ public class MenuItemView extends JLayeredPane {
         panel.setLocation(3, BACK_BTN_HEIGHT);
         this.add(panel, JLayeredPane.PALETTE_LAYER);
        
+    }
+    
+    public void addMouseListener(MouseListener l){
+        back.addMouseListener(l);
     }
     
 
