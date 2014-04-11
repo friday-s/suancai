@@ -1,5 +1,6 @@
 package com.xue.aer.view;
 
+import java.awt.AWTEventMulticaster;
 import java.awt.event.MouseListener;
 
 import javax.swing.JLabel;
@@ -57,6 +58,10 @@ public class MenuItemView extends JLayeredPane {
     
     public void addMouseListener(MouseListener l){
         back.addMouseListener(l);
+    }
+    
+    public synchronized void removeMouseListener(MouseListener l) {
+        back.removeMouseListener(l);
     }
     
 
