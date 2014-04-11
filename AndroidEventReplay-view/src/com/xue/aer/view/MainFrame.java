@@ -1,6 +1,7 @@
 package com.xue.aer.view;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Point;
 
 import javax.swing.JFrame;
@@ -41,15 +42,17 @@ public class MainFrame extends JFrame {
         menuBar.setBounds(0, AER.TITLE_BAR_HEIGHT, AER.TOOL_BAR_WIDTH, AER.TOOL_BAR_HEIGHT);
         menuBar.setBackground(Color.WHITE);
         layeredPane.add(menuBar, JLayeredPane.DEFAULT_LAYER);
-        
-        CButton about = new CButton(Util.getImageIcon("about_up_24.png"),Util.getImageIcon("about_down_24.png"));
+
+        CButton about = new CButton(Util.getImageIcon("about_up_24.png"),
+                Util.getImageIcon("about_down_24.png"));
         MenuItemView aboutView = new MenuItemView();
-        MenuItem adoutItem = new MenuItem(this,about,aboutView);
+        MenuItem adoutItem = new MenuItem(this, about, aboutView);
         menuBar.addMenuItem(adoutItem);
-        
-        CButton settings = new CButton(Util.getImageIcon("settings_up_25.png"),Util.getImageIcon("settings_down_25.png"));
+
+        CButton settings = new CButton(Util.getImageIcon("settings_up_25.png"),
+                Util.getImageIcon("settings_down_25.png"));
         MenuItemView settingsView = new MenuItemView();
-        MenuItem settingsItem = new MenuItem(this,settings,settingsView);
+        MenuItem settingsItem = new MenuItem(this, settings, settingsView);
         menuBar.addMenuItem(settingsItem);
 
         TabHost tabHost = new TabHost();

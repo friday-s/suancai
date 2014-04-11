@@ -17,6 +17,8 @@ public class BottomBar extends JPanel {
 
     private JLabel mUsbStateLabel;
     private JLabel mDeviceSNLabel;
+    
+    private boolean focusable = true;
 
     public BottomBar() {
         initUI();
@@ -55,6 +57,12 @@ public class BottomBar extends JPanel {
         springLayout.putConstraint(SpringLayout.SOUTH, mDeviceSNLabel, 0, SpringLayout.SOUTH, this);
 
     }
+    
+    public void setFocusable(boolean focusable) {
+        super.setFocusable(focusable);
+        this.focusable = focusable;
+    }
+    
 
     private int checkUSBState() {
         return 1;

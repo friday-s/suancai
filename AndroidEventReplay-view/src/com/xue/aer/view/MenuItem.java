@@ -13,6 +13,8 @@ public class MenuItem {
     private JFrame mContext;
     private CButton mWidget;
 
+    private boolean enable;
+
     private MenuItemView mMenuItemView;
 
     public MenuItem(JFrame context, CButton widget, MenuItemView menuItemView) {
@@ -27,6 +29,10 @@ public class MenuItem {
 
     public void hideItemView() {
         mMenuItemView.hideView();
+    }
+
+    public void setEnabled(boolean enable) {
+        mWidget.setEnabled(enable);
     }
 
     public CButton getWidget() {

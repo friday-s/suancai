@@ -18,146 +18,160 @@ import com.xue.aer.util.Util;
 
 public class TitleBar extends JPanel {
 
-	private static final int TITLE_BAR_ICON_WIDTH = 20;
-	private static final int TITLE_BAR_ICON_HEIGHT = 20;
+    private static final int TITLE_BAR_ICON_WIDTH = 20;
+    private static final int TITLE_BAR_ICON_HEIGHT = 20;
 
+    private static final int TITLE_BAR_PAD_HEIGHT = (AER.TITLE_BAR_HEIGHT - TITLE_BAR_ICON_HEIGHT) / 2;
 
-	private static final int TITLE_BAR_PAD_HEIGHT = (AER.TITLE_BAR_HEIGHT - TITLE_BAR_ICON_HEIGHT) / 2;
+    private JFrame mContext;
+    // private Image mTitleLabel;
+    private JLabel mTitleLabel;
+    private JLabel mTitleName;
+    private JLabel mCloseLabel;
 
-	private JFrame mContext;
-	// private Image mTitleLabel;
-	private JLabel mTitleLabel;
-	private JLabel mTitleName;
-	private JLabel mCloseLabel;
+    private boolean isDragged = false;
+    private Point loc = null;
+    private Point tmp = null;
 
-	private boolean isDragged = false;
-	private Point loc = null;
-	private Point tmp = null;
+    private boolean focusable = true;
 
-	public TitleBar(JFrame context) {
-		this.mContext = context;
-		initView();
-		setTitleIcon(Util.getImageIcon("android_20.png"));
-		setTitleName(AER.APP_NAME);
-		setCloseIcon(Util.getImageIcon("close_up_20.png"));
-	}
+    public TitleBar(JFrame context) {
+        this.mContext = context;
+        initView();
+        setTitleIcon(Util.getImageIcon("android_20.png"));
+        setTitleName(AER.APP_NAME);
+        setCloseIcon(Util.getImageIcon("close_up_20.png"));
+    }
 
-	public TitleBar(JFrame context, ImageIcon icon, String name) {
-		this.mContext = context;
-		initView();
-		setTitleIcon(icon);
-		setTitleName(name);
-	}
+    public TitleBar(JFrame context, ImageIcon icon, String name) {
+        this.mContext = context;
+        initView();
+        setTitleIcon(icon);
+        setTitleName(name);
+    }
 
-	public TitleBar(JFrame context, ImageIcon icon, String name, ImageIcon closeIcon) {
-		this.mContext = context;
-		initView();
-		setTitleIcon(icon);
-		setTitleName(name);
-		setCloseIcon(closeIcon);
-	}
+    public TitleBar(JFrame context, ImageIcon icon, String name, ImageIcon closeIcon) {
+        this.mContext = context;
+        initView();
+        setTitleIcon(icon);
+        setTitleName(name);
+        setCloseIcon(closeIcon);
+    }
 
-	private void initView() {
-		mTitleLabel = new JLabel();
-		mTitleName = new JLabel();
-		mCloseLabel = new JLabel();
+    public void setFocusable(boolean focusable) {
+        super.setFocusable(focusable);
+        this.focusable = focusable;
+    }
 
-		mCloseLabel.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				setCloseIcon(Util.getImageIcon("close_up_20.png"));
-				AlertDialog dialog = new AlertDialog(mContext, 400, 250, AlertDialog.EXIT_DIALOG);
-				dialog.setMessage(AER.EXIT_CONTENT);
-				dialog.onCreate();
-				dialog.setVisible(true);
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				setCloseIcon(Util.getImageIcon("close_down_20.png"));
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
+    private void initView() {
+        mTitleLabel = new JLabel();
+        mTitleName = new JLabel();
+        mCloseLabel = new JLabel();
 
-		SpringLayout springLayout = new SpringLayout();
-		setLayout(springLayout);
-		setVisible(true);
+        mCloseLabel.addMouseListener(new MouseListener() {
 
-		add(mTitleLabel);
-		add(mTitleName);
-		add(mCloseLabel);
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                // TODO Auto-generated method stub
 
-		springLayout.putConstraint(SpringLayout.WEST, mTitleLabel, 1, SpringLayout.WEST, this);
-		springLayout
-				.putConstraint(SpringLayout.WEST, mTitleName, 1, SpringLayout.EAST, mTitleLabel);
-		springLayout.putConstraint(SpringLayout.EAST, mCloseLabel, -2, SpringLayout.EAST, this);
+                if (!focusable) {
+                    return;
+                }
 
-		springLayout.putConstraint(SpringLayout.NORTH, mTitleLabel, TITLE_BAR_PAD_HEIGHT,
-				SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.NORTH, mTitleName, TITLE_BAR_PAD_HEIGHT,
-				SpringLayout.NORTH, this);
-		springLayout.putConstraint(SpringLayout.NORTH, mCloseLabel, TITLE_BAR_PAD_HEIGHT,
-				SpringLayout.NORTH, this);
+                setCloseIcon(Util.getImageIcon("close_up_20.png"));
+                AlertDialog dialog = new AlertDialog(mContext, 400, 250, AlertDialog.EXIT_DIALOG);
+                dialog.setMessage(AER.EXIT_CONTENT);
+                dialog.onCreate();
+                dialog.setVisible(true);
+            }
 
-		this.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseReleased(MouseEvent e) {
-				isDragged = false;
-				// Ϊָ���Ĺ�����ù��ͼ��
-				mContext.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-			}
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // TODO Auto-generated method stub
+                if (!focusable) {
+                    return;
+                }
+                setCloseIcon(Util.getImageIcon("close_down_20.png"));
+            }
 
-			public void mousePressed(MouseEvent e) {
-				tmp = new Point(e.getX(), e.getY());
-				isDragged = true;
-				mContext.setCursor(new Cursor(Cursor.MOVE_CURSOR));
-			}
-		});
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // TODO Auto-generated method stub
 
-		this.addMouseMotionListener(new MouseMotionAdapter() {
-			// ��갴��������ϰ��²��϶�ʱ���á�
-			public void mouseDragged(MouseEvent e) {
-				if (isDragged) {
-					loc = new Point(mContext.getLocation().x + e.getX() - tmp.x, mContext
-							.getLocation().y + e.getY() - tmp.y);
-					mContext.setLocation(loc);
-				}
-			}
-		});
-	}
+            }
 
-	public void setCloseIcon(ImageIcon icon) {
-		// icon.setImage(icon.getImage().getScaledInstance(TITLE_BAR_ICON_WIDTH,
-		// TITLE_BAR_ICON_HEIGHT, Image.SCALE_DEFAULT));
-		mCloseLabel.setIcon(icon);
-	}
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // TODO Auto-generated method stub
 
-	public void setTitleName(String name) {
-		mTitleName.setText(name);
-	}
+            }
 
-	public void setTitleIcon(ImageIcon icon) {
-		// icon.setImage(icon.getImage().getScaledInstance(TITLE_BAR_ICON_WIDTH,
-		// TITLE_BAR_ICON_HEIGHT, Image.SCALE_DEFAULT));
-		mTitleLabel.setIcon(icon);
-	}
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // TODO Auto-generated method stub
+
+            }
+        });
+
+        SpringLayout springLayout = new SpringLayout();
+        setLayout(springLayout);
+        setVisible(true);
+
+        add(mTitleLabel);
+        add(mTitleName);
+        add(mCloseLabel);
+
+        springLayout.putConstraint(SpringLayout.WEST, mTitleLabel, 1, SpringLayout.WEST, this);
+        springLayout
+                .putConstraint(SpringLayout.WEST, mTitleName, 1, SpringLayout.EAST, mTitleLabel);
+        springLayout.putConstraint(SpringLayout.EAST, mCloseLabel, -2, SpringLayout.EAST, this);
+
+        springLayout.putConstraint(SpringLayout.NORTH, mTitleLabel, TITLE_BAR_PAD_HEIGHT,
+                SpringLayout.NORTH, this);
+        springLayout.putConstraint(SpringLayout.NORTH, mTitleName, TITLE_BAR_PAD_HEIGHT,
+                SpringLayout.NORTH, this);
+        springLayout.putConstraint(SpringLayout.NORTH, mCloseLabel, TITLE_BAR_PAD_HEIGHT,
+                SpringLayout.NORTH, this);
+
+        this.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(MouseEvent e) {
+                isDragged = false;
+                // Ϊָ���Ĺ�����ù��ͼ��
+                mContext.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+
+            public void mousePressed(MouseEvent e) {
+                tmp = new Point(e.getX(), e.getY());
+                isDragged = true;
+                mContext.setCursor(new Cursor(Cursor.MOVE_CURSOR));
+            }
+        });
+
+        this.addMouseMotionListener(new MouseMotionAdapter() {
+            // ��갴��������ϰ��²��϶�ʱ���á�
+            public void mouseDragged(MouseEvent e) {
+                if (isDragged) {
+                    loc = new Point(mContext.getLocation().x + e.getX() - tmp.x, mContext
+                            .getLocation().y + e.getY() - tmp.y);
+                    mContext.setLocation(loc);
+                }
+            }
+        });
+    }
+
+    public void setCloseIcon(ImageIcon icon) {
+        // icon.setImage(icon.getImage().getScaledInstance(TITLE_BAR_ICON_WIDTH,
+        // TITLE_BAR_ICON_HEIGHT, Image.SCALE_DEFAULT));
+        mCloseLabel.setIcon(icon);
+    }
+
+    public void setTitleName(String name) {
+        mTitleName.setText(name);
+    }
+
+    public void setTitleIcon(ImageIcon icon) {
+        // icon.setImage(icon.getImage().getScaledInstance(TITLE_BAR_ICON_WIDTH,
+        // TITLE_BAR_ICON_HEIGHT, Image.SCALE_DEFAULT));
+        mTitleLabel.setIcon(icon);
+    }
 }

@@ -12,7 +12,7 @@ public class MenuItemView extends JLayeredPane {
 
     private JLabel bgLabel;
 
-    private JLabel back;
+    private CButton back;
 
     /* default size */
     private int mWidth = 400;
@@ -31,19 +31,33 @@ public class MenuItemView extends JLayeredPane {
     private void initView() {
         this.setLayout(null);
         this.setBounds(0, 0, mWidth, mHeight);
-        this.setVisible(false);
 
         bgLabel = new JLabel();
         bgLabel.setBounds(0, 0, mWidth, mHeight);
         bgLabel.setIcon(Util.scaleImage(Util.getImageIcon("dlg_bg.png"), mWidth, mHeight));
         this.add(bgLabel, JLayeredPane.DEFAULT_LAYER);
 
-        back = new JLabel();
+        // back = new JLabel();
+        // back.setBounds(0, 0, BACK_BTN_WIDTH, BACK_BTN_HEIGHT);
+        // back.setIcon(Util.scaleImage(Util.getImageIcon("right_normal.png"),
+        // BACK_BTN_WIDTH,
+        // BACK_BTN_HEIGHT));
+        // this.add(back, JLayeredPane.PALETTE_LAYER);
+
+        back = new CButton(Util.getImageIcon("right_normal.png"),
+                Util.getImageIcon("right_click.png"));
         back.setBounds(0, 0, BACK_BTN_WIDTH, BACK_BTN_HEIGHT);
-        back.setIcon(Util.scaleImage(Util.getImageIcon("right_normal.png"), BACK_BTN_WIDTH,
-                BACK_BTN_HEIGHT));
+
         this.add(back, JLayeredPane.PALETTE_LAYER);
 
+    }
+
+    public void pressBack() {
+        back.pressDown();
+    }
+
+    public void releaseBack() {
+        back.pressUp();
     }
 
     public void showView() {

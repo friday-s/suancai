@@ -1,5 +1,6 @@
 package com.xue.aer.view;
 
+import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -10,14 +11,12 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 
-import com.xue.aer.res.AER;
 import com.xue.aer.util.Util;
-
 
 public class MenuBar extends JPanel implements MouseListener {
 
-    private static final int TOOL_BAR_OPTION_WIDTH = 26;
-    private static final int TOOL_BAR_OPTION_HEIGHT = 26;
+    private static final int SHOW_FLAG = 0;
+    private static final int HIDE_FLAG = 1;
 
     private JFrame mContext;
 
@@ -25,7 +24,9 @@ public class MenuBar extends JPanel implements MouseListener {
 
     private SpringLayout springLayout;
 
-    private AnimationThread animationThread;
+    private MenuBarForm form;
+
+    private boolean focusable = true;
 
     public MenuBar(JFrame jframe) {
         // setLayout(new FlowLayout(FlowLayout.RIGHT, 0, 0));
@@ -40,6 +41,12 @@ public class MenuBar extends JPanel implements MouseListener {
 
         springLayout = new SpringLayout();
         setLayout(springLayout);
+
+    }
+
+    public void setFocusable(boolean focusable) {
+        super.setFocusable(focusable);
+        this.focusable = focusable;
     }
 
     public void addMenuItem(MenuItem item) {
@@ -60,10 +67,37 @@ public class MenuBar extends JPanel implements MouseListener {
     }
 
     private void attachBarForm(MenuItem item) {
-        MenuBarForm form = new MenuBarForm(this);
+
+        form = new MenuBarForm(this);
+
         mContext.getLayeredPane().add(form, new Integer(200));
+        setLayerFocusable(JLayeredPane.DEFAULT_LAYER,false);
+
         form.attachItemView(item.getMenuItemView());
         form.showItemView();
+
+    }
+
+    private void setLayerFocusable(int layer,boolean focusable) {
+        Component[] components = mContext.getLayeredPane().getComponentsInLayer(layer);
+        for (Component c : components) {
+            c.setFocusable(focusable);
+        }
+    }
+    
+
+    private void disposeBarForm() {
+
+        if (form != null) {
+
+            mContext.getLayeredPane().remove(form);
+
+            form = null;
+            mContext.getLayeredPane().repaint();
+
+            setLayerFocusable(JLayeredPane.DEFAULT_LAYER,true);
+
+        }
     }
 
     @Override
@@ -81,9 +115,12 @@ public class MenuBar extends JPanel implements MouseListener {
     @Override
     public void mouseReleased(MouseEvent e) {
         // TODO Auto-generated method stub
+        if (!focusable) {
+            return;
+        }
+
         for (MenuItem item : mMenuItems) {
             if (item.getWidget() == e.getSource()) {
-                System.out.println("disply form");
                 attachBarForm(item);
             }
         }
@@ -103,8 +140,12 @@ public class MenuBar extends JPanel implements MouseListener {
     class MenuBarForm extends JLayeredPane {
 
         private MenuBar bar;
+        private JLabel bg;
+
         private int mFormWidth;
         private int mFormHeight;
+
+        private CAnimation mAnimation;
 
         private MenuItemView mView;
 
@@ -117,115 +158,158 @@ public class MenuBar extends JPanel implements MouseListener {
             this.setLayout(null);
             this.setBounds(0, 0, mFormWidth, mFormHeight);
             this.setVisible(true);
-            JLabel bg = new JLabel();
+            bg = new JLabel();
             bg.setIcon(Util.scaleImage(Util.getImageIcon("shadow.png"), mFormWidth, mFormHeight));
             bg.setBounds(0, 0, mFormWidth, mFormHeight);
+
             this.add(bg, JLayeredPane.DEFAULT_LAYER);
+
+            mAnimation = new CAnimation();
 
         }
 
         public void showItemView() {
-            animationThread = new AnimationThread();
-            animationThread.setFlag(SHOW_FLAG);
-            animationThread.setItemView(mView);
-            animationThread.start();
+
+            mAnimation.setFlag(SHOW_FLAG);
+            mAnimation.setItemView(mView);
+            new Thread(mAnimation).start();
+
         }
 
         public void hideItemView() {
 
+            mAnimation.setFlag(HIDE_FLAG);
+            mAnimation.setItemView(mView);
+            new Thread(mAnimation).start();
         }
 
         public void attachItemView(MenuItemView view) {
             this.mView = view;
+            mView.setLocation(mFormWidth, (mFormHeight - mView.getHeight()) / 2);
+            mView.addMouseListener(mMouseListener);
             this.add(mView, JLayeredPane.PALETTE_LAYER);
-        }
-    }
 
-    private static final int SHOW_FLAG = 0;
-    private static final int HIDE_FLAG = 1;
-
-    private class AnimationThread extends Thread {
-
-        private static final int STEP = 20;
-
-        private int flag;
-        private MenuItemView view;
-
-        public void setFlag(int flag) {
-            this.flag = flag;
         }
 
-        public void setItemView(MenuItemView view) {
-            this.view = view;
+        private void removeItemView() {
+            this.remove(mView);
+            this.remove(bg);
+            mView.removeMouseListener(mMouseListener);
         }
 
-        public void run() {
+        private MouseListener mMouseListener = new MouseListener() {
 
-            int width = getWidth();
-            int height = getHeight();
-            int x = getX();
-            int tempX = x;
-            int y = getY();
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // TODO Auto-generated method stub
 
-            switch (flag) {
-            case SHOW_FLAG:
-
-                while (width < AER.TOOL_VIEW_WIDTH) {
-
-                    tempX -= STEP;
-                    if (tempX < x - AER.TOOL_VIEW_WIDTH) {
-                        tempX = x - AER.TOOL_VIEW_WIDTH;
-                    }
-
-                    width += STEP;
-                    if (width > AER.TOOL_VIEW_WIDTH) {
-                        width = AER.TOOL_VIEW_WIDTH;
-                    }
-
-                    view.setBounds(tempX, y, width, height);
-                    // view.setDialogWidth(width);
-
-                    try {
-                        Thread.sleep(5);
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-
-                break;
-            case HIDE_FLAG:
-
-                while (width > 1) {
-
-                    tempX += STEP;
-                    if (tempX > x + AER.TOOL_VIEW_WIDTH) {
-                        tempX = x + AER.TOOL_VIEW_WIDTH;
-                    }
-
-                    width -= STEP;
-                    if (width < 1) {
-                        width = 1;
-                    }
-
-                    view.setBounds(tempX, y, width, height);
-                    // view.setDialogWidth(width);
-
-                    try {
-                        Thread.sleep(5);
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-
-                break;
-            default:
-                break;
             }
 
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // TODO Auto-generated method stub
+                mView.pressBack();
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                // TODO Auto-generated method stub
+                System.out.println("release the back");
+                mView.releaseBack();
+                hideItemView();
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // TODO Auto-generated method stub
+
+            }
+
+        };
+
+        class CAnimation implements Runnable {
+
+            private static final int STEP = 20;
+
+            private int flag;
+            private MenuItemView view;
+
+            private boolean isShow;
+
+            public void setFlag(int flag) {
+                this.flag = flag;
+            }
+
+            public void setItemView(MenuItemView view) {
+                this.view = view;
+            }
+
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                int x = view.getX() + 5;
+                int y = view.getY();
+                int endX = 0;
+
+                switch (flag) {
+                case SHOW_FLAG:
+
+                    endX = x - view.getWidth();
+                    while (x > endX) {
+
+                        x -= STEP;
+                        if (x < endX) {
+                            x = endX;
+                        }
+                        view.setLocation(x, y);
+
+                        try {
+                            Thread.sleep(5);
+                        } catch (InterruptedException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+
+                    }
+                    isShow = true;
+                    break;
+                case HIDE_FLAG:
+                    endX = x + view.getWidth();
+                    while (x < endX) {
+                        x += STEP;
+                        if (x > endX) {
+                            x = endX;
+                        }
+                        view.setLocation(x, y);
+
+                        try {
+                            Thread.sleep(5);
+                        } catch (InterruptedException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                    disposeBarForm();
+                    removeItemView();
+
+                    break;
+                default:
+                    break;
+                }
+
+            }
+
+            public boolean isShow() {
+                return isShow;
+            }
         }
-
     }
-
 }

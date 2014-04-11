@@ -42,6 +42,8 @@ public class TabHost extends JPanel {
     private int mIndexBarWidth;
 
     private ScrollThread mScrollThread;
+    
+    private boolean focusable = true;
 
     public TabHost() {
         initTabHost();
@@ -118,6 +120,11 @@ public class TabHost extends JPanel {
         mTabBar.add(mNamePanel, BorderLayout.NORTH);
         mTabBar.add(mScrollPanel, BorderLayout.SOUTH);
 
+    }
+    
+    public void setFocusable(boolean focusable) {
+        super.setFocusable(focusable);
+        this.focusable = focusable;
     }
 
     class ScrollThread extends Thread {
@@ -294,6 +301,10 @@ public class TabHost extends JPanel {
         @Override
         public void mouseReleased(MouseEvent e) {
             // TODO Auto-generated method stub
+            if (!focusable){
+                return;
+            }
+            
             for (int i = 0; i < mTabStrings.size(); i++) {
                 if (mTabStrings.get(i).equals(((JLabel) e.getComponent()).getText())) {
                     mSelectIndex = i;

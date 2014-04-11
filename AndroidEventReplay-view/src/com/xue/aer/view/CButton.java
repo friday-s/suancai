@@ -1,6 +1,5 @@
 package com.xue.aer.view;
 
-
 import javax.swing.ImageIcon;
 
 import javax.swing.JLabel;
@@ -15,8 +14,6 @@ public class CButton extends JLabel {
 
     private ImageIcon mIconUp;
     private ImageIcon mIconDown;
-    
-    private JLabel mButton;
 
     public CButton(ImageIcon iconUp, ImageIcon iconDown) {
 
@@ -38,6 +35,5 @@ public class CButton extends JLabel {
     public void pressUp() {
         this.setIcon(mIconUp);
     }
-
 
 }
