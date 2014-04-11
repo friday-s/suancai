@@ -37,7 +37,7 @@ public class AER {
     public static final int TAB_BAR_WIDTH = WIDTH;
     public static final int TAB_BAR_HEIGHT = 40;
 
-    public static final int TAB_VIEW_WIDTH = WIDTH;
+    public static final int TAB_VIEW_WIDTH = WIDTH+2;
     public static final int TAB_VIEW_HEIGHT = TAB_HOST_HEIGHT - TAB_BAR_HEIGHT;
     public static final int TAB_VIEW_X = 0;
     public static final int TAB_VIEW_Y = TAB_BAR_HEIGHT + 1;
