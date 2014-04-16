@@ -60,14 +60,13 @@ public class MainFrame extends JFrame {
                 ATK.TAB_HOST_HEIGHT);
         layeredPane.add(tabHost, JLayeredPane.DEFAULT_LAYER);
 
-        RecordView recordView = new RecordView("record");
+        ReplayView recordView = new ReplayView("Replay");
         recordView.setBackground(Color.GRAY);
-        ReplayView replayView = new ReplayView("replay");
-        replayView.setBackground(Color.RED);
+   
         ReplayView replayView2 = new ReplayView("More");
         replayView2.setBackground(Color.BLUE);
         tabHost.addTab(recordView);
-        tabHost.addTab(replayView);
+  
         tabHost.addTab(replayView2);
 
         BottomBar bottomBar = new BottomBar();
