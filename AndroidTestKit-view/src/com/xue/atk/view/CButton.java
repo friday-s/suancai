@@ -15,6 +15,11 @@ public class CButton extends JLabel {
     private ImageIcon mIconUp;
     private ImageIcon mIconDown;
 
+    private String mUpStr;
+    private String mDownStr;
+
+    private boolean isNormal;
+
     public CButton(ImageIcon iconUp, ImageIcon iconDown) {
 
         this.setIcon(iconUp);
@@ -23,17 +28,27 @@ public class CButton extends JLabel {
         this.mIconDown = iconDown;
     }
 
-    public CButton(ImageIcon icon, int width, int height) {
-        this.mWidth = width;
-        this.mHeight = height;
+    public CButton(String up, String down) {
+        this.setBounds(0, 0, WIDGET_WIDTH, WIDGET_HEIGHT);
+        this.mUpStr = up;
+        this.mDownStr = down;
+        isNormal = true;
     }
 
     public void pressDown() {
-        this.setIcon(mIconDown);
+        if (isNormal) {
+            this.setText(mDownStr);
+        } else {
+            this.setIcon(mIconDown);
+        }
     }
 
     public void pressUp() {
-        this.setIcon(mIconUp);
+        if (isNormal) {
+            this.setText(mUpStr);
+        } else {
+            this.setIcon(mIconUp);
+        }
     }
 
 }
