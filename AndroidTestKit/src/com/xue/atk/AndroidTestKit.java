@@ -13,7 +13,7 @@ import com.xue.atk.service.ADBService;
 import com.xue.atk.util.Util;
 import com.xue.atk.view.MainFrame;
 
-public class AndroidEventReplay {
+public class AndroidTestKit {
 
     private JFrame frame;
 
@@ -22,8 +22,8 @@ public class AndroidEventReplay {
      */
     public static void main(String[] args) {
         try {
-            if (checkPidInProcess(AndroidEventReplay.class.getSimpleName())) {
-                System.out.println(AndroidEventReplay.class.getSimpleName()
+            if (checkPidInProcess(AndroidTestKit.class.getSimpleName())) {
+                System.out.println(AndroidTestKit.class.getSimpleName()
                         + " is already running.");
                 return;
             }
@@ -35,7 +35,7 @@ public class AndroidEventReplay {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    AndroidEventReplay window = new AndroidEventReplay();
+                    AndroidTestKit window = new AndroidTestKit();
                     window.frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -50,7 +50,7 @@ public class AndroidEventReplay {
     /**
      * Create the application.
      */
-    public AndroidEventReplay() {
+    public AndroidTestKit() {
         // JFrame.setDefaultLookAndFeelDecorated(false);
         // try {
         // UIManager
