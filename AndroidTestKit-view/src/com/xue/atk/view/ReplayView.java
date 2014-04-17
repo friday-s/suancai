@@ -1,5 +1,9 @@
 package com.xue.atk.view;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.util.ArrayList;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -10,9 +14,14 @@ import com.xue.atk.util.Util;
 
 public class ReplayView extends CBaseTabView {
 
+    private static final int DIVIDE_LINE_WIDTH = 70;
+    private static final int DIVIDE_LINE_HEIGHT = 1;
+
     private CButton mRecordBtn;
     private CButton mReplayBtn;
-    private JLabel mProgressLabel;
+
+    private JLabel mDivideLineLabel;
+    private ProgressBar mProgress;
 
     public ReplayView(String tabName) {
         super(tabName);
@@ -36,7 +45,6 @@ public class ReplayView extends CBaseTabView {
             beginY += 35;
         }
 
-        
         initCenterView();
     }
 
@@ -46,22 +54,45 @@ public class ReplayView extends CBaseTabView {
         JLayeredPane pane = new JLayeredPane();
         pane.setLayout(null);
         pane.setBounds(0, 0, mCenterPanl.getWidth(), mCenterPanl.getHeight());
-        
+
         mCenterPanl.add(pane);
+
+        mDivideLineLabel = new JLabel();
+        ImageIcon divideIcon = Util.scaleImage(Util.getImageIcon("tabbar_select.png"),
+                mCenterPanl.getWidth(), DIVIDE_LINE_HEIGHT);
+        mDivideLineLabel.setIcon(divideIcon);
+        mDivideLineLabel.setBounds((pane.getWidth() - divideIcon.getIconWidth()) / 2,
+                (pane.getHeight() - divideIcon.getIconHeight()) / 2, divideIcon.getIconWidth(),
+                divideIcon.getIconHeight());
+
+        System.out.println((pane.getHeight() - divideIcon.getIconHeight()) / 2);
+        mRecordBtn = new CButton("record", "stop",18);
+        mRecordBtn.setBounds(mDivideLineLabel.getX(), mDivideLineLabel.getY() - 30,
+                DIVIDE_LINE_WIDTH, 50);
+
+        mReplayBtn = new CButton("replay", "stop",18);
+        mReplayBtn.setBounds(mDivideLineLabel.getX(), mDivideLineLabel.getY(), DIVIDE_LINE_WIDTH,
+                20);
         
+        pane.add(mDivideLineLabel, JLayeredPane.DEFAULT_LAYER);
+
+        pane.add(mRecordBtn, JLayeredPane.PALETTE_LAYER);
+        pane.add(mReplayBtn, JLayeredPane.PALETTE_LAYER);
+
+        /* load images */
+        ArrayList<ImageIcon> icons = new ArrayList<ImageIcon>();
+        for (int i = 1; i < 13; i++) {
+            ImageIcon icon = Util.scaleImage(Util.getImageIcon("progress_bars" + i + ".png"), 25,
+                    25);
+            icons.add(icon);
+        }
         
-        mProgressLabel = new JLabel();
-        ImageIcon icon = Util.getImageIcon("progress_bars1.png");
-        mProgressLabel.setIcon(icon);
-        mProgressLabel.setBounds((pane.getWidth()-icon.getIconWidth())/2, (pane.getHeight()-icon.getIconHeight())/2, icon.getIconWidth() , icon.getIconHeight());
-        mRecordBtn = new CButton("record", "stop");
-        mReplayBtn = new CButton("replay", "stop");
-        
-        pane.add(mProgressLabel,JLayeredPane.DEFAULT_LAYER);
-        System.out.println("mCenterPanl.getWidth():"+mCenterPanl.getWidth());
-        System.out.println("pane.getWidth():"+pane.getWidth());
-        System.out.println("icon.getIconWidth():"+icon.getIconWidth());
-       
+        mProgress = new ProgressBar();
+        mProgress.setProgressImages(icons);
+        mProgress.setLocation(mDivideLineLabel.getX()+mDivideLineLabel.getWidth()-25, mDivideLineLabel.getY());
+        mProgress.start();
+
+        pane.add(mProgress);
     }
 
 }

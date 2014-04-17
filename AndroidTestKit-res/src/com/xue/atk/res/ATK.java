@@ -47,6 +47,9 @@ public class ATK {
     
     public static final int RECORD_LABEL_WIDTH = 100;
     public static final int RECORD_LABEL_HEIGHT = 30;
+    
+    public static final int BASE_TAB_VIEW_WIDTH = WIDTH/3;
+    public static final int BASE_TAB_VIEW_HEIGHT = TAB_VIEW_HEIGHT;
 
     public static final String APP_NAME = "Android TestKit";
     public static final String APP_NAME_SHORT = "ATK";

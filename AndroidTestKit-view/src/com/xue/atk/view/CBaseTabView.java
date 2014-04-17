@@ -17,11 +17,12 @@ public class CBaseTabView extends TabView {
 
     public CBaseTabView(String tabName) {
         super(tabName);
-        setLayout(new GridLayout());
+        setLayout(null);
         initUI();
     }
 
     public void initUI() {
+
         mLeftPanl = new JPanel();
         mCenterPanl = new JPanel();
         mRightPanl = new JPanel();
@@ -30,15 +31,22 @@ public class CBaseTabView extends TabView {
         mCenterPanl.setBackground(Color.WHITE);
         mRightPanl.setBackground(Color.WHITE);
 
-        mLeftPanl.setPreferredSize(new Dimension(ATK.TAB_VIEW_WIDTH, ATK.TAB_VIEW_HEIGHT));
+        System.out.println("ATK.BASE_TAB_VIEW_HEIGHT:" + ATK.BASE_TAB_VIEW_HEIGHT);
+        System.out.println(1000 / 3);
 
-        mCenterPanl.setPreferredSize(new Dimension(ATK.TAB_VIEW_WIDTH, ATK.TAB_VIEW_HEIGHT));
+        mLeftPanl.setBounds(0, 0, ATK.BASE_TAB_VIEW_WIDTH, ATK.BASE_TAB_VIEW_HEIGHT);
+        mCenterPanl.setBounds(ATK.BASE_TAB_VIEW_WIDTH, 0, ATK.BASE_TAB_VIEW_WIDTH,
+                ATK.BASE_TAB_VIEW_HEIGHT);
+        mRightPanl.setBounds(ATK.BASE_TAB_VIEW_WIDTH * 2, 0, ATK.BASE_TAB_VIEW_WIDTH,
+                ATK.BASE_TAB_VIEW_HEIGHT);
 
-        mRightPanl.setPreferredSize(new Dimension(ATK.TAB_VIEW_WIDTH, ATK.TAB_VIEW_HEIGHT));
-
-       this.add(mLeftPanl);
-       this.add(mCenterPanl);
-       this.add(mRightPanl);
+        this.add(mLeftPanl);
+        this.add(mCenterPanl);
+        this.add(mRightPanl);
+        
+        System.out.println("mLeftPanl:"+mLeftPanl.getWidth());
+        System.out.println("mCenterPanl:"+mCenterPanl.getWidth());
+        System.out.println("mRightPanl:"+mLeftPanl.getWidth());
 
     }
 }

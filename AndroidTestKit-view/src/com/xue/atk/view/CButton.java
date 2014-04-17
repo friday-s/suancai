@@ -1,13 +1,14 @@
 package com.xue.atk.view;
 
-import javax.swing.ImageIcon;
+import java.awt.Font;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 public class CButton extends JLabel {
 
-    private static final int WIDGET_WIDTH = 26;
-    private static final int WIDGET_HEIGHT = 26;
+    private static final int WIDGET_WIDTH = 30;
+    private static final int WIDGET_HEIGHT = 30;
 
     private int mWidth;
     private int mHeight;
@@ -20,6 +21,9 @@ public class CButton extends JLabel {
 
     private boolean isNormal;
 
+    private int mTextSize = 12;
+    private int mTextStyle = 0;
+
     public CButton(ImageIcon iconUp, ImageIcon iconDown) {
 
         this.setIcon(iconUp);
@@ -29,15 +33,30 @@ public class CButton extends JLabel {
     }
 
     public CButton(String up, String down) {
+        this.setText(up);
         this.setBounds(0, 0, WIDGET_WIDTH, WIDGET_HEIGHT);
         this.mUpStr = up;
         this.mDownStr = down;
         isNormal = true;
     }
 
+    public CButton(String up, String down, int size) {
+        this.setText(up);
+        this.setFont(new Font(null, mTextStyle, size));
+        this.setBounds(0, 0, WIDGET_WIDTH, WIDGET_HEIGHT);
+        this.mUpStr = up;
+        this.mDownStr = down;
+        isNormal = true;
+    }
+
+    public void setFontSize(int size) {
+        this.mTextSize = size;
+    }
+
     public void pressDown() {
         if (isNormal) {
             this.setText(mDownStr);
+            this.setFont(new Font(mDownStr, mTextStyle, mTextSize));
         } else {
             this.setIcon(mIconDown);
         }
@@ -46,6 +65,7 @@ public class CButton extends JLabel {
     public void pressUp() {
         if (isNormal) {
             this.setText(mUpStr);
+            this.setFont(new Font(mUpStr, mTextStyle, mTextSize));
         } else {
             this.setIcon(mIconUp);
         }
