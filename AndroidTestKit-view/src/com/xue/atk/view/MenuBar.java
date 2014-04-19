@@ -109,7 +109,12 @@ public class MenuBar extends JPanel implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         // TODO Auto-generated method stub
-
+    	for (MenuItem item : mMenuItems) {
+            if (item.getWidget() == e.getSource()) {
+            	item.getWidget().pressDown();
+            }
+    	}
+    	
     }
 
     @Override
@@ -121,6 +126,7 @@ public class MenuBar extends JPanel implements MouseListener {
 
         for (MenuItem item : mMenuItems) {
             if (item.getWidget() == e.getSource()) {
+            	item.getWidget().pressUp();
                 attachBarForm(item);
             }
         }
