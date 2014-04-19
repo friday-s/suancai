@@ -109,6 +109,9 @@ public class MenuBar extends JPanel implements MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         // TODO Auto-generated method stub
+    	 if (!focusable) {
+             return;
+         }
     	for (MenuItem item : mMenuItems) {
             if (item.getWidget() == e.getSource()) {
             	item.getWidget().pressDown();

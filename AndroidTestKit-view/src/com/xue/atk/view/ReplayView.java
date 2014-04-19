@@ -125,6 +125,9 @@ public class ReplayView extends CBaseTabView implements MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
+		if (!focusable){
+			return;
+		}
 		if (e.getSource() == mRecordBtn && mRecordBtn.getEnabled()) {
 			mRecordBtn.pressDown();
 
@@ -139,6 +142,9 @@ public class ReplayView extends CBaseTabView implements MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
+		if (!focusable){
+			return;
+		}
 		if (e.getSource() == mRecordBtn && mRecordBtn.getEnabled()) {
 			if (isRunning) {
 

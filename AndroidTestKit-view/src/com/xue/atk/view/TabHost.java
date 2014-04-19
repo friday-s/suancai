@@ -125,6 +125,7 @@ public class TabHost extends JPanel {
     public void setFocusable(boolean focusable) {
         super.setFocusable(focusable);
         this.focusable = focusable;
+        mTabViews.get(mCurrentIndex).setFocusable(focusable);
     }
 
     class ScrollThread extends Thread {
