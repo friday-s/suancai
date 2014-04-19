@@ -1,17 +1,28 @@
 package com.xue.atk.view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Font;
+import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.plaf.BorderUIResource;
+import javax.swing.plaf.ButtonUI;
+import javax.swing.plaf.basic.BasicArrowButton;
+import javax.swing.plaf.basic.BasicButtonUI;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 
-import com.xue.atk.res.ATK;
 import com.xue.atk.util.Util;
 
 public class ReplayView extends CBaseTabView implements MouseListener {
@@ -33,6 +44,9 @@ public class ReplayView extends CBaseTabView implements MouseListener {
 
 	private JLabel mDivideLineLabel;
 	private ProgressBar mProgress;
+	
+	private ListSource mListSource;
+	private BaseList mTransferList;
 
 	private boolean isRunning;
 
@@ -50,22 +64,50 @@ public class ReplayView extends CBaseTabView implements MouseListener {
 		mStopIconUp = Util.getImageIcon("stop_up.png");
 		mStopIconDown = Util.getImageIcon("stop_down.png");
 
-		int beginX = 20;
-		int beginY = 20;
-		mLeftPanl.setLayout(null);
-		for (String s : ATK.RECORD_LEFT_CONTENT) {
-			JLabel label = new JLabel(s);
-			label.setBounds(beginX, beginY, ATK.RECORD_LABEL_WIDTH, ATK.RECORD_LABEL_HEIGHT);
-			// label.setLocation(beginX, beginY);
-			mLeftPanl.add(label);
-			JTextField text = new JTextField();
-			text.setBounds(beginX + ATK.RECORD_LABEL_WIDTH, beginY, ATK.RECORD_LABEL_WIDTH,
-					ATK.RECORD_LABEL_HEIGHT);
-			mLeftPanl.add(text);
-			beginY += 35;
-		}
-
+		initLeftView();
 		initCenterView();
+	}
+	
+	private void initLeftView(){
+		mLeftPanl.setLayout(null);
+		JComboBox comboBox = new JComboBox(new String[]{"aaa","bbb","ccc"});
+		comboBox.setBounds(0, 0, 200, 40);
+		//comboBox.setBackground(Color.WHITE);
+		
+		comboBox.setSelectedItem("aaa");
+	
+        comboBox.setUI(new BasicComboBoxUI() {
+            public void installUI(JComponent comboBox) {
+                super.installUI(comboBox);
+                listBox.setForeground(Color.WHITE);
+                listBox.setSelectionBackground(Color.WHITE);
+                listBox.setSelectionForeground(Color.BLUE);
+            }
+             
+            /**
+             * 该方法返回右边的按钮
+             */
+            protected JButton createArrowButton() {
+            	JButton button = new BasicArrowButton(BasicArrowButton.SOUTH,
+            			Color.WHITE,
+            			Color.WHITE,
+    				    UIManager.getColor("ComboBox.buttonDarkShadow"),
+    				    Color.WHITE){
+            		public void paint(Graphics g){
+            			super.paint(g);
+            			int h = getSize().width;
+            			int w = getSize().height;
+            			g.setColor(Color.WHITE);
+            			g.drawLine(0, h-1, w-1, h-1);
+                        g.drawLine(w-1, h-1, w-1, 0);
+            		}
+            	};
+            button.setName("ComboBox.arrowButton");
+                return button;
+            }
+        });
+
+		mLeftPanl.add(comboBox);
 	}
 
 	private void initCenterView() {
@@ -115,6 +157,25 @@ public class ReplayView extends CBaseTabView implements MouseListener {
 
 		pane.add(mProgress);
 	}
+	
+	  private void disableFocusBackground(JComboBox combo )
+	     {
+	         if( combo == null ){ return; }
+
+	         Component comp = combo.getEditor().getEditorComponent();
+
+	         if( comp instanceof JTextField )
+	         {
+	             JTextField field = (JTextField)comp;
+
+	             field.setEditable( false );
+
+	            // field.setSelectionColor( field.getBackground()/*java.awt.Color.WHITE*/ );
+	             field.setSelectionColor(Color.WHITE);
+	             combo.setEditable( true );
+	         }
+	     }
+
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
