@@ -11,9 +11,9 @@ import com.xue.atk.res.ATK;
 
 public class CBaseTabView extends TabView {
 
-    protected JPanel mLeftPanl;
-    protected JPanel mCenterPanl;
-    protected JPanel mRightPanl;
+    protected JPanel mLeftPanel;
+    protected JPanel mCenterPanel;
+    protected JPanel mRightPanel;
 
     protected boolean focusable = true;
     
@@ -25,24 +25,24 @@ public class CBaseTabView extends TabView {
 
     public void initUI() {
 
-        mLeftPanl = new JPanel();
-        mCenterPanl = new JPanel();
-        mRightPanl = new JPanel();
+        mLeftPanel = new JPanel();
+        mCenterPanel = new JPanel();
+        mRightPanel = new JPanel();
 
-        mLeftPanl.setBackground(Color.WHITE);
-        mCenterPanl.setBackground(Color.WHITE);
-        mRightPanl.setBackground(Color.WHITE);
+        mLeftPanel.setBackground(Color.WHITE);
+        mCenterPanel.setBackground(Color.WHITE);
+        mRightPanel.setBackground(Color.WHITE);
 
 
-        mLeftPanl.setBounds(0, 0, ATK.BASE_TAB_VIEW_WIDTH, ATK.BASE_TAB_VIEW_HEIGHT);
-        mCenterPanl.setBounds(ATK.BASE_TAB_VIEW_WIDTH, 0, ATK.BASE_TAB_VIEW_WIDTH,
+        mLeftPanel.setBounds(0, 0, ATK.BASE_TAB_VIEW_WIDTH, ATK.BASE_TAB_VIEW_HEIGHT);
+        mCenterPanel.setBounds(ATK.BASE_TAB_VIEW_WIDTH, 0, ATK.BASE_TAB_VIEW_WIDTH,
                 ATK.BASE_TAB_VIEW_HEIGHT);
-        mRightPanl.setBounds(ATK.BASE_TAB_VIEW_WIDTH * 2, 0, ATK.BASE_TAB_VIEW_WIDTH,
+        mRightPanel.setBounds(ATK.BASE_TAB_VIEW_WIDTH * 2, 0, ATK.BASE_TAB_VIEW_WIDTH,
                 ATK.BASE_TAB_VIEW_HEIGHT);
 
-        this.add(mLeftPanl);
-        this.add(mCenterPanl);
-        this.add(mRightPanl);
+        this.add(mLeftPanel);
+        this.add(mCenterPanel);
+        this.add(mRightPanel);
 
     }
     

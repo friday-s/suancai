@@ -1,31 +1,28 @@
 package com.xue.atk.view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
-import javax.swing.JTextField;
 import javax.swing.UIManager;
-import javax.swing.plaf.BorderUIResource;
-import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.basic.BasicArrowButton;
-import javax.swing.plaf.basic.BasicButtonUI;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 
+import com.xue.atk.file.FileScanner;
 import com.xue.atk.util.Util;
 
-public class ReplayView extends CBaseTabView implements MouseListener {
+public class ReplayView extends CBaseTabView implements MouseListener,ItemListener {
 
 	private static final int DIVIDE_LINE_WIDTH = 70;
 	private static final int DIVIDE_LINE_HEIGHT = 1;
@@ -44,9 +41,14 @@ public class ReplayView extends CBaseTabView implements MouseListener {
 
 	private JLabel mDivideLineLabel;
 	private ProgressBar mProgress;
-	
+	   
+    private JComboBox mProjectComboBox;
+    
 	private ListSource mListSource;
 	private BaseList mTransferList;
+	private FileScanner mFileScanner;
+	
+
 
 	private boolean isRunning;
 
@@ -69,24 +71,26 @@ public class ReplayView extends CBaseTabView implements MouseListener {
 	}
 	
 	private void initLeftView(){
-		mLeftPanl.setLayout(null);
-		JComboBox comboBox = new JComboBox(new String[]{"aaa","bbb","ccc"});
-		comboBox.setBounds(0, 0, 200, 40);
-		//comboBox.setBackground(Color.WHITE);
+		mLeftPanel.setLayout(null);
+		JLabel label = new JLabel("Project:");
+		label.setBounds(0, 0, 80, 25);
 		
-		comboBox.setSelectedItem("aaa");
-	
-        comboBox.setUI(new BasicComboBoxUI() {
+		mLeftPanel.add(label);
+		
+		mProjectComboBox = new JComboBox();
+		mProjectComboBox.setBounds(label.getWidth(), 0, mLeftPanel.getWidth()-label.getWidth(), 25);
+		mProjectComboBox.setMaximumRowCount(20);
+		mProjectComboBox.addItemListener(this);
+
+		mProjectComboBox.setUI(new BasicComboBoxUI() {
             public void installUI(JComponent comboBox) {
                 super.installUI(comboBox);
-                listBox.setForeground(Color.WHITE);
+                listBox.setForeground(Color.GRAY);
+                listBox.setBackground(Color.WHITE);
                 listBox.setSelectionBackground(Color.WHITE);
-                listBox.setSelectionForeground(Color.BLUE);
+                listBox.setSelectionForeground(Color.BLACK);
             }
              
-            /**
-             * 该方法返回右边的按钮
-             */
             protected JButton createArrowButton() {
             	JButton button = new BasicArrowButton(BasicArrowButton.SOUTH,
             			Color.WHITE,
@@ -107,27 +111,36 @@ public class ReplayView extends CBaseTabView implements MouseListener {
             }
         });
 
-		mLeftPanl.add(comboBox);
+		mLeftPanel.add(mProjectComboBox);
+		
+		mFileScanner = new FileScanner();
+
+		mProjectComboBox.setModel(new DefaultComboBoxModel(mFileScanner.getProjectList()));
+		mProjectComboBox.setSelectedItem(0);
+		
+		
+		mListSource = new ListSource();
+		mTransferList = new BaseList();
 	}
 
 	private void initCenterView() {
-		mCenterPanl.setLayout(null);
+		mCenterPanel.setLayout(null);
 
 		JLayeredPane pane = new JLayeredPane();
 		pane.setLayout(null);
-		pane.setBounds(0, 0, mCenterPanl.getWidth(), mCenterPanl.getHeight());
+		pane.setBounds(0, 0, mCenterPanel.getWidth(), mCenterPanel.getHeight());
 
-		mCenterPanl.add(pane);
+		mCenterPanel.add(pane);
 
 		mDivideLineLabel = new JLabel();
 		ImageIcon divideIcon = Util.scaleImage(Util.getImageIcon("tabbar_select.png"),
-				mCenterPanl.getWidth(), DIVIDE_LINE_HEIGHT);
+				mCenterPanel.getWidth(), DIVIDE_LINE_HEIGHT);
 		mDivideLineLabel.setIcon(divideIcon);
 		mDivideLineLabel.setBounds((pane.getWidth() - divideIcon.getIconWidth()) / 2,
 				(pane.getHeight() - divideIcon.getIconHeight()) / 2, divideIcon.getIconWidth(),
 				divideIcon.getIconHeight());
 
-		System.out.println((pane.getHeight() - divideIcon.getIconHeight()) / 2);
+		//System.out.println((pane.getHeight() - divideIcon.getIconHeight()) / 2);
 		mRecordBtn = new CButton(mRecordIconUp, mRecordIconDown);
 		mRecordBtn.setBounds(mDivideLineLabel.getX(),
 				mDivideLineLabel.getY() - mRecordIconUp.getIconHeight() - 5,
@@ -158,24 +171,6 @@ public class ReplayView extends CBaseTabView implements MouseListener {
 		pane.add(mProgress);
 	}
 	
-	  private void disableFocusBackground(JComboBox combo )
-	     {
-	         if( combo == null ){ return; }
-
-	         Component comp = combo.getEditor().getEditorComponent();
-
-	         if( comp instanceof JTextField )
-	         {
-	             JTextField field = (JTextField)comp;
-
-	             field.setEditable( false );
-
-	            // field.setSelectionColor( field.getBackground()/*java.awt.Color.WHITE*/ );
-	             field.setSelectionColor(Color.WHITE);
-	             combo.setEditable( true );
-	         }
-	     }
-
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -276,5 +271,13 @@ public class ReplayView extends CBaseTabView implements MouseListener {
 		// TODO Auto-generated method stub
 
 	}
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        // TODO Auto-generated method stub
+        if (e.getStateChange() == ItemEvent.SELECTED){
+            System.out.println("xxxx:"+e.getItem().toString());
+        }
+    }
 
 }
