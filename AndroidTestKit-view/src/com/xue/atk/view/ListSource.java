@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * ×Ô¶¨ÒåµÄÔ´List ÆäÄÚÈÝÊÇÒ»¸öList£¬Íâ²¿Í¨¹ýsetSources(List sources)À´ÉèÖÃÔ´ BaseList Demo ºËÐÄÀà
+ * ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Ô´List ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Listï¿½ï¿½ï¿½â²¿Í¨ï¿½ï¿½setSources(List sources)ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´ BaseList Demo ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
  * 
  * @ClassName ListSource
  * @author wei.xue
@@ -15,55 +15,55 @@ public class ListSource extends BaseModel {
 	private Comparator<Object> comparator = null;
 	private List<Object> sources = new ArrayList<Object>();
 
-	// Í¨¹ýlistÉèÖÃÊý¾ÝÔ´
+	// Í¨ï¿½ï¿½listï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´
 	public void setSources(List<Object> sources) {
 		this.sources = sources;
 	}
 
-	// Ìí¼ÓÒ»¸öµ¥Ôª
+	// ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ôª
 	public void addCell(Object obj) {
 		sources.add(obj);
 		notifySourceRefreshEvent(sources);
 	}
 
-	// ¸ù¾ÝË÷ÒýÉ¾³ýÒ»¸öµ¥Ôª
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ôª
 	public void removeCell(int index) {
-		System.out.println("É¾³ý:" + index);
+		System.out.println("É¾ï¿½ï¿½:" + index);
 		if (sources.size() > 0 && index < sources.size() && index >= 0) {
 			sources.remove(index);
 			notifySourceRefreshEvent(sources);
 		}
 	}
 
-	// ¸ù¾ÝÖµÉ¾³ýÒ»¸öµ¥Ôª
+	// ï¿½ï¿½ï¿½ÖµÉ¾ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ôª
 	public void removeCell(Object value) {
 		sources.remove(value);
 		notifySourceRefreshEvent(sources);
 	}
 
-	// ÉèÖÃÒ»¸öµ¥Ôª
+	// ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½Ôª
 	public void setCell(int index, Object obj) {
 		sources.set(index, obj);
 		notifySourceRefreshEvent(sources);
 	}
 
-	// »ñÈ¡Ò»¸öµ¥ÔªµÄÐÅÏ¢
+	// ï¿½ï¿½È¡Ò»ï¿½ï¿½ï¿½ï¿½Ôªï¿½ï¿½ï¿½ï¿½Ï¢
 	public Object getCell(int index) {
 		return sources.get(index);
 	}
 
-	// »ñÈ¡ËùÓÐµ¥ÔªÐÅÏ¢
+	// ï¿½ï¿½È¡ï¿½ï¿½ï¿½Ðµï¿½Ôªï¿½ï¿½Ï¢
 	public List<Object> getAllCell() {
 		return sources;
 	}
 
-	// ÒÆ³ýËùÓÐ
+	// ï¿½Æ³ï¿½ï¿½ï¿½ï¿½ï¿½
 	public void removeAll() {
 		sources.clear();
 		notifySourceRefreshEvent(sources);
 	}
 
-	// ÉÏÒÆ
+	// ï¿½ï¿½ï¿½ï¿½
 	public void moveUp(int index) {
 		if (index > 0 && index < sources.size()) {
 			Object temp = sources.get(index - 1);
@@ -73,7 +73,7 @@ public class ListSource extends BaseModel {
 		}
 	}
 
-	// ÏÂÒÆ
+	// ï¿½ï¿½ï¿½ï¿½
 	public void moveDown(int index) {
 		if (index < sources.size() - 1 && index > 0) {
 			Object temp = sources.get(index + 1);

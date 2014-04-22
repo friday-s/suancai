@@ -295,8 +295,11 @@ public class ReplayView extends CBaseTabView implements MouseListener,ItemListen
     public void itemStateChanged(ItemEvent e) {
         // TODO Auto-generated method stub
         if (e.getStateChange() == ItemEvent.SELECTED){
-            System.out.println("xxxx:"+e.getItem().toString());
+
+            List source = Arrays.asList(mFileScanner.getEventList(mProjectComboBox.getSelectedItem().toString()));
+            mListSource.setSources(source);
+            mListSource.notifySourceRefreshEvent(source);
+
         }
     }
-
 }
