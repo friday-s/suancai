@@ -7,6 +7,8 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
@@ -15,6 +17,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.plaf.basic.BasicComboBoxUI;
@@ -47,8 +50,6 @@ public class ReplayView extends CBaseTabView implements MouseListener,ItemListen
 	private ListSource mListSource;
 	private BaseList mTransferList;
 	private FileScanner mFileScanner;
-	
-
 
 	private boolean isRunning;
 
@@ -118,9 +119,27 @@ public class ReplayView extends CBaseTabView implements MouseListener,ItemListen
 		mProjectComboBox.setModel(new DefaultComboBoxModel(mFileScanner.getProjectList()));
 		mProjectComboBox.setSelectedItem(0);
 		
-		
+		List source = Arrays.asList(mFileScanner.getEventList(mProjectComboBox.getSelectedItem().toString()));
+	
 		mListSource = new ListSource();
+		mListSource.setSources(source);
+		
+		
 		mTransferList = new BaseList();
+		mTransferList.setBounds(0, 0, mLeftPanel.getWidth(), mLeftPanel.getHeight()-label.getHeight());
+		
+		
+		mTransferList.setCellIface(new CellPanel());
+		mTransferList.setSource(mListSource);
+		
+		JScrollPane scrollpane = new JScrollPane(mTransferList);
+        scrollpane.setBounds(0, mProjectComboBox.getHeight(), mLeftPanel.getWidth(),
+                mLeftPanel.getHeight() - mProjectComboBox.getHeight());
+        scrollpane.setOpaque(false);
+        scrollpane.getViewport().setOpaque(false);
+        scrollpane.setBorder(null);
+        mLeftPanel.add(scrollpane);
+		
 	}
 
 	private void initCenterView() {

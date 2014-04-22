@@ -3,14 +3,16 @@ package com.xue.atk.view;
 import javax.swing.JComponent;
 
 /**
- * Cell的接口类，用于构造BaseList中的cell BaseList Demo 重要类
+ * Cell锟侥接匡拷锟洁，锟斤拷锟节癸拷锟斤拷BaseList锟叫碉拷cell BaseList Demo 锟斤拷要锟斤拷
  * 
  * @author wei.xue
  * @date 2013-01-18
  */
 public interface ListCellIface {
-	
-	public JComponent getListCell(BaseList list, Object value);
 
-	public void setSelect(boolean iss);
+    public JComponent getListCell(BaseList list, Object value);
+
+    public void setSelect(boolean iss);
+
+    public boolean getSelect();
 }
