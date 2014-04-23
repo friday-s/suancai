@@ -112,7 +112,6 @@ public class AlertDialog extends Dialog implements MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-
 		if (e.getSource() == mPositiveBtn) {
 			mPositiveBtn.setIcon(Util.getImageIcon("ok_down.png"));
 			return;
@@ -127,6 +126,7 @@ public class AlertDialog extends Dialog implements MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
+	    
 		if (e.getSource() == mPositiveBtn) {
 			mPositiveBtn.setIcon(Util.getImageIcon("ok_up.png"));
 			return;
@@ -141,13 +141,11 @@ public class AlertDialog extends Dialog implements MouseListener {
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-
 	}
 
 }

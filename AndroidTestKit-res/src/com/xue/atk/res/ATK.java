@@ -59,6 +59,9 @@ public class ATK {
     public static final String[] TABBED_PANE = { "record", "replay" };
 
     public static final String EXIT_CONTENT = "Do you want to quit?";
+    
+    public static final String[] REPLAY_RIGHT_VIEW_POP = {"Up","Down","Remove"};
+    public static final String[] REPLAY_LEFT_VIEW_POP = {"Add to replay list","Detail","Delete"};
 
     public static final String USB_STATE = "USB:";
     public static final String DEVICE_SN = "Device:";

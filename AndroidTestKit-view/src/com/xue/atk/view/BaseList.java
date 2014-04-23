@@ -9,7 +9,8 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 
 /**
  * �Զ���JList,ÿ��cell����һ��component,���component�Ϳ������ⶨ����,������һ��JPanel�
@@ -35,6 +36,8 @@ public class BaseList extends JComponent {
     private Color selectColor = new Color(252, 233, 161);
 
     private Color passColor = new Color(196, 227, 248);
+
+    private JPopupMenu mPopupMenu;
 
     public ListSource getSource() {
         return source;
@@ -151,13 +154,7 @@ public class BaseList extends JComponent {
             cell.addMouseListener(new MouseAdapter() {
 
                 public void mouseClicked(MouseEvent e) {
-                    for (int i = 0; i < mTotalCell.size(); i++) {
-                        if (e.getSource().equals(mTotalCell.get(i))) {
 
-                            setSelectIndex(i);
-                            break;
-                        }
-                    }
                 }
 
                 public void mouseEntered(MouseEvent e) {
@@ -166,11 +163,6 @@ public class BaseList extends JComponent {
                         if (e.getSource().equals(mTotalCell.get(i))) {
 
                             if (!((ListCellIface) mTotalCell.get(i)).getSelect()) {
-
-                                if (!((ListCellIface) mTotalCell.get(mTempIndex)).getSelect()) {
-                                    mTotalCell.get(mTempIndex).setOpaque(false);
-                                    mTotalCell.get(mTempIndex).setBackground(null);
-                                }
 
                                 mTotalCell.get(i).setOpaque(true);
                                 mTotalCell.get(i).setBackground(getPassColor());
@@ -181,14 +173,47 @@ public class BaseList extends JComponent {
                         }
                     }
                 }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    // TODO Auto-generated method stub
+                    if (!((ListCellIface) mTotalCell.get(mTempIndex)).getSelect()) {
+                        mTotalCell.get(mTempIndex).setOpaque(false);
+                        mTotalCell.get(mTempIndex).setBackground(null);
+                    }
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    // TODO Auto-generated method stub
+
+                    for (int i = 0; i < mTotalCell.size(); i++) {
+                        if (e.getSource().equals(mTotalCell.get(i))) {
+                            setSelectIndex(i);
+
+                            break;
+                        }
+                    }
+
+                    if (e.getSource() == mTotalCell.get(selectIndex)
+                            && e.getButton() == MouseEvent.BUTTON3) {
+                        if (mPopupMenu != null) {
+                            mPopupMenu.show(e.getComponent(), e.getX(), e.getY());
+                        }
+                    }
+                }
             });
 
             this.mTotalCell.add(cell);
             this.add(cell);
         }
- 
+
         this.revalidate();
         this.repaint();
+    }
+
+    public void setRightClickPopup(JPopupMenu pop) {
+        this.mPopupMenu = pop;
     }
 
     public List<JComponent> getmTotalCell() {

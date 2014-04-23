@@ -1,6 +1,7 @@
 package com.xue.atk.view;
 
 import java.awt.BorderLayout;
+import java.awt.Insets;
 
 import java.awt.Dimension;
 
@@ -64,36 +65,21 @@ public class CellPanel extends JPanel implements ListCellIface {
         this.baseList = list;
 
         label = new JLabel(bean);
-      //  label.setMaximumSize(new Dimension(DEFAULT_WIDTH-BUTTON_SIDE_LENGHT,BUTTON_SIDE_LENGHT));
-      //  label.setPreferredSize(new Dimension(DEFAULT_WIDTH-BUTTON_SIDE_LENGHT,BUTTON_SIDE_LENGHT));
 
-        CButton button = new CButton(Util.getImageIcon("right_normal.png"),
-                Util.getImageIcon("right_click.png"));
-        button.setMaximumSize(new Dimension(BUTTON_SIDE_LENGHT,BUTTON_SIDE_LENGHT));
+        JButton button = new JButton();
+        button.setIcon(Util.getImageIcon("right_normal.png"));
+        button.setPressedIcon(Util.getImageIcon("right_click.png"));
+        button.setMaximumSize(new Dimension(BUTTON_SIDE_LENGHT, BUTTON_SIDE_LENGHT));
+        button.setOpaque(false);  
+        button.setContentAreaFilled(false);  
+        button.setMargin(new Insets(0, 0, 0, 0)); 
+        button.setBorder(null);  
+        button.setFocusPainted(false);  
+        button.setBorderPainted(false);  
 
-        // final JSpinner jSpinner = new JSpinner();
-        // jSpinner.setModel(new SpinnerNumberModel(1, 1, null, 1));
-        // jSpinner.setPreferredSize(new Dimension(60,30));
-        // jSpinner.setMaximumSize(new Dimension(60,30));
-        // jSpinner.addChangeListener(new ChangeListener() {
-        //
-        // @Override
-        // public void stateChanged(ChangeEvent arg0) {
-        // // TODO Auto-generated method stub
-        // System.out.println(jSpinner.getValue());
-        // }
-        // });
-        // remove.setBounds(100, 0, 60, 25);
-        // remove.addMouseListener(new MouseAdapter() {
-        // public void mouseClicked(MouseEvent e) {
-        //
-        // if(e.getButton()==MouseEvent.BUTTON1){
-        // per2CellPanel.baseList.getSource().removeCell(bean);
-        // }
-        // }
-        // });
+       
         this.add(label, BorderLayout.WEST);
-        this.add(button, BorderLayout.EAST);
+   //     this.add(button, BorderLayout.EAST);
 
         return this;
     }
