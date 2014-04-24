@@ -22,9 +22,13 @@ import com.android.ddmlib.IDevice;
 import com.android.ddmlib.Log;
 
 public class ADB {
+
+    private static final String TAG = "ADB";
+
     private AndroidDebugBridge mAndroidDebugBridge;
 
     public boolean initialize() {
+
         boolean success = true;
 
         // String adbLocation =
@@ -33,16 +37,12 @@ public class ADB {
 
         String osName = System.getProperties().getProperty("os.name");
         String osArch = System.getProperties().getProperty("os.arch");
-        System.out.println(osName+"  "+osArch);
+
+        Log.i(TAG, "OS:"+osName+" "+osArch);
 
         if (osName.indexOf("Linux") != -1 && osArch.indexOf("64") != -1) {
-
             adbLocation = "." + File.separator + "adb" + File.separator + "linuxX64";
-            
-            System.out.println(osName+"  "+osArch);
         }
-
-       
 
         if (success) {
             if ((adbLocation != null) && (adbLocation.length() != 0)) {

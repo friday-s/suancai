@@ -16,6 +16,7 @@ import com.xue.atk.view.MainFrame;
 public class AndroidTestKit {
 
     private JFrame frame;
+    private static ADBService adbService;
 
     /**
      * Launch the application.
@@ -43,7 +44,7 @@ public class AndroidTestKit {
             }
         });
 
-        ADBService adbService = new ADBService();
+        adbService = new ADBService();
         adbService.start();
     }
 
