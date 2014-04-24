@@ -27,8 +27,22 @@ public class ADB {
     public boolean initialize() {
         boolean success = true;
 
-        //String adbLocation = System.getProperty("com.android.screenshot.bindir");
+        // String adbLocation =
+        // System.getProperty("com.android.screenshot.bindir");
         String adbLocation = null;
+
+        String osName = System.getProperties().getProperty("os.name");
+        String osArch = System.getProperties().getProperty("os.arch");
+        System.out.println(osName+"  "+osArch);
+
+        if (osName.indexOf("Linux") != -1 && osArch.indexOf("64") != -1) {
+
+            adbLocation = "." + File.separator + "adb" + File.separator + "linuxX64";
+            
+            System.out.println(osName+"  "+osArch);
+        }
+
+       
 
         if (success) {
             if ((adbLocation != null) && (adbLocation.length() != 0)) {
