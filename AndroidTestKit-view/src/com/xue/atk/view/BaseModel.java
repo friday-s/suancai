@@ -16,21 +16,21 @@ import java.util.Vector;
 public class BaseModel {
 	private Vector<BaseList> repository = new Vector<BaseList>();
 	private BaseList bl;
-	// 注册监听器，如果这里没有使用Vector而是使用ArrayList那么要注意同步问题
+	// 注锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷没锟斤拷使锟斤拷Vector锟斤拷锟斤拷使锟斤拷ArrayList锟斤拷么要注锟斤拷同锟斤拷锟斤拷锟斤拷
 	public void addSourceRefreshListener(BaseList list) {
-		repository.addElement(list);// 这步要注意同步问题
+		repository.addElement(list);// 锟解步要注锟斤拷同锟斤拷锟斤拷锟斤拷
 	}
 
-	// 如果这里没有使用Vector而是使用ArrayList那么要注意同步问题
-	public void notifySourceRefreshEvent(List<Object> event) {
-		Enumeration<BaseList> en = repository.elements();// 这步要注意同步问题
+	// 锟斤拷锟斤拷锟斤拷锟矫伙拷锟绞癸拷锟絍ector锟斤拷锟斤拷使锟斤拷ArrayList锟斤拷么要注锟斤拷同锟斤拷锟斤拷锟斤拷
+	public void notifySourceRefreshEvent() {
+		Enumeration<BaseList> en = repository.elements();// 锟解步要注锟斤拷同锟斤拷锟斤拷锟斤拷
 		while (en.hasMoreElements()) {
 			bl = (BaseList) en.nextElement();
-			bl.sourceRefreshEvent(event);
+			bl.sourceRefreshEvent();
 		}
 	}
-	// 删除监听器，如果这里没有使用Vector而是使用ArrayList那么要注意同步问题
+	// 删锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷没锟斤拷使锟斤拷Vector锟斤拷锟斤拷使锟斤拷ArrayList锟斤拷么要注锟斤拷同锟斤拷锟斤拷锟斤拷
 	public void removeSourceRefreshListener(BaseList srl) {
-		repository.remove(srl);// 这步要注意同步问题
+		repository.remove(srl);// 锟解步要注锟斤拷同锟斤拷锟斤拷锟斤拷
 	}
 }

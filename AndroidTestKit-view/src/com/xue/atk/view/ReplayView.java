@@ -2,6 +2,8 @@ package com.xue.atk.view;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
@@ -22,14 +24,19 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
+import javax.swing.event.MenuKeyEvent;
+import javax.swing.event.MenuKeyListener;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 
+import com.xue.atk.file.EventFile;
 import com.xue.atk.file.FileScanner;
 import com.xue.atk.res.ATK;
 import com.xue.atk.util.Util;
 
-public class ReplayView extends CBaseTabView implements MouseListener, ItemListener {
+public class ReplayView extends CBaseTabView implements MouseListener, ItemListener, ActionListener {
 
     private static final int DIVIDE_LINE_WIDTH = 70;
     private static final int DIVIDE_LINE_HEIGHT = 1;
@@ -126,12 +133,11 @@ public class ReplayView extends CBaseTabView implements MouseListener, ItemListe
         mProjectComboBox.setModel(new DefaultComboBoxModel(mFileScanner.getProjectList()));
         mProjectComboBox.setSelectedItem(0);
 
-        List source = Arrays.asList(mFileScanner.getEventList(mProjectComboBox.getSelectedItem()
-                .toString()));
-
         mLListSource = new ListSource();
-        mLListSource.setSources(source);
 
+        List<Object> source = mFileScanner.getEventList(mProjectComboBox.getSelectedItem()
+                .toString());
+        mLListSource.setSources(source);
         mLTransferList = new BaseList();
         mLTransferList.setBounds(0, 0, mLeftPanel.getWidth(),
                 mLeftPanel.getHeight() - label.getHeight());
@@ -146,18 +152,18 @@ public class ReplayView extends CBaseTabView implements MouseListener, ItemListe
         scrollpane.getViewport().setOpaque(false);
         scrollpane.setBorder(null);
         mLeftPanel.add(scrollpane);
-        
-        
+
         JPopupMenu pop = new JPopupMenu();
         pop.setBackground(Color.WHITE);
-        pop.setBorder(BorderFactory.createLineBorder(new Color(65,105,225)));
-        
-        for (String s : ATK.REPLAY_LEFT_VIEW_POP){
-            JMenuItem item =  new JMenuItem(s);
+        pop.setBorder(BorderFactory.createLineBorder(new Color(65, 105, 225)));
+
+        for (String s : ATK.REPLAY_LEFT_VIEW_POP) {
+            JMenuItem item = new JMenuItem(s);
+            item.addActionListener(this);
             item.setBackground(Color.WHITE);
             pop.add(item);
         }
-        
+
         mLTransferList.setRightClickPopup(pop);
 
     }
@@ -219,38 +225,40 @@ public class ReplayView extends CBaseTabView implements MouseListener, ItemListe
         mRightPanel.add(label);
 
         mRListSource = new ListSource();
-        List source = Arrays.asList(new String[]{"aaa","bbb","ccc"});
-        mRListSource.setSources(source);
-        
+      
+      
+
         mRTransferList = new BaseList();
         mRTransferList.setBounds(0, 0, mRightPanel.getWidth(),
                 mRightPanel.getHeight() - label.getHeight());
-        
+
         mRTransferList.setCellIface(new RCellPanel());
         mRTransferList.setSource(mRListSource);
-        
+
         JScrollPane scrollpane = new JScrollPane(mRTransferList);
-        scrollpane.setBounds(0, label.getHeight(), mRightPanel.getWidth(),
-                mRightPanel.getHeight() - label.getHeight());
+        scrollpane.setBounds(0, label.getHeight(), mRightPanel.getWidth(), mRightPanel.getHeight()
+                - label.getHeight());
         scrollpane.setOpaque(false);
         scrollpane.getViewport().setOpaque(false);
         scrollpane.setBorder(null);
-        
+
         mRightPanel.add(scrollpane);
-        
+
         JPopupMenu pop = new JPopupMenu();
+
         pop.setBackground(Color.WHITE);
-        pop.setBorder(BorderFactory.createLineBorder(new Color(65,105,225)));
-        
-        for (String s : ATK.REPLAY_RIGHT_VIEW_POP){
-            JMenuItem item =  new JMenuItem(s);
+        pop.setBorder(BorderFactory.createLineBorder(new Color(65, 105, 225)));
+
+        for (String s : ATK.REPLAY_RIGHT_VIEW_POP) {
+            JMenuItem item = new JMenuItem(s);
+            item.addActionListener(this);
             item.setBackground(Color.WHITE);
-           
+
             pop.add(item);
         }
-        
+
         mRTransferList.setRightClickPopup(pop);
-        
+
     }
 
     @Override
@@ -358,11 +366,44 @@ public class ReplayView extends CBaseTabView implements MouseListener, ItemListe
         // TODO Auto-generated method stub
         if (e.getStateChange() == ItemEvent.SELECTED) {
 
-            List source = Arrays.asList(mFileScanner.getEventList(mProjectComboBox
-                    .getSelectedItem().toString()));
-            mLListSource.setSources(source);
-            mLListSource.notifySourceRefreshEvent(source);
+            List<Object> source = mFileScanner.getEventList(mProjectComboBox.getSelectedItem()
+                    .toString());
 
+            mLListSource.setSources(source);
+
+            mLListSource.notifySourceRefreshEvent();
         }
     }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+
+        if (e.getActionCommand().equals(ATK.REPLAY_LEFT_VIEW_POP[0])) {
+            Object o = mLTransferList.getSelectCell();
+            mRListSource.addCell(((EventFile)o).clone());
+            mRListSource.notifySourceRefreshEvent();
+            return;
+        }
+        if (e.getActionCommand().equals(ATK.REPLAY_LEFT_VIEW_POP[1])) {
+            return;
+        }
+        if (e.getActionCommand().equals(ATK.REPLAY_LEFT_VIEW_POP[2])) {
+            return;
+        }
+        if (e.getActionCommand().equals(ATK.REPLAY_RIGHT_VIEW_POP[0])) {
+            mRListSource.moveUp(mRTransferList.getSelectIndex());
+            return;
+        }
+        if (e.getActionCommand().equals(ATK.REPLAY_RIGHT_VIEW_POP[1])) {
+            mRListSource.moveDown(mRTransferList.getSelectIndex());
+            return;
+        }
+        if (e.getActionCommand().equals(ATK.REPLAY_RIGHT_VIEW_POP[2])) {
+            mRListSource.removeCell(mRTransferList.getSelectIndex());
+            return;
+        }
+
+    }
+
 }

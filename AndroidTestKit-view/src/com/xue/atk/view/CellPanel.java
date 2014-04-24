@@ -37,7 +37,6 @@ public class CellPanel extends JPanel implements ListCellIface {
     
     private boolean selected;
     
-    
     private static final int DEFAULT_WIDTH = ATK.BASE_TAB_VIEW_WIDTH-25;
     private static final int DEFAULT_HEIGHT = 30;
     
@@ -60,8 +59,8 @@ public class CellPanel extends JPanel implements ListCellIface {
 
     @Override
     public JComponent getListCell(BaseList list, Object value) {
-        String valuelist = (String) value;
-        this.bean = valuelist;
+    
+        this.bean = value.toString();
         this.baseList = list;
 
         label = new JLabel(bean);

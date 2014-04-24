@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Insets;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -18,19 +16,14 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.xue.atk.file.EventFile;
 import com.xue.atk.res.ATK;
 import com.xue.atk.util.Util;
 
 public class RCellPanel extends JPanel implements ListCellIface {
 
     private static final long serialVersionUID = 1L;
-
-    private BaseList baseList;
-    private String bean;
-
-    private JLabel label;
-
-    private boolean selected;
+    
 
     private static final int DEFAULT_WIDTH = ATK.BASE_TAB_VIEW_WIDTH - 20;
     private static final int DEFAULT_HEIGHT = 30;
@@ -42,6 +35,15 @@ public class RCellPanel extends JPanel implements ListCellIface {
 
     private static final int LABEL_WIDTH = DEFAULT_WIDTH - BUTTON_SIDE_LENGHT - SPINNER_WIDTH;
     private static final int LABEL_HEIGHT = DEFAULT_HEIGHT;
+
+    private String bean;
+
+    private JLabel label;
+
+    private boolean selected;
+    
+    private EventFile eventFile;
+
 
     public RCellPanel() {
         this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -61,9 +63,10 @@ public class RCellPanel extends JPanel implements ListCellIface {
 
     @Override
     public JComponent getListCell(BaseList list, Object value) {
-        String valuelist = (String) value;
-        this.bean = valuelist;
-        this.baseList = list;
+
+        this.eventFile = (EventFile) value;
+
+        this.bean = value.toString();
 
         label = new JLabel(bean);
         label.setPreferredSize(new Dimension(LABEL_WIDTH, LABEL_HEIGHT));
@@ -80,7 +83,7 @@ public class RCellPanel extends JPanel implements ListCellIface {
         button.setBorderPainted(false);
 
         final JSpinner jSpinner = new JSpinner();
-        jSpinner.setModel(new SpinnerNumberModel(1, 1, null, 1));
+        jSpinner.setModel(new SpinnerNumberModel(eventFile.getTime(), 1, null, 1));
         jSpinner.setPreferredSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
         jSpinner.setMaximumSize(new Dimension(SPINNER_WIDTH, SPINNER_HEIGHT));
         jSpinner.setBorder(BorderFactory.createLineBorder(new Color(252, 233, 161)));
@@ -96,19 +99,15 @@ public class RCellPanel extends JPanel implements ListCellIface {
             @Override
             public void stateChanged(ChangeEvent arg0) {
                 // TODO Auto-generated method stub
-                System.out.println(jSpinner.getValue());
+                eventFile.setTime((Integer) jSpinner.getValue());
             }
         });
 
         this.add(label, BorderLayout.WEST);
         this.add(jSpinner, BorderLayout.CENTER);
-   //     this.add(button, BorderLayout.EAST);
-
         return this;
     }
- 
-    
-  
+
     @Override
     public void setSelect(boolean iss) {
         this.selected = iss;

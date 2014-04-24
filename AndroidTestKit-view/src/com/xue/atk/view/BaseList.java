@@ -24,7 +24,7 @@ public class BaseList extends JComponent {
 
     private ListSource source;
 
-    private int mLastIndex = 0;
+    private int mLastIndex = -1;
     private int mTempIndex = 0;
 
     private ListCellIface celliface;
@@ -95,15 +95,18 @@ public class BaseList extends JComponent {
 
         if (selectIndex < mTotalCell.size() && selectIndex > -1) {
 
-            mTotalCell.get(mLastIndex).setOpaque(false);
-            mTotalCell.get(mLastIndex).setBackground(null);
+            if (mLastIndex >= 0) {
+                mTotalCell.get(mLastIndex).setOpaque(false);
+                mTotalCell.get(mLastIndex).setBackground(null);
+            }
 
             mTotalCell.get(selectIndex).setOpaque(true);
             mTotalCell.get(selectIndex).setBackground(getSelectColor());
 
             if (celliface != null) {
-                ((ListCellIface) mTotalCell.get(mLastIndex)).setSelect(false);
-
+                if (mLastIndex >= 0) {
+                    ((ListCellIface) mTotalCell.get(mLastIndex)).setSelect(false);
+                }
                 ((ListCellIface) mTotalCell.get(selectIndex)).setSelect(true);
 
                 mLastIndex = selectIndex;
@@ -115,6 +118,10 @@ public class BaseList extends JComponent {
 
     public int getSelectIndex() {
         return selectIndex;
+    }
+
+    public Object getSelectCell() {
+        return source.getCell(selectIndex);
     }
 
     public BaseList() {
@@ -133,79 +140,83 @@ public class BaseList extends JComponent {
         // }
         this.removeAll();
         this.mTotalCell.clear();
-        for (int i = 0; i < source.getAllCell().size(); i++) {
-            JComponent cell = null;
-            if (celliface != null) {
-                try {
-                    celliface = celliface.getClass().newInstance();
-                } catch (Exception e) {
-                    e.printStackTrace();
+
+        if (source.getAllCell() != null) {
+
+            for (int i = 0; i < source.getAllCell().size(); i++) {
+                JComponent cell = null;
+                if (celliface != null) {
+                    try {
+                        celliface = celliface.getClass().newInstance();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-            if (celliface == null) {
-                cell = new JLabel(source.getAllCell().get(i).toString());
-                cell.setMaximumSize(new Dimension(200, 30));
-                cell.setPreferredSize(new Dimension(0, 30));
+                if (celliface == null) {
+                    cell = new JLabel(source.getAllCell().get(i).toString());
+                    cell.setMaximumSize(new Dimension(200, 30));
+                    cell.setPreferredSize(new Dimension(0, 30));
 
-            } else {
-                cell = celliface.getListCell(this, source.getAllCell().get(i));
-            }
-
-            cell.addMouseListener(new MouseAdapter() {
-
-                public void mouseClicked(MouseEvent e) {
-
+                } else {
+                    cell = celliface.getListCell(this, source.getAllCell().get(i));
                 }
 
-                public void mouseEntered(MouseEvent e) {
-                    for (int i = 0; i < mTotalCell.size(); i++) {
+                cell.addMouseListener(new MouseAdapter() {
 
-                        if (e.getSource().equals(mTotalCell.get(i))) {
+                    public void mouseClicked(MouseEvent e) {
 
-                            if (!((ListCellIface) mTotalCell.get(i)).getSelect()) {
+                    }
 
-                                mTotalCell.get(i).setOpaque(true);
-                                mTotalCell.get(i).setBackground(getPassColor());
-                                mTempIndex = i;
+                    public void mouseEntered(MouseEvent e) {
+                        for (int i = 0; i < mTotalCell.size(); i++) {
+
+                            if (e.getSource().equals(mTotalCell.get(i))) {
+
+                                if (!((ListCellIface) mTotalCell.get(i)).getSelect()) {
+
+                                    mTotalCell.get(i).setOpaque(true);
+                                    mTotalCell.get(i).setBackground(getPassColor());
+                                    mTempIndex = i;
+
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        // TODO Auto-generated method stub
+                        if (!((ListCellIface) mTotalCell.get(mTempIndex)).getSelect()) {
+                            mTotalCell.get(mTempIndex).setOpaque(false);
+                            mTotalCell.get(mTempIndex).setBackground(null);
+                        }
+                    }
+
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                        // TODO Auto-generated method stub
+
+                        for (int i = 0; i < mTotalCell.size(); i++) {
+                            if (e.getSource().equals(mTotalCell.get(i))) {
+                                setSelectIndex(i);
 
                                 break;
                             }
                         }
-                    }
-                }
 
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    // TODO Auto-generated method stub
-                    if (!((ListCellIface) mTotalCell.get(mTempIndex)).getSelect()) {
-                        mTotalCell.get(mTempIndex).setOpaque(false);
-                        mTotalCell.get(mTempIndex).setBackground(null);
-                    }
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                    // TODO Auto-generated method stub
-
-                    for (int i = 0; i < mTotalCell.size(); i++) {
-                        if (e.getSource().equals(mTotalCell.get(i))) {
-                            setSelectIndex(i);
-
-                            break;
+                        if (e.getSource() == mTotalCell.get(selectIndex)
+                                && e.getButton() == MouseEvent.BUTTON3) {
+                            if (mPopupMenu != null) {
+                                mPopupMenu.show(e.getComponent(), e.getX(), e.getY());
+                            }
                         }
                     }
+                });
 
-                    if (e.getSource() == mTotalCell.get(selectIndex)
-                            && e.getButton() == MouseEvent.BUTTON3) {
-                        if (mPopupMenu != null) {
-                            mPopupMenu.show(e.getComponent(), e.getX(), e.getY());
-                        }
-                    }
-                }
-            });
-
-            this.mTotalCell.add(cell);
-            this.add(cell);
+                this.mTotalCell.add(cell);
+                this.add(cell);
+            }
         }
 
         this.revalidate();
@@ -225,7 +236,8 @@ public class BaseList extends JComponent {
      * 
      * @param event
      */
-    public void sourceRefreshEvent(List event) {
+    public void sourceRefreshEvent() {
         this.refreshData();
+        mLastIndex = -1;
     }
 }

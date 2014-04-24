@@ -23,7 +23,7 @@ public class ListSource extends BaseModel {
 	// ���һ����Ԫ
 	public void addCell(Object obj) {
 		sources.add(obj);
-		notifySourceRefreshEvent(sources);
+		notifySourceRefreshEvent();
 	}
 
 	// �������ɾ��һ����Ԫ
@@ -31,20 +31,20 @@ public class ListSource extends BaseModel {
 		System.out.println("ɾ��:" + index);
 		if (sources.size() > 0 && index < sources.size() && index >= 0) {
 			sources.remove(index);
-			notifySourceRefreshEvent(sources);
+			notifySourceRefreshEvent();
 		}
 	}
 
 	// ���ֵɾ��һ����Ԫ
 	public void removeCell(Object value) {
 		sources.remove(value);
-		notifySourceRefreshEvent(sources);
+		notifySourceRefreshEvent();
 	}
 
 	// ����һ����Ԫ
 	public void setCell(int index, Object obj) {
 		sources.set(index, obj);
-		notifySourceRefreshEvent(sources);
+		notifySourceRefreshEvent();
 	}
 
 	// ��ȡһ����Ԫ����Ϣ
@@ -60,7 +60,7 @@ public class ListSource extends BaseModel {
 	// �Ƴ�����
 	public void removeAll() {
 		sources.clear();
-		notifySourceRefreshEvent(sources);
+		notifySourceRefreshEvent();
 	}
 
 	// ����
@@ -69,7 +69,7 @@ public class ListSource extends BaseModel {
 			Object temp = sources.get(index - 1);
 			sources.set(index - 1, sources.get(index));
 			sources.set(index, temp);
-			notifySourceRefreshEvent(sources);
+			notifySourceRefreshEvent();
 		}
 	}
 
@@ -79,13 +79,13 @@ public class ListSource extends BaseModel {
 			Object temp = sources.get(index + 1);
 			sources.set(index + 1, sources.get(index));
 			sources.set(index, temp);
-			notifySourceRefreshEvent(sources);
+			notifySourceRefreshEvent();
 		}
 	}
 
 	public void setSort(Comparator<Object> comparator) {
 		this.comparator = comparator;
-		notifySourceRefreshEvent(sources);
+		notifySourceRefreshEvent();
 	}
 
 	public Comparator<Object> getComparator() {
