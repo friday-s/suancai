@@ -1,10 +1,12 @@
 package com.xue.atk.service;
 
+import com.android.ddmlib.AndroidDebugBridge;
+import com.android.ddmlib.AndroidDebugBridge.IDeviceChangeListener;
 import com.android.ddmlib.IDevice;
 
 
 
-public class ADBService extends Thread {
+public class ADBService {
 
     private int adbSate;
     
@@ -13,7 +15,7 @@ public class ADBService extends Thread {
     private IDevice mDevice;
     
     public ADBService(){
-        System.out.println(ADBService.class.getName());
+
         mADB = new ADB();
         if (!mADB.initialize()){
             System.out.println("Could not find adb.");
@@ -24,10 +26,28 @@ public class ADBService extends Thread {
             System.out.println("device:"+d.toString());
           //  System.out.println("device:"+d.get);
         }
+        
     }
+    
+    private IDeviceChangeListener mDeviceChangeListener = new IDeviceChangeListener(){
 
-    public void run() {
+  		@Override
+  		public void deviceConnected(IDevice device) {
+  			// TODO Auto-generated method stub
+  			
+  		}
 
-    }
+  		@Override
+  		public void deviceDisconnected(IDevice device) {
+  			// TODO Auto-generated method stub
+  			
+  		}
 
+  		@Override
+  		public void deviceChanged(IDevice device, int changeMask) {
+  			// TODO Auto-generated method stub
+  			
+  		}
+      	
+      };
 }

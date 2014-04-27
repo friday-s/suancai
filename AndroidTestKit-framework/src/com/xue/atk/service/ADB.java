@@ -18,6 +18,8 @@ package com.xue.atk.service;
 import java.io.File;
 
 import com.android.ddmlib.AndroidDebugBridge;
+import com.android.ddmlib.AndroidDebugBridge.IDebugBridgeChangeListener;
+import com.android.ddmlib.AndroidDebugBridge.IDeviceChangeListener;
 import com.android.ddmlib.IDevice;
 import com.android.ddmlib.Log;
 
@@ -52,6 +54,7 @@ public class ADB {
             }
             AndroidDebugBridge.init(false);
             mAndroidDebugBridge = AndroidDebugBridge.createBridge(adbLocation, true);
+
             if (mAndroidDebugBridge == null) {
                 success = false;
             }
@@ -78,7 +81,11 @@ public class ADB {
 
         return success;
     }
-
+    
+    public AndroidDebugBridge getAndroidDebugBridge(){
+    	return this.mAndroidDebugBridge;
+    }
+    
     public void terminate() {
         AndroidDebugBridge.terminate();
     }
@@ -90,4 +97,5 @@ public class ADB {
         }
         return devices;
     }
+
 }
