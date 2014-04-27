@@ -19,6 +19,9 @@ public class FileScanner {
 
     public List<Object> getEventList(String projectName) {
 
+    	if (projectName ==null){
+    		return null;
+    	}
         List<Object> array = null;
 
         String[] s = new File(PATH, projectName).list();

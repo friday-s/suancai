@@ -135,8 +135,8 @@ public class ReplayView extends CBaseTabView implements MouseListener, ItemListe
 
         mLListSource = new ListSource();
 
-        List<Object> source = mFileScanner.getEventList(mProjectComboBox.getSelectedItem()
-                .toString());
+        Object obj = mProjectComboBox.getSelectedItem();
+        List<Object> source = mFileScanner.getEventList(obj ==null ? null :obj.toString());
         mLListSource.setSources(source);
         mLTransferList = new BaseList();
         mLTransferList.setBounds(0, 0, mLeftPanel.getWidth(),
