@@ -26,15 +26,11 @@ public class ADBService {
         mADB = new ADB();
         if (!mADB.initialize()) {
             System.out.println("Could not find adb.");
+            Log.d(TAG, "Could not find adb.");
         }
 
         mDevices = Arrays.asList(mADB.getDevices());
 
-        for (IDevice d : mDevices) {
-
-            System.out.println("device:" + d.toString());
-
-        }
         if (mDevices != null && mDevices.size() > 0) {
             mCurrentDevice = mDevices.get(0);
         }

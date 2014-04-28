@@ -6,14 +6,18 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import com.xue.atk.manager.ADBManager;
 import com.xue.atk.res.ATK;
-import com.xue.atk.service.ADBService;
 import com.xue.atk.util.Util;
 import com.xue.atk.view.MainFrame;
+import com.xue.atk.view.ProgressBar;
 
 public class AndroidTestKit {
 
@@ -25,52 +29,34 @@ public class AndroidTestKit {
     public static void main(String[] args) {
         try {
             if (checkPidInProcess(AndroidTestKit.class.getSimpleName())) {
-                System.out.println(AndroidTestKit.class.getSimpleName()
-                        + " is already running.");
+                System.out.println(AndroidTestKit.class.getSimpleName() + " is already running.");
                 return;
             }
         } catch (Exception e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-        
-        JFrame login = new JFrame();
-        login.setBounds(ATK.LOCATION_X, ATK.LOCATION_Y, ATK.WIDTH, ATK.HEIGHT);
-        login.setVisible(true);
-        
 
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 ADBManager.getADBManager().initManager();
+
             }
         });
 
-        try {
-            EventQueue.invokeAndWait(new Runnable() {
-                public void run() {
-                    try {
-                        AndroidTestKit window = new AndroidTestKit();
-                        window.frame.setVisible(true);
-                      
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    AndroidTestKit window = new AndroidTestKit();
+                    window.frame.setVisible(true);
 
-        login.dispose();
-        login = null;
-       
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
-    
-  
 
     /**
      * Create the application.

@@ -53,7 +53,6 @@ public class ProgressBar extends JLabel {
 			while (running) {
 				int index = 0;
 				while (running && index < progressImages.size()) {
-
 					setIcon(progressImages.get(index));
 					index++;
 
