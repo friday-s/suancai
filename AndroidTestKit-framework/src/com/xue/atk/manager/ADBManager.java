@@ -1,5 +1,7 @@
 package com.xue.atk.manager;
 
+import java.util.List;
+
 import com.android.ddmlib.IDevice;
 import com.xue.atk.service.ADBService;
 import com.xue.atk.service.IDeviceChangedCallBack;
@@ -25,7 +27,7 @@ public class ADBManager {
         return mADBManager;
     }
     
-    public IDevice[] getDevices() {
+    public List<IDevice> getDevices() {
         return mADBService.getDevices();
     }
     
