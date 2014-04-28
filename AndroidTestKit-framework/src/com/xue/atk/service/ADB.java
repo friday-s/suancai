@@ -18,7 +18,6 @@ package com.xue.atk.service;
 import java.io.File;
 
 import com.android.ddmlib.AndroidDebugBridge;
-import com.android.ddmlib.AndroidDebugBridge.IDebugBridgeChangeListener;
 import com.android.ddmlib.AndroidDebugBridge.IDeviceChangeListener;
 import com.android.ddmlib.IDevice;
 import com.android.ddmlib.Log;
@@ -80,6 +79,11 @@ public class ADB {
         }
 
         return success;
+    }
+    
+    public void addDeviceChangeListener(IDeviceChangeListener listener){
+        mAndroidDebugBridge.addDeviceChangeListener(listener);
+        
     }
     
     public AndroidDebugBridge getAndroidDebugBridge(){

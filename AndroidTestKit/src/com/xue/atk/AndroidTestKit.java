@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 
 import javax.swing.JFrame;
 
+import com.xue.atk.manager.ADBManager;
 import com.xue.atk.res.ATK;
 import com.xue.atk.service.ADBService;
 import com.xue.atk.util.Util;
@@ -44,8 +45,8 @@ public class AndroidTestKit {
             }
         });
 
-        adbService = new ADBService();
-        adbService.start();
+        ADBManager.getADBManager().initManager();
+
     }
 
     /**

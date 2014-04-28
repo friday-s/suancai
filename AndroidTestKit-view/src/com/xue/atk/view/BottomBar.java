@@ -14,6 +14,7 @@ import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 
 import com.xue.atk.res.ATK;
+import com.xue.atk.service.IDeviceChangedCallBack;
 
 public class BottomBar extends JPanel {
 
@@ -73,7 +74,23 @@ public class BottomBar extends JPanel {
 
         mStateLabel = new JLabel();
 
+        refreshUI();
+       
 
+        this.add(mStateLabel);
+        this.add(mDevicesComboBox);
+
+        springLayout.putConstraint(SpringLayout.EAST, mStateLabel, 1, SpringLayout.EAST, this);
+        springLayout.putConstraint(SpringLayout.SOUTH, mStateLabel, 0, SpringLayout.SOUTH, this);
+    
+        springLayout.putConstraint(SpringLayout.EAST, mDevicesComboBox, 1, SpringLayout.WEST,
+                mStateLabel);
+        
+        springLayout.putConstraint(SpringLayout.SOUTH, mDevicesComboBox, 0, SpringLayout.SOUTH, this);
+
+    }
+    
+    private void refreshUI(){
         switch (checkUSBState()) {
         case USB_CONNECTED:
 
@@ -91,19 +108,17 @@ public class BottomBar extends JPanel {
         default:
             break;
         }
-
-        this.add(mStateLabel);
-        this.add(mDevicesComboBox);
-
-        springLayout.putConstraint(SpringLayout.EAST, mStateLabel, 1, SpringLayout.EAST, this);
-        springLayout.putConstraint(SpringLayout.SOUTH, mStateLabel, 0, SpringLayout.SOUTH, this);
-    
-        springLayout.putConstraint(SpringLayout.EAST, mDevicesComboBox, 1, SpringLayout.WEST,
-                mStateLabel);
-        
-        springLayout.putConstraint(SpringLayout.SOUTH, mDevicesComboBox, 0, SpringLayout.SOUTH, this);
-
     }
+    
+    private IDeviceChangedCallBack mCallBack = new IDeviceChangedCallBack(){
+
+        @Override
+        public void updateView() {
+            // TODO Auto-generated method stub
+            
+        }
+        
+    };
     
     public void setFocusable(boolean focusable) {
         super.setFocusable(focusable);
