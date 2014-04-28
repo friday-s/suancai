@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JFrame;
 
@@ -17,7 +18,6 @@ import com.xue.atk.view.MainFrame;
 public class AndroidTestKit {
 
     private JFrame frame;
-    private static ADBService adbService;
 
     /**
      * Launch the application.
@@ -33,21 +33,44 @@ public class AndroidTestKit {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
+        
+        JFrame login = new JFrame();
+        login.setBounds(ATK.LOCATION_X, ATK.LOCATION_Y, ATK.WIDTH, ATK.HEIGHT);
+        login.setVisible(true);
+        
 
         EventQueue.invokeLater(new Runnable() {
             public void run() {
-                try {
-                    AndroidTestKit window = new AndroidTestKit();
-                    window.frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                ADBManager.getADBManager().initManager();
             }
         });
 
-        ADBManager.getADBManager().initManager();
+        try {
+            EventQueue.invokeAndWait(new Runnable() {
+                public void run() {
+                    try {
+                        AndroidTestKit window = new AndroidTestKit();
+                        window.frame.setVisible(true);
+                      
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
+        login.dispose();
+        login = null;
+       
     }
+    
+  
 
     /**
      * Create the application.

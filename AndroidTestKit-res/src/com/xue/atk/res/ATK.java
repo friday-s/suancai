@@ -64,7 +64,7 @@ public class ATK {
     public static final String[] REPLAY_LEFT_VIEW_POP = {"Add to replay list","Detail","Delete"};
 
     public static final String USB_STATE = "USB:";
-    public static final String DEVICE_SN = "Device:";
+    public static final String DEVICE = "Device:";
     
     public static final String SOFTWARE_INFORMATION = 
                                                         "<html>"

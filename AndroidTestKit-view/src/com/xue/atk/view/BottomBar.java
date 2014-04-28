@@ -2,7 +2,9 @@ package com.xue.atk.view;
 
 import java.awt.Color;
 import java.awt.Graphics;
-
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -13,22 +15,20 @@ import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 
+import com.android.ddmlib.IDevice;
+import com.xue.atk.manager.ADBManager;
 import com.xue.atk.res.ATK;
 import com.xue.atk.service.IDeviceChangedCallBack;
 
 public class BottomBar extends JPanel {
 
-    private static final int USB_CONNECTED = 1;
-    private static final int USB_DISCONNECTED = 0;
-    private static final String CONNECTED = "connected";
-    private static final String DISCONNECTED = "disconnected";
-
     private JLabel mStateLabel;
- 
-    
+
     private JComboBox mDevicesComboBox;
-    
+
     private boolean focusable = true;
+
+    private DefaultComboBoxModel mBoxModel;
 
     public BottomBar() {
         initUI();
@@ -37,12 +37,11 @@ public class BottomBar extends JPanel {
     public void initUI() {
         SpringLayout springLayout = new SpringLayout();
         setLayout(springLayout);
-        
-        
+
         mDevicesComboBox = new JComboBox();
-        mDevicesComboBox.setBounds(0, 0, 150,25);
+        // mDevicesComboBox.setBounds(0, 0, 150, 25);
+        // mDevicesComboBox.setPreferredSize(new Dimension(150, 25));
         mDevicesComboBox.setMaximumRowCount(10);
-    
 
         mDevicesComboBox.setUI(new BasicComboBoxUI() {
             public void installUI(JComponent comboBox) {
@@ -51,6 +50,7 @@ public class BottomBar extends JPanel {
                 listBox.setBackground(Color.WHITE);
                 listBox.setSelectionBackground(Color.WHITE);
                 listBox.setSelectionForeground(Color.BLACK);
+                // listBox.setBorder(BorderFactory.createLineBorder(Color.BLUE));
             }
 
             protected JButton createArrowButton() {
@@ -69,64 +69,79 @@ public class BottomBar extends JPanel {
                 return button;
             }
         });
-        
-        
 
         mStateLabel = new JLabel();
+        mStateLabel.setText(ATK.DEVICE);
+        mStateLabel.setForeground(Color.BLUE);
 
-        refreshUI();
-       
+        mBoxModel = new DefaultComboBoxModel();
+
+        for (IDevice device : ADBManager.getADBManager().getDevices()) {
+            mBoxModel.addElement(device);
+        }
+
+        mDevicesComboBox.setModel(mBoxModel);
+        mDevicesComboBox.addItemListener(mItemListener);
 
         this.add(mStateLabel);
         this.add(mDevicesComboBox);
 
-        springLayout.putConstraint(SpringLayout.EAST, mStateLabel, 1, SpringLayout.EAST, this);
+        springLayout.putConstraint(SpringLayout.EAST, mDevicesComboBox, 1, SpringLayout.EAST, this);
+        springLayout.putConstraint(SpringLayout.SOUTH, mDevicesComboBox, 0, SpringLayout.SOUTH,
+                this);
+
+        springLayout.putConstraint(SpringLayout.EAST, mStateLabel, -5, SpringLayout.WEST,
+                mDevicesComboBox);
+
         springLayout.putConstraint(SpringLayout.SOUTH, mStateLabel, 0, SpringLayout.SOUTH, this);
-    
-        springLayout.putConstraint(SpringLayout.EAST, mDevicesComboBox, 1, SpringLayout.WEST,
-                mStateLabel);
-        
-        springLayout.putConstraint(SpringLayout.SOUTH, mDevicesComboBox, 0, SpringLayout.SOUTH, this);
+
+        ADBManager.getADBManager().addCallBack(mCallBack);
 
     }
-    
-    private void refreshUI(){
-        switch (checkUSBState()) {
-        case USB_CONNECTED:
 
-            mDevicesComboBox.setVisible(true);
-           // mDeviceSNLabel.setText(ATK.DEVICE_SN);
-            mStateLabel.setText(CONNECTED);
-            mStateLabel.setForeground(Color.GREEN);
-            break;
-        case USB_DISCONNECTED:
-
-            mDevicesComboBox.setVisible(false);
-            mStateLabel.setText(ATK.USB_STATE + DISCONNECTED);
-            mStateLabel.setForeground(Color.RED);
-            break;
-        default:
-            break;
+    private boolean checkExist(IDevice device) {
+        for (int i = 0; i < mBoxModel.getSize(); i++) {
+            if (device.equals(mBoxModel.getElementAt(i))) {
+                return true;
+            }
         }
+        return false;
     }
-    
-    private IDeviceChangedCallBack mCallBack = new IDeviceChangedCallBack(){
+
+    private ItemListener mItemListener = new ItemListener() {
 
         @Override
-        public void updateView() {
+        public void itemStateChanged(ItemEvent e) {
             // TODO Auto-generated method stub
-            
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                ADBManager.getADBManager().setCurrentDevice(
+                        (IDevice) mDevicesComboBox.getSelectedItem());
+            }
         }
-        
     };
-    
+
+    private IDeviceChangedCallBack mCallBack = new IDeviceChangedCallBack() {
+
+        @Override
+        public void deviceConnected(IDevice device) {
+            // TODO Auto-generated method stub
+            if (!checkExist(device)) {
+                mBoxModel.addElement(device);
+            }
+        }
+
+        @Override
+        public void deviceDisonnected(IDevice device) {
+            // TODO Auto-generated method stub
+            if (checkExist(device)) {
+                mBoxModel.removeElement(device);
+            }
+        }
+    };
+
     public void setFocusable(boolean focusable) {
         super.setFocusable(focusable);
         this.focusable = focusable;
     }
-    
 
-    private int checkUSBState() {
-        return 1;
-    }
 }

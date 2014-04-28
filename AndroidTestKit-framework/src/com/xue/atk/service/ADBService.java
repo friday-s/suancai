@@ -12,8 +12,9 @@ public class ADBService {
     
     private ADB mADB;
     private IDevice[] mDevices;
-    private IDevice mDevice;
-    
+  
+    private IDevice mCurrentDevice;
+ 
     private List<IDeviceChangedCallBack> mCallBackList;
     
     public ADBService(){
@@ -26,8 +27,12 @@ public class ADBService {
         mDevices = mADB.getDevices();
         
         for (IDevice d:mDevices){
+            
             System.out.println("device:"+d.toString());
        
+        }
+        if (mDevices != null  && mDevices.length >0){
+            mCurrentDevice = mDevices[0];
         }
 
         mADB.addDeviceChangeListener(mDeviceChangeListener);
@@ -39,23 +44,38 @@ public class ADBService {
         mCallBackList.add(callBack);
     }
     
+    public IDevice[] getDevices() {
+        return mDevices;
+    }
+
+
+    
+    public IDevice getCurrentDevice() {
+        return mCurrentDevice;
+    }
+
+    public void setCurrentDevice(IDevice mCurrentDevice) {
+        this.mCurrentDevice = mCurrentDevice;
+    }
+    
     
     private IDeviceChangeListener mDeviceChangeListener = new IDeviceChangeListener(){
 
   		@Override
   		public void deviceConnected(IDevice device) {
   			// TODO Auto-generated method stub
-  		    System.out.println(device.getState());
+  		  System.out.println("connected device:"+device.toString());
   		    for (IDeviceChangedCallBack callBack :mCallBackList){
-  		      callBack.updateView();
+  		      callBack.deviceConnected(device);
   		    }
   		}
 
   		@Override
   		public void deviceDisconnected(IDevice device) {
   			// TODO Auto-generated method stub
+  		  System.out.println("disconnected device:"+device.toString());
   		  for (IDeviceChangedCallBack callBack :mCallBackList){
-              callBack.updateView();
+              callBack.deviceDisonnected(device);
             }
   		}
 
