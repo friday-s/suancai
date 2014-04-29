@@ -8,6 +8,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,8 +32,11 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 
+import com.android.ddmlib.IShellOutputReceiver;
+import com.android.ddmlib.MultiLineReceiver;
 import com.xue.atk.file.EventFile;
 import com.xue.atk.file.FileScanner;
+import com.xue.atk.manager.ADBManager;
 import com.xue.atk.res.ATK;
 import com.xue.atk.util.Util;
 
@@ -313,6 +317,9 @@ public class ReplayView extends CBaseTabView implements MouseListener, ItemListe
 
                 mReplayBtn.setEnabled(false);
                 isRunning = true;
+                System.out.println("exec logcat");
+                ADBManager.getADBManager().execADBCommand("logcat");
+               
             }
 
             mRecordBtn.pressUp();
@@ -348,6 +355,8 @@ public class ReplayView extends CBaseTabView implements MouseListener, ItemListe
 
         }
     }
+    
+
 
     @Override
     public void mouseEntered(MouseEvent e) {

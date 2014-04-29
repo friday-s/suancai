@@ -28,13 +28,15 @@ public class ADB {
 
     private AndroidDebugBridge mAndroidDebugBridge;
 
+    private String adbLocation;
+
     public boolean initialize() {
 
         boolean success = true;
 
         // String adbLocation =
         // System.getProperty("com.android.screenshot.bindir");
-        String adbLocation = null;
+      
 
         String osName = System.getProperties().getProperty("os.name");
         String osArch = System.getProperties().getProperty("os.arch");
@@ -80,6 +82,11 @@ public class ADB {
 
         return success;
     }
+    
+    public String getAdbLocation() {
+        return adbLocation;
+    }
+    
     
     public void addDeviceChangeListener(IDeviceChangeListener listener){
         mAndroidDebugBridge.addDeviceChangeListener(listener);
