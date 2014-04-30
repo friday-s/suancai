@@ -8,6 +8,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 
 import java.util.ArrayList;
 
@@ -41,7 +42,10 @@ public class ReplayView extends CBaseTabView implements MouseListener, ItemListe
 
     private static final int DIVIDE_LINE_WIDTH = 70;
     private static final int DIVIDE_LINE_HEIGHT = 1;
-
+    
+    private static final String DEVICE_TMP_PATH = File.separator+"data"+File.separator+"local"+File.separator+"tmp"+File.separator;
+    private static final String LIBS_PATH = "."+File.separator+"libs"+File.separator;
+          
     private static final int PROGRESSBAR_SIDE_LENGHT = 25;
 
     private CButton mRecordBtn;
@@ -307,13 +311,21 @@ public class ReplayView extends CBaseTabView implements MouseListener, ItemListe
                 mProgress.setLocation(mDivideLineLabel.getX() + mDivideLineLabel.getWidth()
                         - PROGRESSBAR_SIDE_LENGHT, mDivideLineLabel.getY()
                         - PROGRESSBAR_SIDE_LENGHT);
-                mProgress.start();
+       
 
                 mReplayBtn.setEnabled(false);
                 isRunning = true;
+                
+                
                 System.out.println("exec logcat");
-                ADBManager.getManager().execADBCommand("logcat");
-               
+                
+                String command  = "push "+LIBS_PATH+"event_record" + " "+DEVICE_TMP_PATH;
+                ADBManager.getManager().execADBCommand(command);
+                
+                ADBManager.getManager().executeShellCommand("chmod 555 "+DEVICE_TMP_PATH+"event_record");
+                ADBManager.getManager().executeShellCommand("."+DEVICE_TMP_PATH+"event_record");
+
+                mProgress.start();
             }
 
             mRecordBtn.pressUp();

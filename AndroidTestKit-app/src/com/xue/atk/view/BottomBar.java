@@ -82,6 +82,7 @@ public class BottomBar extends JPanel {
 
         mDevicesComboBox.setModel(mBoxModel);
         mDevicesComboBox.addItemListener(mItemListener);
+        
 
         this.add(mStateLabel);
         this.add(mDevicesComboBox);
