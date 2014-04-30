@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.border.EmptyBorder;
 
+import com.xue.atk.replay.ReplayView;
 import com.xue.atk.res.ATK;
 import com.xue.atk.util.Util;
 

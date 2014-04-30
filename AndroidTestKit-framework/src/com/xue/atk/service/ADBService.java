@@ -142,6 +142,10 @@ public class ADBService {
 
     private Process p;
     private Thread executeThread;
+
+    private List<Process> totalProcess = new ArrayList<Process>();
+    private List<Thread> totalThreads = new ArrayList<Thread>();
+
     public static String errorMsg;
 
     public void execADBCommand(String command) {
@@ -161,6 +165,8 @@ public class ADBService {
             }
         };
         executeThread.start();
+
+        totalThreads.add(executeThread);
     }
 
     private int executeADB(String command) {
@@ -169,7 +175,7 @@ public class ADBService {
         Log.i(TAG, "command:" + command);
         try {
             p = Runtime.getRuntime().exec(command);
-
+            totalProcess.add(p);
             new StreamGobbler(p.getErrorStream(), "ERROR").start();
             new StreamGobbler(p.getInputStream(), "OUTPUT").start();
 
@@ -194,10 +200,15 @@ public class ADBService {
     }
 
     public void terminateADBCommand() {
-        p.destroy();
-        if (executeThread != null && executeThread.isAlive()) {
-            executeThread.stop();
+
+        for (int i = 0; i < totalProcess.size(); i++) {
+            totalProcess.get(i).destroy();
+            if (totalThreads.get(i) != null && totalThreads.get(i).isAlive()) {
+                totalThreads.get(i).stop();
+            }
         }
+        totalProcess.clear();
+        totalThreads.clear();
     }
 
     class StreamGobbler extends Thread {

@@ -1,4 +1,4 @@
-package com.xue.atk.view;
+package com.xue.atk.replay;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -37,6 +37,13 @@ import com.xue.atk.manager.ADBManager;
 import com.xue.atk.manager.FileScannerManager;
 import com.xue.atk.res.ATK;
 import com.xue.atk.util.Util;
+import com.xue.atk.view.BaseList;
+import com.xue.atk.view.CBaseTabView;
+import com.xue.atk.view.CButton;
+import com.xue.atk.view.CellPanel;
+import com.xue.atk.view.ListSource;
+import com.xue.atk.view.ProgressBar;
+import com.xue.atk.view.RCellPanel;
 
 public class ReplayView extends CBaseTabView implements MouseListener, ItemListener, ActionListener {
 
