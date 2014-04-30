@@ -5,19 +5,13 @@ import java.awt.EventQueue;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 import com.xue.atk.manager.ADBManager;
+import com.xue.atk.manager.FileScannerManager;
 import com.xue.atk.res.ATK;
 import com.xue.atk.util.Util;
 import com.xue.atk.view.MainFrame;
-import com.xue.atk.view.ProgressBar;
+
 
 public class AndroidTestKit {
 
@@ -39,8 +33,8 @@ public class AndroidTestKit {
 
         EventQueue.invokeLater(new Runnable() {
             public void run() {
-                ADBManager.getADBManager().initManager();
-
+                ADBManager.getManager().initManager();
+                FileScannerManager.getManager().initManager();
             }
         });
 

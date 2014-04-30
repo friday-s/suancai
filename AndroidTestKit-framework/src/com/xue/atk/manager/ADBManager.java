@@ -29,7 +29,7 @@ public class ADBManager {
         mADBService = new ADBService();
     }
 
-    public static ADBManager getADBManager() {
+    public static ADBManager getManager() {
         if (mADBManager == null) {
             mADBManager = new ADBManager();
         }
@@ -66,5 +66,9 @@ public class ADBManager {
 
     public void execADBCommand(IDevice device, String command) {
         mADBService.execADBCommand(device, command);
+    }
+    
+    public void terminateADBCommand() {
+        mADBService.terminateADBCommand();
     }
 }

@@ -76,7 +76,7 @@ public class BottomBar extends JPanel {
 
         mBoxModel = new DefaultComboBoxModel();
 
-        for (IDevice device : ADBManager.getADBManager().getDevices()) {
+        for (IDevice device : ADBManager.getManager().getDevices()) {
             mBoxModel.addElement(device);
         }
 
@@ -95,7 +95,7 @@ public class BottomBar extends JPanel {
 
         springLayout.putConstraint(SpringLayout.SOUTH, mStateLabel, 0, SpringLayout.SOUTH, this);
 
-        ADBManager.getADBManager().addCallBack(mCallBack);
+        ADBManager.getManager().addCallBack(mCallBack);
 
     }
 
@@ -114,7 +114,7 @@ public class BottomBar extends JPanel {
         public void itemStateChanged(ItemEvent e) {
             // TODO Auto-generated method stub
             if (e.getStateChange() == ItemEvent.SELECTED) {
-                ADBManager.getADBManager().setCurrentDevice(
+                ADBManager.getManager().setCurrentDevice(
                         (IDevice) mDevicesComboBox.getSelectedItem());
             }
         }

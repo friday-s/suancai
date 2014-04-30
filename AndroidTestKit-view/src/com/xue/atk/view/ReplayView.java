@@ -8,9 +8,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
+
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -25,18 +25,15 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.UIManager;
-import javax.swing.event.MenuKeyEvent;
-import javax.swing.event.MenuKeyListener;
-import javax.swing.event.PopupMenuEvent;
-import javax.swing.event.PopupMenuListener;
+
 import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 
-import com.android.ddmlib.IShellOutputReceiver;
-import com.android.ddmlib.MultiLineReceiver;
+
 import com.xue.atk.file.EventFile;
-import com.xue.atk.file.FileScanner;
+
 import com.xue.atk.manager.ADBManager;
+import com.xue.atk.manager.FileScannerManager;
 import com.xue.atk.res.ATK;
 import com.xue.atk.util.Util;
 
@@ -67,8 +64,6 @@ public class ReplayView extends CBaseTabView implements MouseListener, ItemListe
 
     private ListSource mRListSource;
     private BaseList mRTransferList;
-
-    private FileScanner mFileScanner;
 
     private boolean isRunning;
 
@@ -132,15 +127,15 @@ public class ReplayView extends CBaseTabView implements MouseListener, ItemListe
 
         mLeftPanel.add(mProjectComboBox);
 
-        mFileScanner = new FileScanner();
+ 
 
-        mProjectComboBox.setModel(new DefaultComboBoxModel(mFileScanner.getProjectList()));
+        mProjectComboBox.setModel(new DefaultComboBoxModel(FileScannerManager.getManager().getProjectList()));
         mProjectComboBox.setSelectedItem(0);
 
         mLListSource = new ListSource();
 
         Object obj = mProjectComboBox.getSelectedItem();
-        List<Object> source = mFileScanner.getEventList(obj ==null ? null :obj.toString());
+        List<Object> source = FileScannerManager.getManager().getEventList(obj ==null ? null :obj.toString());
         mLListSource.setSources(source);
         mLTransferList = new BaseList();
         mLTransferList.setBounds(0, 0, mLeftPanel.getWidth(),
@@ -230,8 +225,6 @@ public class ReplayView extends CBaseTabView implements MouseListener, ItemListe
 
         mRListSource = new ListSource();
       
-      
-
         mRTransferList = new BaseList();
         mRTransferList.setBounds(0, 0, mRightPanel.getWidth(),
                 mRightPanel.getHeight() - label.getHeight());
@@ -304,6 +297,7 @@ public class ReplayView extends CBaseTabView implements MouseListener, ItemListe
                 isRunning = false;
 
                 mReplayBtn.setEnabled(true);
+                ADBManager.getManager().terminateADBCommand();
 
             } else {
 
@@ -318,7 +312,7 @@ public class ReplayView extends CBaseTabView implements MouseListener, ItemListe
                 mReplayBtn.setEnabled(false);
                 isRunning = true;
                 System.out.println("exec logcat");
-                ADBManager.getADBManager().execADBCommand("logcat");
+                ADBManager.getManager().execADBCommand("logcat");
                
             }
 
@@ -375,7 +369,7 @@ public class ReplayView extends CBaseTabView implements MouseListener, ItemListe
         // TODO Auto-generated method stub
         if (e.getStateChange() == ItemEvent.SELECTED) {
 
-            List<Object> source = mFileScanner.getEventList(mProjectComboBox.getSelectedItem()
+            List<Object> source = FileScannerManager.getManager().getEventList(mProjectComboBox.getSelectedItem()
                     .toString());
 
             mLListSource.setSources(source);

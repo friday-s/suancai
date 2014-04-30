@@ -14,14 +14,13 @@ import com.android.ddmlib.Log;
 import com.android.ddmlib.MultiLineReceiver;
 import com.xue.atk.manager.ADBManager;
 
-
 public class ADBService {
 
     private static final String TAG = "ADBService";
 
     private ADB mADB;
-  //  private IDevice[] mDevices;
-    
+    // private IDevice[] mDevices;
+
     private List<IDevice> mDevices;
 
     private IDevice mCurrentDevice;
@@ -46,7 +45,7 @@ public class ADBService {
         mCallBackList = new ArrayList<IDeviceChangedCallBack>();
 
     }
-    
+
     public String getAdbLocation() {
         return mADB.getAdbLocation();
     }
@@ -77,7 +76,7 @@ public class ADBService {
             for (IDeviceChangedCallBack callBack : mCallBackList) {
                 callBack.deviceConnected(device);
             }
-            
+
         }
 
         @Override
@@ -88,7 +87,7 @@ public class ADBService {
             for (IDeviceChangedCallBack callBack : mCallBackList) {
                 callBack.deviceDisonnected(device);
             }
-            
+
         }
 
         @Override
@@ -98,7 +97,7 @@ public class ADBService {
         }
 
     };
-    
+
     public void executeShellCommand(final String command) {
         final IDevice device = getCurrentDevice();
         executeShellCommand(device, command);
@@ -142,11 +141,11 @@ public class ADBService {
     };
 
     private Process p;
-    private Thread thread_replay;
+    private Thread executeThread;
     public static String errorMsg;
 
     public void execADBCommand(String command) {
-        IDevice device = ADBManager.getADBManager().getCurrentDevice();
+        IDevice device = getCurrentDevice();
         execADBCommand(device, command);
     }
 
@@ -156,17 +155,18 @@ public class ADBService {
         String deviceSN = device.toString();
 
         final String c = adbLocation + " -s " + deviceSN + " " + command;
-        new Thread() {
+        executeThread = new Thread() {
             public void run() {
                 executeADB(c);
             }
-        }.start();
+        };
+        executeThread.start();
     }
 
     private int executeADB(String command) {
-        
-        System.out.println("command:"+command);
-        Log.e(TAG, "command:"+command);
+
+        System.out.println("command:" + command);
+        Log.i(TAG, "command:" + command);
         try {
             p = Runtime.getRuntime().exec(command);
 
@@ -193,10 +193,10 @@ public class ADBService {
         return 1;
     }
 
-    public void stop() {
+    public void terminateADBCommand() {
         p.destroy();
-        if (thread_replay != null && thread_replay.isAlive()) {
-            thread_replay.stop();
+        if (executeThread != null && executeThread.isAlive()) {
+            executeThread.stop();
         }
     }
 
@@ -220,7 +220,7 @@ public class ADBService {
                 String line = null;
                 while ((line = br.readLine()) != null) {
                     System.err.println(type + ">" + line);
-                    Log.e(TAG, type + ">" + line);
+                    Log.i(TAG, type + ">" + line);
                     errorMsg = line;
                 }
             } catch (IOException e) {
