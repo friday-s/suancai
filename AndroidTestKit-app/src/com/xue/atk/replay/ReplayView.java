@@ -45,10 +45,9 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
     private static final int DIVIDE_LINE_WIDTH = 70;
     private static final int DIVIDE_LINE_HEIGHT = 1;
 
-    public static final String DEVICE_TMP_PATH = File.separator + "data" + File.separator + "local"
-            + File.separator + "tmp" + File.separator;
+    public static final String DEVICE_TMP_PATH = "/data/local/tmp/";
     public static final String LIBS_PATH = "." + File.separator + "libs" + File.separator;
-    public static final String EVENT_PATH = File.separator + "sdcard" + File.separator + "events";
+    public static final String EVENT_PATH = "sdcard/events";
 
     private static final int PROGRESSBAR_SIDE_LENGHT = 25;
 
