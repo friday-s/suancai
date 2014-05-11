@@ -173,8 +173,8 @@ public class AlertDialog extends Dialog implements ActionListener {
                 System.exit(0);
                 break;
             case MSG_DIALOG:
+            	mContext.setEnabled(true);
                 this.dispose();
-                mContext.setEnabled(true);
                 break;
             default:
                 break;
@@ -184,9 +184,9 @@ public class AlertDialog extends Dialog implements ActionListener {
             return;
         }
         if (e.getSource().equals(mNegativeBtn)) {
-
+        	mContext.setEnabled(true);
             this.dispose();
-            mContext.setEnabled(true);
+           
             return;
         }
     }

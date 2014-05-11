@@ -15,26 +15,22 @@ public class ListSource extends BaseModel {
 	private Comparator<Object> comparator = null;
 	private List<Object> sources = new ArrayList<Object>();
 
-	// ͨ��list�������Դ
-	public void setSources(List<Object> sources) {
+public void setSources(List<Object> sources) {
 		this.sources = sources;
 	}
 
-	// ���һ����Ԫ
-	public void addCell(Object obj) {
+public void addCell(Object obj) {
 		sources.add(obj);
 		notifySourceRefreshEvent();
 	}
 
-	// �������ɾ��һ����Ԫ
-	public void removeCell(int index) {
+public void removeCell(int index) {
 		if (sources.size() > 0 && index < sources.size() && index >= 0) {
 			sources.remove(index);
 			notifySourceRefreshEvent();
 		}
 	}
 
-	// ���ֵɾ��һ����Ԫ
 	public void removeCell(Object value) {
 		sources.remove(value);
 		notifySourceRefreshEvent();

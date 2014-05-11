@@ -173,15 +173,14 @@ public class SaveDialog extends Dialog implements ActionListener {
                 };
 
                 DlgProgess.show(this, thread);
-                
-                this.dispose();
                 mContext.setEnabled(true);
+                this.dispose();
             }
             return;
         }
         if (e.getSource().equals(mNegativeBtn)) {
+        	mContext.setEnabled(true);
             this.dispose();
-            mContext.setEnabled(true);
             return;
         }
     }

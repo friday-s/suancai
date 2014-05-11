@@ -59,8 +59,10 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
     private ImageIcon mRecordIconDown;
     private ImageIcon mReplayIconUp;
     private ImageIcon mReplayIconDown;
-    private ImageIcon mStopIconUp;
-    private ImageIcon mStopIconDown;
+    private ImageIcon mReplayStopIconUp;
+    private ImageIcon mReplayStopIconDown;
+    private ImageIcon mRecordStopIconUp;
+    private ImageIcon mRecordStopIconDown;
 
     private JLabel mDivideLineLabel;
     private ProgressBar mProgress;
@@ -92,12 +94,14 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
 
     public void initView() {
 
-        mRecordIconUp = Util.getImageIcon("record_btn.png");
-        mRecordIconDown = Util.getImageIcon("record_btn_down.png");
-        mReplayIconUp = Util.getImageIcon("replay_btn.png");
-        mReplayIconDown = Util.getImageIcon("replay_btn_down.png");
-        mStopIconUp = Util.getImageIcon("stop_up.png");
-        mStopIconDown = Util.getImageIcon("stop_down.png");
+		mRecordIconUp = Util.getImageIcon("record_btn.png");
+		mRecordIconDown = Util.getImageIcon("record_btn_down.png");
+		mReplayIconUp = Util.getImageIcon("replay_btn.png");
+		mReplayIconDown = Util.getImageIcon("replay_btn_down.png");
+		mReplayStopIconUp = Util.getImageIcon("stop_up.png");
+		mReplayStopIconDown = Util.getImageIcon("stop_down.png");
+		mRecordStopIconUp = Util.getImageIcon("lstop_up.png");
+		mRecordStopIconDown = Util.getImageIcon("lstop_down.png");
 
         initLeftView();
         initCenterView();
@@ -364,14 +368,14 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
                     for (final IDevice device : ADBManager.getManager().getDevices()) {
 
                         if (ADBManager.getManager().execADBCommand(device,
-                                "push " + LIBS_PATH + "event_replay_bg" + " " + DEVICE_TMP_PATH) < 0) {
+                                "push " + LIBS_PATH + "event_replay" + " " + DEVICE_TMP_PATH) < 0) {
                             showDialog(ADBManager.getManager().getErrorMsg());
                             mReplayBtn.doClick();
                             return;
                         }
 
                         if (ADBManager.getManager().execADBCommand(device,
-                                "shell chmod 555 " + DEVICE_TMP_PATH + "event_replay_bg") < 0) {
+                                "shell chmod 555 " + DEVICE_TMP_PATH + "event_replay") < 0) {
                             showDialog(ADBManager.getManager().getErrorMsg());
                             mReplayBtn.doClick();
                             return;
@@ -393,7 +397,7 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
                                         device,
                                         "shell "
                                                 + DEVICE_TMP_PATH
-                                                + "event_replay_bg "
+                                                + "event_replay "
                                                 + ADBManager.getManager()
                                                         .getCurrentDeviceEventNum() + " "
                                                 + event.getTime() + " &") < 0) {
@@ -479,14 +483,14 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
                 /* single background replay */
                 if (mBackgroundCheckbox.isSelected()) {
                     if (ADBManager.getManager().execADBCommand(
-                            "push " + LIBS_PATH + "event_replay_bg" + " " + DEVICE_TMP_PATH) < 0) {
+                            "push " + LIBS_PATH + "event_replay" + " " + DEVICE_TMP_PATH) < 0) {
                         showDialog(ADBManager.getManager().getErrorMsg());
                         mReplayBtn.doClick();
                         return;
                     }
 
                     if (ADBManager.getManager().execADBCommand(
-                            "shell chmod 555 " + DEVICE_TMP_PATH + "event_replay_bg") < 0) {
+                            "shell chmod 555 " + DEVICE_TMP_PATH + "event_replay") < 0) {
                         showDialog(ADBManager.getManager().getErrorMsg());
                         mReplayBtn.doClick();
                         return;
@@ -501,7 +505,7 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
                     }
 
                     if (ADBManager.getManager().execADBCommand(
-                            "shell " + DEVICE_TMP_PATH + "event_replay_bg "
+                            "shell " + DEVICE_TMP_PATH + "event_replay "
                                     + ADBManager.getManager().getCurrentDeviceEventNum() + " "
                                     + event.getTime() + " &") < 0) {
                         showDialog(ADBManager.getManager().getErrorMsg());
@@ -592,7 +596,7 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
 
                 } else {
 
-                    mRecordBtn.setIconDrawable(mStopIconUp, mStopIconDown);
+                    mRecordBtn.setIconDrawable(mRecordStopIconUp, mRecordStopIconDown);
                     mReplayBtn.setEnabled(false);
                     isRunning = true;
                     mCurrentEvent.setText("");
@@ -630,7 +634,7 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
                         return;
                     }
 
-                    mReplayBtn.setIconDrawable(mStopIconUp, mStopIconDown);
+                    mReplayBtn.setIconDrawable(mReplayStopIconUp, mReplayStopIconUp);
                     mRecordBtn.setEnabled(false);
                     isRunning = true;
 
@@ -639,9 +643,7 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
                     new Thread(mReplayRunnable).start();
                 }
             }
-
             return;
-
         }
 
         if (e.getActionCommand().equals(ATK.REPLAY_LEFT_VIEW_POP[0])) {
@@ -668,7 +670,5 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
             mRListSource.removeCell(mRTransferList.getSelectIndex());
             return;
         }
-
     }
-
 }

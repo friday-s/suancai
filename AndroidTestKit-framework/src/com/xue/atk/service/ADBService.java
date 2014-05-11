@@ -231,7 +231,6 @@ public class ADBService {
             new StreamGobbler(p.getInputStream(), "OUTPUT").start();
 
             try {
-                // 返回结果可能有风险存在
                 if (p.waitFor() < 0) {
                     System.err.println("command \"" + command + "\" return=" + p.exitValue());
                     Log.e(TAG, "command \"" + command + "\" return=" + p.exitValue());

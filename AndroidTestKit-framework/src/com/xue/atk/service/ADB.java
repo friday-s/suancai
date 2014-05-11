@@ -42,9 +42,12 @@ public class ADB {
         String osArch = System.getProperties().getProperty("os.arch");
 
         Log.i(TAG, "OS:"+osName+" "+osArch);
+        System.out.println( "OS:"+osName+" "+osArch);
 
         if (osName.indexOf("Linux") != -1 && osArch.indexOf("64") != -1) {
             adbLocation = "." + File.separator + "adb" + File.separator + "linuxX64";
+        }else if(osName.indexOf("Windows") != -1){
+        	adbLocation = "." + File.separator + "adb" + File.separator + "windows";
         }
 
         if (success) {
