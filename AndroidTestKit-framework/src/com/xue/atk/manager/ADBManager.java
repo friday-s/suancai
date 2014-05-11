@@ -52,22 +52,33 @@ public class ADBManager {
         mADBService.setCurrentDevice(mCurrentDevice);
     }
 
-    public void executeShellCommand(String command) {
-        mADBService.executeShellCommand(command);
+    public int executeShellCommand(String command) {
+        return mADBService.executeShellCommand(command);
     }
 
-    public void executeShellCommand(IDevice device, String command) {
-        mADBService.executeShellCommand(device, command);
+    public int executeShellCommand(IDevice device, String command) {
+        return mADBService.executeShellCommand(device, command);
     }
 
-    public void execADBCommand(String command) {
-        mADBService.execADBCommand(command);
+    public int execADBCommand(String command) {
+        return mADBService.execADBCommand(command);
     }
 
-    public void execADBCommand(IDevice device, String command) {
-        mADBService.execADBCommand(device, command);
+    public int execADBCommand(IDevice device, String command) {
+        return mADBService.execADBCommand(device, command);
     }
     
+    public int getCurrentDeviceEventNum(){
+        return mADBService.getCurrentDeviceEventNum();
+    }
+    
+    public String getErrorMsg(){
+        return getException().getMessage();
+    }
+    public Exception getException(){
+        return mADBService.getException();
+    }
+
     public void terminateADBCommand() {
         mADBService.terminateADBCommand();
     }

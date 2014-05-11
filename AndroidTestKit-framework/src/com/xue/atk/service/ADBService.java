@@ -4,12 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import com.android.ddmlib.AndroidDebugBridge.IDeviceChangeListener;
 import com.android.ddmlib.IDevice;
+import com.android.ddmlib.IShellOutputReceiver;
 import com.android.ddmlib.Log;
 import com.android.ddmlib.MultiLineReceiver;
 import com.xue.atk.manager.ADBManager;
@@ -24,6 +26,7 @@ public class ADBService {
     private List<IDevice> mDevices;
 
     private IDevice mCurrentDevice;
+    private int mCurrentDeviceEventNum;
 
     private List<IDeviceChangedCallBack> mCallBackList;
 
@@ -32,18 +35,65 @@ public class ADBService {
         mADB = new ADB();
         if (!mADB.initialize()) {
             System.out.println("Could not find adb.");
-            Log.d(TAG, "Could not find adb.");
+            Log.w(TAG, "Could not find adb.");
         }
 
         mDevices = Arrays.asList(mADB.getDevices());
 
         if (mDevices != null && mDevices.size() > 0) {
             mCurrentDevice = mDevices.get(0);
+            calcEventNum();
         }
 
         mADB.addDeviceChangeListener(mDeviceChangeListener);
         mCallBackList = new ArrayList<IDeviceChangedCallBack>();
 
+    }
+
+    private void calcEventNum() {
+
+        if (mCurrentDevice != null) {
+            try {
+                mCurrentDevice.executeShellCommand("ls dev/input", mEventNumReceiver);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private IShellOutputReceiver mEventNumReceiver = new IShellOutputReceiver() {
+
+        @Override
+        public void addOutput(byte[] data, int offset, int length) {
+            // TODO Auto-generated method stub
+            String str = null;
+            try {
+                str = new String(data, offset, length, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                // TODO Auto-generated catch block
+                str = new String(data, offset, length);
+            }
+            mCurrentDeviceEventNum = str.split("\r\n").length;
+            System.out.println("mCurrentDeviceEventNum:" + mCurrentDeviceEventNum);
+            Log.i(TAG, "mCurrentDeviceEventNum:" + mCurrentDeviceEventNum);
+        }
+
+        @Override
+        public void flush() {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public boolean isCancelled() {
+            // TODO Auto-generated method stub
+            return false;
+        }
+    };
+
+    public int getCurrentDeviceEventNum() {
+        
+        return mCurrentDeviceEventNum;
     }
 
     public String getAdbLocation() {
@@ -64,6 +114,7 @@ public class ADBService {
 
     public void setCurrentDevice(IDevice mCurrentDevice) {
         this.mCurrentDevice = mCurrentDevice;
+        calcEventNum();
     }
 
     private IDeviceChangeListener mDeviceChangeListener = new IDeviceChangeListener() {
@@ -76,7 +127,6 @@ public class ADBService {
             for (IDeviceChangedCallBack callBack : mCallBackList) {
                 callBack.deviceConnected(device);
             }
-
         }
 
         @Override
@@ -87,39 +137,45 @@ public class ADBService {
             for (IDeviceChangedCallBack callBack : mCallBackList) {
                 callBack.deviceDisonnected(device);
             }
-
         }
 
         @Override
         public void deviceChanged(IDevice device, int changeMask) {
             // TODO Auto-generated method stub
-
+            System.out.println("deviceChanged");
         }
-
     };
 
-    public void executeShellCommand(final String command) {
+    private Exception mException;
+
+    public Exception getException() {
+        return mException;
+    }
+
+    public int executeShellCommand(final String command) {
         final IDevice device = getCurrentDevice();
-        executeShellCommand(device, command);
+        return executeShellCommand(device, command);
     }
 
-    public void executeShellCommand(final IDevice device, final String command) {
-
-        new Thread() {
-            public void run() {
-                execute(device, command);
-            }
-        }.start();
-
+    public int executeShellCommand(final IDevice device, final String command) {
+        return execute(device, command);
     }
 
-    private void execute(IDevice device, String command) {
+    private int execute(IDevice device, String command) {
         try {
             device.executeShellCommand(command, mMultiLineReceiver);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            mException = e;
+            return -1;
         }
+
+        return 1;
+    }
+
+    public void terminateShellCommand() {
+
     }
 
     private MultiLineReceiver mMultiLineReceiver = new MultiLineReceiver() {
@@ -134,45 +190,40 @@ public class ADBService {
         public void processNewLines(String[] lines) {
             // TODO Auto-generated method stub
             for (String s : lines) {
-                System.out.println(s);
-                Log.i(TAG, s);
+                System.out.println("test :" + s);
+                Log.i(TAG, "test :" + s);
             }
         }
     };
 
     private Process p;
-    private Thread executeThread;
 
     private List<Process> totalProcess = new ArrayList<Process>();
-    private List<Thread> totalThreads = new ArrayList<Thread>();
 
-    public static String errorMsg;
+    private String errorMsg;
 
-    public void execADBCommand(String command) {
-        IDevice device = getCurrentDevice();
-        execADBCommand(device, command);
+    public String getErrorMsg() {
+        return errorMsg;
     }
 
-    public void execADBCommand(IDevice device, final String command) {
+    public int execADBCommand(String command) {
+        IDevice device = getCurrentDevice();
+        return execADBCommand(device, command);
+    }
+
+    public int execADBCommand(IDevice device, final String command) {
 
         String adbLocation = getAdbLocation();
         String deviceSN = device.toString();
 
         final String c = adbLocation + " -s " + deviceSN + " " + command;
-        executeThread = new Thread() {
-            public void run() {
-                executeADB(c);
-            }
-        };
-        executeThread.start();
 
-        totalThreads.add(executeThread);
+        return executeADB(c);
+
     }
 
     private int executeADB(String command) {
 
-        System.out.println("command:" + command);
-        Log.i(TAG, "command:" + command);
         try {
             p = Runtime.getRuntime().exec(command);
             totalProcess.add(p);
@@ -203,12 +254,10 @@ public class ADBService {
 
         for (int i = 0; i < totalProcess.size(); i++) {
             totalProcess.get(i).destroy();
-            if (totalThreads.get(i) != null && totalThreads.get(i).isAlive()) {
-                totalThreads.get(i).stop();
-            }
+            totalProcess.set(i, null);
         }
         totalProcess.clear();
-        totalThreads.clear();
+
     }
 
     class StreamGobbler extends Thread {

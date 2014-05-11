@@ -1,6 +1,7 @@
 package com.xue.atk.view;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
@@ -19,19 +20,19 @@ public class Dialog extends JFrame {
     private int mDialogWidth = DEFAULT_WIDTH;
     private int mDialogHeight = DEFAULT_HEIGHT;
 
-    protected JFrame mContext;
+    protected Component mContext;
     private JLayeredPane layeredPane;
 
     private JLabel background;
     private ImageIcon backgroundIcon;
 
-    public Dialog(JFrame owner) {
+    public Dialog(Component owner) {
         this.mContext = owner;
         initPanel();
 
     }
 
-    public Dialog(JFrame owner, int width, int height) {
+    public Dialog(Component owner, int width, int height) {
         this.mContext = owner;
         this.mDialogWidth = width;
         this.mDialogHeight = height;
@@ -67,8 +68,6 @@ public class Dialog extends JFrame {
     private ImageIcon scaleImage(ImageIcon icon, int width, int height) {
         if (width != DEFAULT_WIDTH || height != DEFAULT_HEIGHT) {
             icon.setImage(icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
-            System.out.println("mDialogWidth:" + width);
-            System.out.println("mDialogHeight:" + height);
         }
         return icon;
     }

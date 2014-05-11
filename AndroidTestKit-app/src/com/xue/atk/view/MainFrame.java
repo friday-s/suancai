@@ -56,7 +56,7 @@ public class MainFrame extends JFrame {
         MenuItem settingsItem = new MenuItem(this, settings, settingsView);
         menuBar.addMenuItem(settingsItem);
 
-        TabHost tabHost = new TabHost();
+        TabHost tabHost = new TabHost(this);
         tabHost.setBounds(ATK.TAB_HOST_LOCATION_X, ATK.TAB_HOST_LOCATION_Y, ATK.TAB_HOST_WIDTH,
                 ATK.TAB_HOST_HEIGHT);
         layeredPane.add(tabHost, JLayeredPane.DEFAULT_LAYER);

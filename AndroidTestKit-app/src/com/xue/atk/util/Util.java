@@ -28,5 +28,14 @@ public class Util {
         icon.setImage(icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
         return icon;
     }
-    
+
+    public static boolean isContainChinese(String str) {
+        byte[] bytes = str.getBytes();
+        for (int i = 0; i < bytes.length; i++) {
+            if (bytes[i] >= (byte) 0x81 && bytes[i] <= (byte) 0xfe) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

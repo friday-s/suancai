@@ -1,6 +1,8 @@
 package com.xue.atk.view;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -13,7 +15,7 @@ import javax.swing.SpringLayout;
 
 import com.xue.atk.util.Util;
 
-public class MenuBar extends JPanel implements MouseListener {
+public class MenuBar extends JPanel implements ActionListener {
 
     private static final int SHOW_FLAG = 0;
     private static final int HIDE_FLAG = 1;
@@ -71,20 +73,19 @@ public class MenuBar extends JPanel implements MouseListener {
         form = new MenuBarForm(this);
 
         mContext.getLayeredPane().add(form, new Integer(200));
-        setLayerFocusable(JLayeredPane.DEFAULT_LAYER,false);
+        setLayerFocusable(JLayeredPane.DEFAULT_LAYER, false);
 
         form.attachItemView(item.getMenuItemView());
         form.showItemView();
 
     }
 
-    private void setLayerFocusable(int layer,boolean focusable) {
+    private void setLayerFocusable(int layer, boolean focusable) {
         Component[] components = mContext.getLayeredPane().getComponentsInLayer(layer);
         for (Component c : components) {
             c.setFocusable(focusable);
         }
     }
-    
 
     private void disposeBarForm() {
 
@@ -95,55 +96,9 @@ public class MenuBar extends JPanel implements MouseListener {
             form = null;
             mContext.getLayeredPane().repaint();
 
-            setLayerFocusable(JLayeredPane.DEFAULT_LAYER,true);
+            setLayerFocusable(JLayeredPane.DEFAULT_LAYER, true);
 
         }
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
-    	 if (!focusable) {
-             return;
-         }
-    	for (MenuItem item : mMenuItems) {
-            if (item.getWidget() == e.getSource()) {
-            	item.getWidget().pressDown();
-            }
-    	}
-    	
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-        if (!focusable) {
-            return;
-        }
-
-        for (MenuItem item : mMenuItems) {
-            if (item.getWidget() == e.getSource()) {
-            	item.getWidget().pressUp();
-                attachBarForm(item);
-            }
-        }
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
     }
 
     class MenuBarForm extends JLayeredPane {
@@ -195,7 +150,7 @@ public class MenuBar extends JPanel implements MouseListener {
         public void attachItemView(MenuItemView view) {
             this.mView = view;
             mView.setLocation(mFormWidth, (mFormHeight - mView.getHeight()) / 2);
-            mView.addMouseListener(mMouseListener);
+            mView.addActionListener(mActionListener);
             this.add(mView, JLayeredPane.PALETTE_LAYER);
 
         }
@@ -203,41 +158,15 @@ public class MenuBar extends JPanel implements MouseListener {
         private void removeItemView() {
             this.remove(mView);
             this.remove(bg);
-            mView.removeMouseListener(mMouseListener);
+            mView.removeActionListener(mActionListener);
         }
 
-        private MouseListener mMouseListener = new MouseListener() {
+        private ActionListener mActionListener = new ActionListener() {
 
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                // TODO Auto-generated method stub
-                mView.pressBack();
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                // TODO Auto-generated method stub
-                System.out.println("release the back");
-                mView.releaseBack();
                 hideItemView();
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                // TODO Auto-generated method stub
-
             }
 
         };
@@ -318,6 +247,20 @@ public class MenuBar extends JPanel implements MouseListener {
 
             public boolean isShow() {
                 return isShow;
+            }
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+        if (!focusable) {
+            return;
+        }
+
+        for (MenuItem item : mMenuItems) {
+            if (e.getSource().equals(item.getWidget())) {
+                attachBarForm(item);
             }
         }
     }

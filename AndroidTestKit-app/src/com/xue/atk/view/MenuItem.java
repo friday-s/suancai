@@ -1,7 +1,6 @@
 package com.xue.atk.view;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 
@@ -51,8 +50,8 @@ public class MenuItem {
         this.mMenuItemView = mMenuItemView;
     }
 
-    public void addMouseListener(MouseListener l) {
-        this.mWidget.addMouseListener(l);
+    public void addMouseListener(ActionListener l) {
+        this.mWidget.addActionListener(l);
     }
 
 }

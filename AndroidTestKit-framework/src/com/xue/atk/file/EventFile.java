@@ -1,5 +1,7 @@
 package com.xue.atk.file;
 
+import java.io.File;
+
 public class EventFile implements Cloneable {
 
     private String name;
@@ -24,6 +26,10 @@ public class EventFile implements Cloneable {
 
     public String getPath() {
         return path;
+    }
+
+    public String getCompletePath() {
+        return path + File.separator + name;
     }
 
     public void setPath(String path) {

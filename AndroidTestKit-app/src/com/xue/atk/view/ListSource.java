@@ -28,7 +28,6 @@ public class ListSource extends BaseModel {
 
 	// �������ɾ��һ����Ԫ
 	public void removeCell(int index) {
-		System.out.println("ɾ��:" + index);
 		if (sources.size() > 0 && index < sources.size() && index >= 0) {
 			sources.remove(index);
 			notifySourceRefreshEvent();

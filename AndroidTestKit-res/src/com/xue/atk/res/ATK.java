@@ -59,12 +59,21 @@ public class ATK {
     public static final String[] TABBED_PANE = { "record", "replay" };
 
     public static final String EXIT_CONTENT = "Do you want to quit?";
+    public static final String DEVICE_NOT_FOUND_CONTENT = "Device not found!";
     
     public static final String[] REPLAY_RIGHT_VIEW_POP = {"Up","Down","Remove"};
     public static final String[] REPLAY_LEFT_VIEW_POP = {"Add to replay list","Detail","Delete"};
 
     public static final String USB_STATE = "USB:";
     public static final String DEVICE = "Device:";
+    
+    public static final String[] SAVE_DIALOG_LABEL = {"Project:","Name:"};
+    public static final String ERROR_USE_CHINESE = "Can not use Chinese.";
+    public static final String ERROR_CONTENT_EMPTY = "Can not be empty.";
+    public static final String ERROR_REPLAY_EVENT_EMPTY = "Replay list is empty.";
+    
+    public static final String CURRENT_EVENT="Current Event: ";
+    public static final String CURRENT_TIME="Current Time: ";
     
     public static final String SOFTWARE_INFORMATION = 
                                                         "<html>"

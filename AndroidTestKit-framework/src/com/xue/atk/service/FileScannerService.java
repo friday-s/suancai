@@ -8,7 +8,7 @@ import com.xue.atk.file.EventFile;
 
 public class FileScannerService {
 
-    private static final String PATH = "." + File.separator + "events" + File.separator;
+    private final String PATH = "." + File.separator + "events" + File.separator;
 
     private File mFile;
 
@@ -19,15 +19,26 @@ public class FileScannerService {
         }
     }
 
+    public String getEventPath() {
+        return PATH;
+    }
+
+    public void checkPath(String path) {
+         File file = new File(path);
+         if (!file.exists()){
+             file.mkdirs();
+         }
+    }
+
     public List<Object> getEventList(String projectName) {
 
-        if (projectName ==null){
+        if (projectName == null) {
             return null;
         }
         List<Object> array = null;
 
         String[] s = new File(PATH, projectName).list();
-        if (s.length != 0) {
+        if (s != null && s.length != 0) {
             array = new ArrayList<Object>();
             for (int i = 0; i < s.length; i++) {
                 EventFile event = new EventFile();
@@ -43,7 +54,5 @@ public class FileScannerService {
     public String[] getProjectList() {
         return mFile.list();
     }
-    
 
-    
 }

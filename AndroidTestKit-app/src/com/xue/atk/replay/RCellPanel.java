@@ -1,4 +1,4 @@
-package com.xue.atk.view;
+package com.xue.atk.replay;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -19,8 +19,11 @@ import javax.swing.event.ChangeListener;
 import com.xue.atk.file.EventFile;
 import com.xue.atk.res.ATK;
 import com.xue.atk.util.Util;
+import com.xue.atk.view.BaseList;
+import com.xue.atk.view.CellPanel;
+import com.xue.atk.view.ListCellIface;
 
-public class RCellPanel extends JPanel implements ListCellIface {
+public class RCellPanel extends CellPanel {
 
     private static final long serialVersionUID = 1L;
     
@@ -70,17 +73,6 @@ public class RCellPanel extends JPanel implements ListCellIface {
 
         label = new JLabel(bean);
         label.setPreferredSize(new Dimension(LABEL_WIDTH, LABEL_HEIGHT));
-
-        JButton button = new JButton();
-        button.setIcon(Util.getImageIcon("right_normal.png"));
-        button.setPressedIcon(Util.getImageIcon("right_click.png"));
-        button.setMaximumSize(new Dimension(BUTTON_SIDE_LENGHT, BUTTON_SIDE_LENGHT));
-        button.setOpaque(false);
-        button.setContentAreaFilled(false);
-        button.setMargin(new Insets(0, 0, 0, 0));
-        button.setBorder(null);
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
 
         final JSpinner jSpinner = new JSpinner();
         jSpinner.setModel(new SpinnerNumberModel(eventFile.getTime(), 1, null, 1));
