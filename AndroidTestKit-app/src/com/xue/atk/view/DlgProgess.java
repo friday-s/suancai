@@ -17,7 +17,7 @@ import javax.swing.JProgressBar;
 
 /**
  * 
- * ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½
+ * µ¯³öÊ½½ø¶ÈÌõ
  * @author xuewei
  * @date 2013-02-02
  * 
@@ -37,7 +37,7 @@ public class DlgProgess implements ActionListener {
 
 	private Window parent;
 
-	private Thread thread; // ï¿½ï¿½ï¿½ï¿½Òµï¿½ï¿½ï¿½ï¿½ß³ï¿½
+	private Thread thread; // ´¦ÀíÒµÎñµÄÏß³Ì
 
 	private String statusInfo;
 
@@ -93,12 +93,12 @@ public class DlgProgess implements ActionListener {
 		// mainPane.add(btnCancel);
 
 		dialog.getContentPane().add(mainPane);
-		dialog.setUndecorated(true); // ï¿½ï¿½È¥title
+		dialog.setUndecorated(true); // ³ýÈ¥title
 		dialog.setResizable(true);
 		dialog.setSize(390, 100);
-		dialog.setLocationRelativeTo(parent); // ï¿½ï¿½ï¿½Ã´Ë´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
+		dialog.setLocationRelativeTo(parent); // ÉèÖÃ´Ë´°¿ÚÏà¶ÔÓÚÖ¸¶¨×é¼þµÄÎ»ÖÃ
 
-		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ø±ï¿½
+		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE); // ²»ÔÊÐí¹Ø±Õ
 
 		mainPane.addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
@@ -111,13 +111,13 @@ public class DlgProgess implements ActionListener {
 		new Thread() {
 			public void run() {
 				try {
-					thread.start(); // ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½
-					// ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ì½ï¿½ï¿½ï¿½
+					thread.start(); // ´¦ÀíºÄÊ±ÈÎÎñ
+					// µÈ´ýÊÂÎñ´¦ÀíÏß³Ì½áÊø
 					thread.join();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				} finally {
-					// ï¿½Ø±Õ½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½
+					// ¹Ø±Õ½ø¶ÈÌáÊ¾¿ò
 					dialog.dispose();
 
 					if (resultInfo != null && !resultInfo.trim().equals("")) {
