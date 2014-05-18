@@ -51,10 +51,13 @@ public class SoftwareInfoView extends MenuItemView {
         infoLabel.setText(ATK.SOFTWARE_INFORMATION);
         infoLabel.setBounds(0, 0, mWidth, mHeight);
         
+        CButton updateBtn = new CButton(Util.getImageIcon("update_btn_up.png"),Util.getImageIcon("update_btn_down.png"));
+        updateBtn.setBounds(20, mHeight-50, 350, 35);
         
 
         imagePanel.add(imageLabel);
         infoPanel.add(infoLabel);
+        infoPanel.add(updateBtn);
 
         mPanel.add(imagePanel,BorderLayout.NORTH);
         mPanel.add(infoPanel,BorderLayout.SOUTH);
