@@ -21,6 +21,7 @@ import com.android.ddmlib.AndroidDebugBridge;
 import com.android.ddmlib.AndroidDebugBridge.IDeviceChangeListener;
 import com.android.ddmlib.IDevice;
 import com.android.ddmlib.Log;
+import com.xue.atk.file.DirectoryUtil;
 
 public class ADB {
 
@@ -30,25 +31,28 @@ public class ADB {
 
     private String adbLocation;
 
+    public ADB() {
+
+        String osName = System.getProperties().getProperty("os.name");
+        String osArch = System.getProperties().getProperty("os.arch");
+
+        Log.i(TAG, "OS:" + osName + " " + osArch);
+
+        String path = DirectoryUtil.getRootDirectory();
+
+        if (osName.indexOf("Linux") != -1 && osArch.indexOf("64") != -1) {
+            adbLocation = path + "adb" + File.separator + "linuxX64";
+        } else if (osName.indexOf("Windows") != -1) {
+            adbLocation = path + "adb" + File.separator + "windows";
+        }
+    }
+
     public boolean initialize() {
 
         boolean success = true;
 
         // String adbLocation =
         // System.getProperty("com.android.screenshot.bindir");
-      
-
-        String osName = System.getProperties().getProperty("os.name");
-        String osArch = System.getProperties().getProperty("os.arch");
-
-        Log.i(TAG, "OS:"+osName+" "+osArch);
-        System.out.println( "OS:"+osName+" "+osArch);
-
-        if (osName.indexOf("Linux") != -1 && osArch.indexOf("64") != -1) {
-            adbLocation = "." + File.separator + "adb" + File.separator + "linuxX64";
-        }else if(osName.indexOf("Windows") != -1){
-        	adbLocation = "." + File.separator + "adb" + File.separator + "windows";
-        }
 
         if (success) {
             if ((adbLocation != null) && (adbLocation.length() != 0)) {
@@ -85,21 +89,24 @@ public class ADB {
 
         return success;
     }
-    
+
     public String getAdbLocation() {
         return adbLocation;
     }
-    
-    
-    public void addDeviceChangeListener(IDeviceChangeListener listener){
-        mAndroidDebugBridge.addDeviceChangeListener(listener);
-        
+
+    public void setAdbLocation(String location) {
+        this.adbLocation = location;
     }
-    
-    public AndroidDebugBridge getAndroidDebugBridge(){
-    	return this.mAndroidDebugBridge;
+
+    public void addDeviceChangeListener(IDeviceChangeListener listener) {
+        AndroidDebugBridge.addDeviceChangeListener(listener);
+
     }
-    
+
+    public AndroidDebugBridge getAndroidDebugBridge() {
+        return this.mAndroidDebugBridge;
+    }
+
     public void terminate() {
         AndroidDebugBridge.terminate();
     }

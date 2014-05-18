@@ -4,30 +4,41 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.android.ddmlib.Log;
+import com.xue.atk.file.DirectoryUtil;
 import com.xue.atk.file.EventFile;
 
 public class FileScannerService {
 
-    private final String PATH = "." + File.separator + "events" + File.separator;
+    private static final String TAG = "FileScannerService";
+
+    private String mEventsPath;
 
     private File mFile;
 
     public FileScannerService() {
-        mFile = new File(PATH);
+
+        String path = DirectoryUtil.getRootDirectory();
+
+        mEventsPath = path + "events" + File.separator;
+
+        mFile = new File(mEventsPath);
         if (!mFile.exists()) {
             mFile.mkdirs();
         }
+        
+        Log.i(TAG, "initialize the file scanner service");
     }
 
     public String getEventPath() {
-        return PATH;
+        return mEventsPath;
     }
 
     public void checkPath(String path) {
-         File file = new File(path);
-         if (!file.exists()){
-             file.mkdirs();
-         }
+        File file = new File(path);
+        if (!file.exists()) {
+            file.mkdirs();
+        }
     }
 
     public List<Object> getEventList(String projectName) {
@@ -37,13 +48,13 @@ public class FileScannerService {
         }
         List<Object> array = null;
 
-        String[] s = new File(PATH, projectName).list();
+        String[] s = new File(mEventsPath, projectName).list();
         if (s != null && s.length != 0) {
             array = new ArrayList<Object>();
             for (int i = 0; i < s.length; i++) {
                 EventFile event = new EventFile();
                 event.setName(s[i]);
-                event.setPath(PATH + projectName);
+                event.setPath(mEventsPath + projectName);
                 array.add(event);
             }
         }

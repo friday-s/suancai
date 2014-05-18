@@ -30,11 +30,11 @@ public class AlertDialog extends Dialog implements ActionListener {
     public static final int MSG_DIALOG = 2;
 
     private int mFlag;
-    private String message;
+    private String[] message;
 
-    private JLabel mIconLable;
-    private JButton mPositiveBtn;
-    private JButton mNegativeBtn;
+    protected JLabel mIconLable;
+    protected JButton mPositiveBtn;
+    protected JButton mNegativeBtn;
     private JLabel mMsgLabel;
 
     public AlertDialog(Component owner) {
@@ -57,38 +57,49 @@ public class AlertDialog extends Dialog implements ActionListener {
         mIconLable.setBounds((getDialogWidth() - ICON_WIDTH) / 2, ICON_WIDTH / 2, ICON_WIDTH,
                 ICON_HEIGHT);
 
-        mMsgLabel = new JLabel();
-        mMsgLabel.setBounds(20, getDialogHeight() / 2 - 20,
-                getDialogWidth()-40, MSG_HEIGHT);
-        
-        StringBuilder builder = new StringBuilder("<html>");
-        char[] chars = message.toCharArray();
-        FontMetrics fontMetrics = mMsgLabel.getFontMetrics(mMsgLabel.getFont());
-        for (int beginIndex = 0, limit = 1;; limit++) {
+        if (message.length == 1) {
+            mMsgLabel = new JLabel();
+            mMsgLabel.setBounds(20, getDialogHeight() / 2 - 20, getDialogWidth() - 40, MSG_HEIGHT);
 
-            if (fontMetrics.charsWidth(chars, beginIndex, limit) < mMsgLabel.getWidth()) {
-                if (beginIndex + limit < chars.length) {
-                    continue;
+            StringBuilder builder = new StringBuilder("<html>");
+            char[] chars = message[0].toCharArray();
+
+            FontMetrics fontMetrics = mMsgLabel.getFontMetrics(mMsgLabel.getFont());
+            for (int beginIndex = 0, limit = 1;; limit++) {
+
+                if (fontMetrics.charsWidth(chars, beginIndex, limit) < mMsgLabel.getWidth()) {
+                    if (beginIndex + limit < chars.length) {
+                        continue;
+                    }
+                    builder.append(chars, beginIndex, limit);
+                    break;
                 }
-                builder.append(chars, beginIndex, limit);
-                break;
+                builder.append(chars, beginIndex, limit - 1).append("<br/>");
+                beginIndex = limit - 1;
+                limit = 0;
             }
-            builder.append(chars, beginIndex, limit - 1).append("<br/>");
-            beginIndex =limit - 1;
-            limit = 1;
-        }
-        
-        builder.append("</html>");
-   
-        mMsgLabel.setText(builder.toString());
-      
 
-        getLayeredPane().add(mMsgLabel, new Integer(300));
+            builder.append("</html>");
+
+            mMsgLabel.setText(builder.toString());
+
+            getLayeredPane().add(mMsgLabel, new Integer(300));
+        }else{
+            
+            int y = getDialogHeight() / 2 - 45;
+            
+            for (int i = 0 ;i< message.length ;i++){
+                JLabel label = new JLabel(message[i]);
+                label.setBounds(20, y, getDialogWidth() - 40, MSG_HEIGHT);
+                getLayeredPane().add(label, new Integer(300));
+                y+= 30;
+            }
+            
+        }
 
         switch (mFlag) {
         case EXIT_DIALOG:
             mIconLable.setIcon(Util.getImageIcon("warn.png"));
-            
 
             mPositiveBtn = new JButton();
             mPositiveBtn.setIcon(Util.getImageIcon("ok_up.png"));
@@ -129,7 +140,7 @@ public class AlertDialog extends Dialog implements ActionListener {
         case MSG_DIALOG:
 
             mIconLable.setIcon(Util.getImageIcon("warn.png"));
-            
+
             mPositiveBtn = new JButton();
             mPositiveBtn.setIcon(Util.getImageIcon("ok_up.png"));
 
@@ -153,11 +164,11 @@ public class AlertDialog extends Dialog implements ActionListener {
         default:
             break;
         }
-        
+
         getLayeredPane().add(mIconLable, new Integer(300));
     }
 
-    public void setMessage(String message) {
+    public void setMessage(String[] message) {
         this.message = message;
     }
 
@@ -173,7 +184,7 @@ public class AlertDialog extends Dialog implements ActionListener {
                 System.exit(0);
                 break;
             case MSG_DIALOG:
-            	mContext.setEnabled(true);
+                mContext.setEnabled(true);
                 this.dispose();
                 break;
             default:
@@ -184,9 +195,9 @@ public class AlertDialog extends Dialog implements ActionListener {
             return;
         }
         if (e.getSource().equals(mNegativeBtn)) {
-        	mContext.setEnabled(true);
+            mContext.setEnabled(true);
             this.dispose();
-           
+
             return;
         }
     }

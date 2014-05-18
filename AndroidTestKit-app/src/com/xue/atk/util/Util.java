@@ -38,4 +38,18 @@ public class Util {
         }
         return false;
     }
+
+    public static String addSpace(String str, int lenght) {
+
+        if (str.length() < lenght) {
+            int i = lenght - str.length();
+            while (i >0) {
+                str = str + " ";
+                System.out.println(str.length());
+                i--;
+            }
+        }
+        System.out.println(str +"|||");
+        return str;
+    }
 }

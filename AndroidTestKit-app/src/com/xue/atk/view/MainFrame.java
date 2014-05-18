@@ -2,6 +2,7 @@ package com.xue.atk.view;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Point;
 
 import javax.swing.JFrame;
@@ -63,12 +64,41 @@ public class MainFrame extends JFrame {
 
         ReplayView recordView = new ReplayView("Replay");
         recordView.setBackground(Color.GRAY);
-   
-        ReplayView replayView2 = new ReplayView("More");
-        replayView2.setBackground(Color.BLUE);
         tabHost.addTab(recordView);
-  
-        tabHost.addTab(replayView2);
+        
+
+        CBaseTabView view2 = new CBaseTabView("ScreenMonitor");
+        view2.mCenterPanel.setLayout(null);
+        JLabel label2 = new JLabel("Stay Tuned");
+        label2.setHorizontalAlignment(JLabel.CENTER);
+        label2.setVerticalAlignment(JLabel.CENTER);
+        label2.setFont(new Font(null,1,20));
+        label2.setForeground(Color.RED);
+        label2.setBounds(0, 0, view2.mCenterPanel.getWidth(), view2.mCenterPanel.getHeight());
+        view2.mCenterPanel.add(label2);
+        tabHost.addTab(view2);
+        
+        CBaseTabView view3 = new CBaseTabView("MemoryMonitor");
+        view3.mCenterPanel.setLayout(null);
+        JLabel label3 = new JLabel("Stay Tuned");
+        label3.setHorizontalAlignment(JLabel.CENTER);
+        label3.setVerticalAlignment(JLabel.CENTER);
+        label3.setFont(new Font(null,1,20));
+        label3.setForeground(Color.RED);
+        label3.setBounds(0, 0, view3.mCenterPanel.getWidth(), view3.mCenterPanel.getHeight());
+        view3.mCenterPanel.add(label3);
+        tabHost.addTab(view3);
+        
+        CBaseTabView view4 = new CBaseTabView("More");
+        view4.mCenterPanel.setLayout(null);
+        JLabel label4 = new JLabel("Stay Tuned");
+        label4.setHorizontalAlignment(JLabel.CENTER);
+        label4.setVerticalAlignment(JLabel.CENTER);
+        label4.setFont(new Font(null,1,20));
+        label4.setForeground(Color.RED);
+        label4.setBounds(0, 0, view4.mCenterPanel.getWidth(), view4.mCenterPanel.getHeight());
+        view4.mCenterPanel.add(label4);
+        tabHost.addTab(view4);
 
         BottomBar bottomBar = new BottomBar();
         bottomBar.setBounds(ATK.BOTTOM_BAR_X, ATK.BOTTOM_BAR_Y, ATK.BOTTOM_BAR_WIDTH,

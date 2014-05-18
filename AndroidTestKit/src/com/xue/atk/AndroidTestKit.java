@@ -3,9 +3,14 @@ package com.xue.atk;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import javax.swing.JFrame;
+
+import com.android.ddmlib.DdmPreferences;
+import com.android.ddmlib.Log;
+import com.android.ddmlib.Log.LogLevel;
 import com.xue.atk.manager.ADBManager;
 import com.xue.atk.manager.FileScannerManager;
 import com.xue.atk.res.ATK;
@@ -15,15 +20,21 @@ import com.xue.atk.view.MainFrame;
 
 public class AndroidTestKit {
 
+    private static final String TAG = "AndroidTestKit";
+    
     private JFrame frame;
 
     /**
      * Launch the application.
      */
     public static void main(String[] args) {
+        
+        DdmPreferences.setLogLevel(LogLevel.VERBOSE.getStringValue());
+
         try {
             if (checkPidInProcess(AndroidTestKit.class.getSimpleName())) {
-                System.out.println(AndroidTestKit.class.getSimpleName() + " is already running.");
+
+                Log.w(TAG, AndroidTestKit.class.getSimpleName() + " is already running.");
                 return;
             }
         } catch (Exception e1) {
@@ -99,4 +110,5 @@ public class AndroidTestKit {
         }
         return count <= 1 ? false : true;
     }
+    
 }

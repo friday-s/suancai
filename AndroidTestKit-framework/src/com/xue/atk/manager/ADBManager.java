@@ -1,21 +1,15 @@
 package com.xue.atk.manager;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+
 import java.util.List;
 
 import com.android.ddmlib.IDevice;
-import com.android.ddmlib.Log;
-import com.android.ddmlib.MultiLineReceiver;
+
 import com.xue.atk.service.ADBService;
 import com.xue.atk.service.IDeviceChangedCallBack;
 
 public class ADBManager {
-
-    private static final String TAG = "ADBManager";
 
     private static ADBManager mADBManager;
 
@@ -67,15 +61,20 @@ public class ADBManager {
     public int execADBCommand(IDevice device, String command) {
         return mADBService.execADBCommand(device, command);
     }
-    
-    public int getCurrentDeviceEventNum(){
+
+    public int getCurrentDeviceEventNum() {
         return mADBService.getCurrentDeviceEventNum();
     }
-    
-    public String getErrorMsg(){
+
+    public void calcEventNum() throws IOException {
+        mADBService.calcEventNum();
+    }
+
+    public String getErrorMsg() {
         return getException().getMessage();
     }
-    public Exception getException(){
+
+    public Exception getException() {
         return mADBService.getException();
     }
 

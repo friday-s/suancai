@@ -48,10 +48,13 @@ public class SaveDialog extends Dialog implements ActionListener {
     private JTextField mTextField;
     private JComboBox mJComboBox;
     private JLabel mErrorLabel;
+    
+    private SourceRefreshCallBack mCallback;
 
-    public SaveDialog(Component owner, int width, int height) {
+    public SaveDialog(Component owner, SourceRefreshCallBack callback,int width, int height) {
         super(owner, width, height);
         // TODO Auto-generated constructor stub
+        this.mCallback = callback;
     }
 
     public void onCreate() {
@@ -151,8 +154,8 @@ public class SaveDialog extends Dialog implements ActionListener {
         // TODO Auto-generated method stub
         if (e.getSource().equals(mPositiveBtn)) {
 
-            if (mJComboBox.getSelectedItem().toString().trim().isEmpty()
-                    || mTextField.getText().trim().isEmpty()
+            if (mJComboBox.getSelectedItem()==null || mJComboBox.getSelectedItem().toString().trim().isEmpty()
+                    || mTextField.getText() ==null || mTextField.getText().trim().isEmpty()
                     || mJComboBox.getSelectedItem().toString().trim().indexOf(" ") >= 0
                     || mTextField.getText().trim().indexOf(" ") >= 0) {
                 mErrorLabel.setText(ATK.ERROR_CONTENT_EMPTY);
@@ -174,6 +177,7 @@ public class SaveDialog extends Dialog implements ActionListener {
 
                 DlgProgess.show(this, thread);
                 mContext.setEnabled(true);
+                mCallback.refreshSource();
                 this.dispose();
             }
             return;

@@ -136,7 +136,6 @@ public class BaseList extends JComponent {
         // if (source.getAllCell().size() != 0) {
         // // ����
         // Collections.sort(source.getAllCell(), source.getComparator());
-        // System.out.println(source.getComparator());
         // }
         this.removeAll();
         this.mTotalCell.clear();

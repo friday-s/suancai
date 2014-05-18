@@ -7,8 +7,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -17,6 +20,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JMenuItem;
@@ -27,10 +31,13 @@ import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 
 import com.android.ddmlib.IDevice;
+import com.android.ddmlib.Log;
+import com.xue.atk.file.DirectoryUtil;
 import com.xue.atk.file.EventFile;
 import com.xue.atk.manager.ADBManager;
 import com.xue.atk.manager.FileScannerManager;
 import com.xue.atk.res.ATK;
+import com.xue.atk.service.IDeviceChangedCallBack;
 import com.xue.atk.util.Util;
 import com.xue.atk.view.AlertDialog;
 import com.xue.atk.view.BaseList;
@@ -40,16 +47,20 @@ import com.xue.atk.view.CellPanel;
 import com.xue.atk.view.ListSource;
 import com.xue.atk.view.ProgressBar;
 
-public class ReplayView extends CBaseTabView implements ItemListener, ActionListener {
+public class ReplayView extends CBaseTabView implements ItemListener, ActionListener,SourceRefreshCallBack {
 
+    private static final String TAG = "ReplayView";
+    
     private static final int DIVIDE_LINE_WIDTH = 70;
     private static final int DIVIDE_LINE_HEIGHT = 1;
 
     public static final String DEVICE_TMP_PATH = "/data/local/tmp/";
-    public static final String LIBS_PATH = "." + File.separator + "libs" + File.separator;
+
     public static final String EVENT_PATH = "sdcard/events";
 
     private static final int PROGRESSBAR_SIDE_LENGHT = 25;
+    
+    private  String mLibsPath;
 
     private CButton mRecordBtn;
     private CButton mReplayBtn;
@@ -85,9 +96,14 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
     
     private JCheckBox mBackgroundCheckbox;
     private JCheckBox mMultideviceCheckbox;
+    
+    private  DefaultComboBoxModel mProjectModel;
+    private Object mCurrentComboSelected;
 
     public ReplayView(String tabName) {
         super(tabName);
+        mLibsPath = DirectoryUtil.getRootDirectory() + "libs" + File.separator;;
+        
         initView();
     }
 
@@ -105,6 +121,8 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
         initLeftView();
         initCenterView();
         initRightView();
+        
+        ADBManager.getManager().addCallBack(mCallBack);
     }
 
     private void initLeftView() {
@@ -148,8 +166,9 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
 
         mLeftPanel.add(mProjectComboBox);
 
-        mProjectComboBox.setModel(new DefaultComboBoxModel(FileScannerManager.getManager()
-                .getProjectList()));
+        mProjectModel = new DefaultComboBoxModel(FileScannerManager.getManager()
+                .getProjectList());
+        mProjectComboBox.setModel(mProjectModel);
         mProjectComboBox.setSelectedItem(0);
 
         mLListSource = new ListSource();
@@ -311,40 +330,80 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
         // TODO Auto-generated method stub
         if (e.getStateChange() == ItemEvent.SELECTED) {
 
-            List<Object> source = FileScannerManager.getManager().getEventList(
-                    mProjectComboBox.getSelectedItem().toString());
-
-            mLListSource.setSources(source);
-
-            mLListSource.notifySourceRefreshEvent();
+            refreshCurrentSource();
         }
+    }
+    
+    private void refreshCurrentSource(){
+        List<Object> source = FileScannerManager.getManager().getEventList(
+                mProjectComboBox.getSelectedItem().toString());
+
+        mLListSource.setSources(source);
+
+        mLListSource.notifySourceRefreshEvent();
     }
 
     private void showDialog(String msg) {
+        AlertDialog dialog = new AlertDialog(this.getRootPane().getParent(), 400, 250,
+                AlertDialog.MSG_DIALOG);
+        dialog.setMessage(new String[]{msg});
+        dialog.onCreate();
+        dialog.setVisible(true);
+    }
+    
+    private void showDialog(String[] msg) {
         AlertDialog dialog = new AlertDialog(this.getRootPane().getParent(), 400, 250,
                 AlertDialog.MSG_DIALOG);
         dialog.setMessage(msg);
         dialog.onCreate();
         dialog.setVisible(true);
     }
+    
+    private void stopRecordState(){
+        mRecordBtn.setIconDrawable(mRecordIconUp, mRecordIconDown);
+
+        mProgress.stop();
+        isRunning = false;
+
+        mReplayBtn.setEnabled(true);
+        ADBManager.getManager().terminateADBCommand();
+        mClock.stopTiming();
+    }
+    
+    private void stopReplayState(){
+        mReplayBtn.setIconDrawable(mReplayIconUp, mReplayIconDown);
+        mProgress.stop();
+        mClock.stopTiming();
+        isRunning = false;
+        mRecordBtn.setEnabled(true);
+    }
 
     private Runnable mRecordRunnable = new Runnable() {
         public void run() {
-            if (ADBManager.getManager().execADBCommand(
-                    "push " + LIBS_PATH + "event_record" + " " + DEVICE_TMP_PATH) < 0) {
-                showDialog(ADBManager.getManager().getErrorMsg());
-                mRecordBtn.doClick();
+            try {
+                
+                ADBManager.getManager().calcEventNum();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                showDialog(e.getMessage());
+                stopRecordState();
                 return;
             }
-            System.out.println("push file");
+            
+            if (ADBManager.getManager().execADBCommand(
+                    "push " + mLibsPath + "event_record" + " " + DEVICE_TMP_PATH) < 0) {
+                showDialog(ADBManager.getManager().getErrorMsg());
+                stopRecordState();
+                return;
+            }
 
             if (ADBManager.getManager().execADBCommand(
                     "shell chmod 555 " + DEVICE_TMP_PATH + "event_record") < 0) {
                 showDialog(ADBManager.getManager().getErrorMsg());
-                mRecordBtn.doClick();
+                stopRecordState();
                 return;
             }
-            System.out.println("chmod file");
 
             if (ADBManager.getManager().execADBCommand(
                     "shell " + DEVICE_TMP_PATH + "event_record "
@@ -353,12 +412,21 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
                 mRecordBtn.doClick();
                 return;
             }
-            System.out.println("execute");
+
         }
     };
 
     private Runnable mReplayRunnable = new Runnable() {
         public void run() {
+            try {
+                ADBManager.getManager().calcEventNum();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                showDialog(e.getMessage());
+                mReplayBtn.doClick();
+                return;
+            }
 
             if (mMultideviceCheckbox.isSelected()) {
                 /* multi background */
@@ -367,7 +435,7 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
                     for (final IDevice device : ADBManager.getManager().getDevices()) {
 
                         if (ADBManager.getManager().execADBCommand(device,
-                                "push " + LIBS_PATH + "event_replay" + " " + DEVICE_TMP_PATH) < 0) {
+                                "push " + mLibsPath + "event_replay" + " " + DEVICE_TMP_PATH) < 0) {
                             showDialog(ADBManager.getManager().getErrorMsg());
                             mReplayBtn.doClick();
                             return;
@@ -418,7 +486,7 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
                         for (final IDevice device : ADBManager.getManager().getDevices()) {
 
                             if (ADBManager.getManager().execADBCommand(device,
-                                    "push " + LIBS_PATH + "event_replay" + " " + DEVICE_TMP_PATH) < 0) {
+                                    "push " + mLibsPath + "event_replay" + " " + DEVICE_TMP_PATH) < 0) {
                                 showDialog(ADBManager.getManager().getErrorMsg());
                                 mReplayBtn.doClick();
                                 return;
@@ -482,7 +550,7 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
                 /* single background replay */
                 if (mBackgroundCheckbox.isSelected()) {
                     if (ADBManager.getManager().execADBCommand(
-                            "push " + LIBS_PATH + "event_replay" + " " + DEVICE_TMP_PATH) < 0) {
+                            "push " + mLibsPath + "event_replay" + " " + DEVICE_TMP_PATH) < 0) {
                         showDialog(ADBManager.getManager().getErrorMsg());
                         mReplayBtn.doClick();
                         return;
@@ -514,7 +582,7 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
 
                 } else { /* single foreground replay */
                     if (ADBManager.getManager().execADBCommand(
-                            "push " + LIBS_PATH + "event_replay" + " " + DEVICE_TMP_PATH) < 0) {
+                            "push " + mLibsPath + "event_replay" + " " + DEVICE_TMP_PATH) < 0) {
                         showDialog(ADBManager.getManager().getErrorMsg());
                         mReplayBtn.doClick();
                         return;
@@ -555,12 +623,29 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
                 }
             }
 
-            mReplayBtn.setIconDrawable(mReplayIconUp, mReplayIconDown);
-            mProgress.stop();
-            mClock.stopTiming();
-            isRunning = false;
-            mRecordBtn.setEnabled(true);
+            stopReplayState();
+        }
+    };
+    
+    private IDeviceChangedCallBack mCallBack = new IDeviceChangedCallBack() {
 
+        @Override
+        public void deviceConnected(IDevice device) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public void deviceDisonnected(IDevice device) {
+            // TODO Auto-generated method stub
+            if (isRunning && !mBackgroundCheckbox.isSelected()) {
+                if (device.equals(ADBManager.getManager().getCurrentDevice())) {
+                    Log.w(TAG, device.toString()+" disconnectd,update status");
+                    showDialog(ATK.ERROR_DEVICE_DISCONNECTED + " ("+device.toString()+")");
+                    stopRecordState();
+                    stopReplayState();
+                }
+            }
         }
     };
 
@@ -588,8 +673,10 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
                     mReplayBtn.setEnabled(true);
                     ADBManager.getManager().terminateADBCommand();
                     mClock.stopTiming();
-
-                    SaveDialog dialog = new SaveDialog(this.getRootPane().getParent(), 400, 250);
+                    
+                    mCurrentComboSelected= mProjectModel.getElementAt(mProjectComboBox.getSelectedIndex());
+                    
+                    SaveDialog dialog = new SaveDialog(this.getRootPane().getParent(),this, 400, 250);
                     dialog.onCreate();
                     dialog.setVisible(true);
 
@@ -652,9 +739,62 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
             return;
         }
         if (e.getActionCommand().equals(ATK.REPLAY_LEFT_VIEW_POP[1])) {
+            Object o = mLTransferList.getSelectCell();
+            File file = new File(((EventFile) o).getCompletePath());
+ 
+            String name = "Name:" + file.getName();
+            String lenght = "Lenght:" + file.length();
+            String lastModified ="Last modified:"+ new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(file.lastModified());
+         
+            showDialog(new String[]{name,lenght,lastModified});
+          
             return;
         }
         if (e.getActionCommand().equals(ATK.REPLAY_LEFT_VIEW_POP[2])) {
+            
+            final Object o = mLTransferList.getSelectCell();
+            final File file = new File(((EventFile) o).getCompletePath());
+             boolean result = false;
+            AlertDialog dialog = new AlertDialog(this.getRootPane().getParent(), 400, 250,
+                    AlertDialog.EXIT_DIALOG){
+                public void actionPerformed(ActionEvent e) {
+                    
+                 // TODO Auto-generated method stub
+                    if (e.getSource().equals(mPositiveBtn)) {
+                        try {
+                          boolean result = file.delete();
+                          Log.i(TAG, "delete file "+ o.toString() + "   result:"+result);
+                            if (result){
+                                mLListSource.removeCell(o);
+                                mLListSource.notifySourceRefreshEvent();
+                            }
+                            
+                        } catch (Exception e1) {
+                            // TODO Auto-generated catch block
+                            e1.printStackTrace();
+                        }
+                        mContext.setEnabled(true);
+                        this.dispose();
+
+                        return;
+                    }
+                    if (e.getSource().equals(mNegativeBtn)) {
+                        mContext.setEnabled(true);
+                        this.dispose();
+
+                        return;
+                    }
+                }
+                
+                
+            };
+            
+            dialog.setMessage(new String[]{ATK.DELETE_CONTENT + file.getName()+"?"});
+            dialog.onCreate();
+            dialog.setVisible(true);
+            
+            
+
             return;
         }
         if (e.getActionCommand().equals(ATK.REPLAY_RIGHT_VIEW_POP[0])) {
@@ -669,5 +809,15 @@ public class ReplayView extends CBaseTabView implements ItemListener, ActionList
             mRListSource.removeCell(mRTransferList.getSelectIndex());
             return;
         }
+    }
+
+    @Override
+    public void refreshSource() {
+        // TODO Auto-generated method stub
+        mProjectModel = new DefaultComboBoxModel(FileScannerManager.getManager()
+                .getProjectList());
+        mProjectComboBox.setModel(mProjectModel);
+        mProjectComboBox.setSelectedItem(mCurrentComboSelected);
+        refreshCurrentSource();
     }
 }

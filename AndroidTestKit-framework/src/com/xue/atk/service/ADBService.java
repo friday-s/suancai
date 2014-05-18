@@ -1,6 +1,7 @@
 package com.xue.atk.service;
 
 import java.io.BufferedReader;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -14,7 +15,6 @@ import com.android.ddmlib.IDevice;
 import com.android.ddmlib.IShellOutputReceiver;
 import com.android.ddmlib.Log;
 import com.android.ddmlib.MultiLineReceiver;
-import com.xue.atk.manager.ADBManager;
 
 public class ADBService {
 
@@ -28,21 +28,25 @@ public class ADBService {
     private IDevice mCurrentDevice;
     private int mCurrentDeviceEventNum;
 
+
     private List<IDeviceChangedCallBack> mCallBackList;
 
     public ADBService() {
-
+        
         mADB = new ADB();
         if (!mADB.initialize()) {
-            System.out.println("Could not find adb.");
-            Log.w(TAG, "Could not find adb.");
+            Log.w(TAG, "Try using system environment variables adb");
+            mADB.setAdbLocation(null);
+            if (!mADB.initialize()){
+                Log.e(TAG, "Could not find adb");
+            }
         }
 
         mDevices = Arrays.asList(mADB.getDevices());
 
         if (mDevices != null && mDevices.size() > 0) {
             mCurrentDevice = mDevices.get(0);
-            calcEventNum();
+
         }
 
         mADB.addDeviceChangeListener(mDeviceChangeListener);
@@ -50,23 +54,23 @@ public class ADBService {
 
     }
 
-    private void calcEventNum() {
+    public void calcEventNum() throws IOException{
 
         if (mCurrentDevice != null) {
-            try {
-                mCurrentDevice.executeShellCommand("ls dev/input", mEventNumReceiver);
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+
+            mCurrentDevice.executeShellCommand("ls dev/input", mEventNumReceiver);
+
         }
     }
 
     private IShellOutputReceiver mEventNumReceiver = new IShellOutputReceiver() {
 
+        private int count =0;
+        
         @Override
         public void addOutput(byte[] data, int offset, int length) {
             // TODO Auto-generated method stub
+            
             String str = null;
             try {
                 str = new String(data, offset, length, "UTF-8");
@@ -74,14 +78,21 @@ public class ADBService {
                 // TODO Auto-generated catch block
                 str = new String(data, offset, length);
             }
-            mCurrentDeviceEventNum = str.split("\r\n").length;
-            System.out.println("mCurrentDeviceEventNum:" + mCurrentDeviceEventNum);
-            Log.i(TAG, "mCurrentDeviceEventNum:" + mCurrentDeviceEventNum);
+
+            for (String s :str.split("\r\n")){
+                if(s.indexOf("event")!= -1 ){
+                    count++;
+                }
+            }
+     
         }
 
         @Override
         public void flush() {
             // TODO Auto-generated method stub
+            mCurrentDeviceEventNum = count;
+            count =0;
+            Log.i(TAG, "mCurrentDeviceEventNum:" + mCurrentDeviceEventNum);
         }
 
         @Override
@@ -114,7 +125,7 @@ public class ADBService {
 
     public void setCurrentDevice(IDevice mCurrentDevice) {
         this.mCurrentDevice = mCurrentDevice;
-        calcEventNum();
+        //calcEventNum();
     }
 
     private IDeviceChangeListener mDeviceChangeListener = new IDeviceChangeListener() {
@@ -122,7 +133,7 @@ public class ADBService {
         @Override
         public void deviceConnected(IDevice device) {
             // TODO Auto-generated method stub
-            Log.d(TAG, "connected device:" + device.toString());
+            Log.i(TAG, "connected device:" + device.toString());
             mDevices = Arrays.asList(mADB.getDevices());
             for (IDeviceChangedCallBack callBack : mCallBackList) {
                 callBack.deviceConnected(device);
@@ -132,7 +143,7 @@ public class ADBService {
         @Override
         public void deviceDisconnected(IDevice device) {
             // TODO Auto-generated method stub
-            Log.d(TAG, "disconnected device:" + device.toString());
+            Log.i(TAG, "disconnected device:" + device.toString());
             mDevices = Arrays.asList(mADB.getDevices());
             for (IDeviceChangedCallBack callBack : mCallBackList) {
                 callBack.deviceDisonnected(device);
@@ -142,7 +153,7 @@ public class ADBService {
         @Override
         public void deviceChanged(IDevice device, int changeMask) {
             // TODO Auto-generated method stub
-            System.out.println("deviceChanged");
+            Log.i(TAG, "deviceChanged:" + device + " changeMask:"+changeMask);
         }
     };
 
@@ -190,7 +201,6 @@ public class ADBService {
         public void processNewLines(String[] lines) {
             // TODO Auto-generated method stub
             for (String s : lines) {
-                System.out.println("test :" + s);
                 Log.i(TAG, "test :" + s);
             }
         }
@@ -232,8 +242,13 @@ public class ADBService {
 
             try {
                 if (p.waitFor() < 0) {
-                    System.err.println("command \"" + command + "\" return=" + p.exitValue());
                     Log.e(TAG, "command \"" + command + "\" return=" + p.exitValue());
+                    mException = new Exception(errorMsg);
+                    return -1;
+                }
+                
+                if (errorMsg!=null && errorMsg.indexOf("failed") != -1){
+                    mException = new Exception(errorMsg);
                     return -1;
                 }
             } catch (InterruptedException e) {
@@ -278,8 +293,7 @@ public class ADBService {
                 br = new BufferedReader(new InputStreamReader(is));
                 String line = null;
                 while ((line = br.readLine()) != null) {
-                    System.err.println(type + ">" + line);
-                    Log.i(TAG, type + ">" + line);
+                    Log.d(TAG, type + ">" + line);
                     errorMsg = line;
                 }
             } catch (IOException e) {

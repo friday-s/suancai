@@ -59,6 +59,7 @@ public class ATK {
     public static final String[] TABBED_PANE = { "record", "replay" };
 
     public static final String EXIT_CONTENT = "Do you want to quit?";
+    public static final String DELETE_CONTENT = "Do you want to delete ";
     public static final String DEVICE_NOT_FOUND_CONTENT = "Device not found!";
     
     public static final String[] REPLAY_RIGHT_VIEW_POP = {"Up","Down","Remove"};
@@ -71,6 +72,8 @@ public class ATK {
     public static final String ERROR_USE_CHINESE = "Can not use Chinese.";
     public static final String ERROR_CONTENT_EMPTY = "Can not be empty.";
     public static final String ERROR_REPLAY_EVENT_EMPTY = "Replay list is empty.";
+    public static final String ERROR_DEVICE_OFFLINE = "Device is not online.";
+    public static final String ERROR_DEVICE_DISCONNECTED = "Device disconnected.";
     
     public static final String CURRENT_EVENT="Current Event: ";
     public static final String CURRENT_TIME="Current Time: ";

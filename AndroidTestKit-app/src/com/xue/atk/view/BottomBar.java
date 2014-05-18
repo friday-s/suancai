@@ -120,7 +120,6 @@ public class BottomBar extends JPanel {
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 ADBManager.getManager().setCurrentDevice(
                         (IDevice) mDevicesComboBox.getSelectedItem());
-                System.out.println("change:"+(IDevice) mDevicesComboBox.getSelectedItem());
                 Log.i(TAG,"change:"+(IDevice) mDevicesComboBox.getSelectedItem());
             }
         }
@@ -131,8 +130,6 @@ public class BottomBar extends JPanel {
         @Override
         public void deviceConnected(IDevice device) {
             // TODO Auto-generated method stub
-            System.out.println("deviceConnected:"+device);
-            Log.i(TAG, "deviceConnected:"+device);
             if (!checkExist(device)) {
                 mBoxModel.addElement(device);
             }
@@ -141,8 +138,6 @@ public class BottomBar extends JPanel {
         @Override
         public void deviceDisonnected(IDevice device) {
             // TODO Auto-generated method stub
-            System.out.println("deviceDisonnected:"+device);
-            Log.i(TAG, "deviceDisonnected:"+device);
             if (checkExist(device)) {
                 mBoxModel.removeElement(device);
             }

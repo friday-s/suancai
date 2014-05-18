@@ -80,7 +80,7 @@ public class TitleBar extends JPanel {
 
                 setCloseIcon(Util.getImageIcon("close_up_20.png"));
                 AlertDialog dialog = new AlertDialog(mContext, 400, 250, AlertDialog.EXIT_DIALOG);
-                dialog.setMessage(ATK.EXIT_CONTENT);
+                dialog.setMessage(new String[]{ATK.EXIT_CONTENT});
                 dialog.onCreate();
                 dialog.setVisible(true);
             }
