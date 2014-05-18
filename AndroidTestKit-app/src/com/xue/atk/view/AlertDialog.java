@@ -24,7 +24,7 @@ public class AlertDialog extends Dialog implements ActionListener {
     private static final int BTN_HEIGHT = 40;
 
     private static final int MSG_WIDTH = 30;
-    private static final int MSG_HEIGHT = 30;
+    private static final int MSG_HEIGHT = 35;
 
     public static final int EXIT_DIALOG = 1;
     public static final int MSG_DIALOG = 2;
