@@ -172,12 +172,13 @@ public class SaveDialog extends Dialog implements ActionListener {
                 Thread thread = new Thread() {
                     public void run() {
                         ADBManager.getManager().execADBCommand(command);
+                        mCallback.refreshSource();
                     }
                 };
 
                 DlgProgess.show(this, thread);
                 mContext.setEnabled(true);
-                mCallback.refreshSource();
+               
                 this.dispose();
             }
             return;
