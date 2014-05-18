@@ -80,8 +80,8 @@ public class ATK {
     
     public static final String SOFTWARE_INFORMATION = 
                                                         "<html>"
-                                                        +APP_NAME + " v2.0"+"<br>"
-                                                        +"Build:XXXXX" + "<br>"
+                                                        +APP_NAME + " v1.0"+"<br>"
+                                                        +"Build:2014-05-18 16:00" + "<br>"
                                                         +"Email:175427603@qq.com" + "<br>"
                                                         +"</html>";
 
